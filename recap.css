@@ -1,0 +1,508 @@
+/* After-chat sequence on the agent switcher (see recap.js) */
+
+.phone {
+  --gold-hi: #fff3cf;
+  --gold: #ffc44d;
+  --gold-deep: #e08a12;
+}
+
+/* ───────────────────────── Stage: the empty middle of the screen ───────────────────────── */
+
+.recap-stage {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 136px;
+  bottom: calc(var(--kb-h) + var(--composer-gap) + 52px + 14px);
+  display: none;
+  pointer-events: none;
+  font-family: "Inter", var(--font-ui);
+  transition: bottom var(--kb-dur) var(--ease-drawer);
+}
+.phone[data-keyboard="closed"] .recap-stage { bottom: calc(var(--composer-rest) + 52px + 18px); }
+.phone[data-screen="agents"] .recap-stage { display: block; }
+
+/* Recap lines: bold, warm-white, glowing like heat (the "words turn to embers" reference) */
+.recap-line {
+  font-weight: 650;
+  font-size: 21px;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: #fff4ea;
+  text-shadow:
+    0 0 1px rgba(255, 236, 214, 0.9),
+    0 0 14px rgba(255, 138, 64, 0.55),
+    0 0 34px rgba(255, 90, 20, 0.25);
+}
+.recap-line span { display: inline-block; }
+
+/* ── Ember crawl: a tilted plane the lines drift away on ── */
+.recap-crawl {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  perspective: 320px;
+  perspective-origin: 50% 0%;
+  -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 34%, #000 100%);
+  mask: linear-gradient(to bottom, transparent 0%, #000 34%, #000 100%);
+}
+.recap-plane {
+  position: absolute;
+  inset: 0 28px;
+  transform: rotateX(28deg);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+}
+.recap-plane .recap-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -30px;
+}
+
+/* ── Ember rise: lines stack up from a baseline; the oldest burn off ── */
+.recap-rise {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 0;
+  bottom: 30%;
+  -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 30%);
+  mask: linear-gradient(to bottom, transparent 0%, #000 30%);
+}
+.recap-rise .recap-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: transform 640ms var(--ease-out);
+}
+
+/* ── Whisper: one soft serif phrase at a time ── */
+.recap-whisper {
+  position: absolute;
+  inset: 0 34px;
+  display: grid;
+  place-items: center;
+}
+.recap-phrase {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 31px;
+  line-height: 1.1;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--theme) 45%, transparent);
+}
+.recap-phrase span { display: inline-block; }
+
+/* ── The gold core insight ── */
+.recap-insight {
+  position: absolute;
+  inset: 0 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.recap-insight-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+}
+.recap-line--gold {
+  font-size: 23px;
+  text-shadow: none;
+  /* a glint sweeps across once it lands; the glow is a drop-shadow so it sits under the gradient fill */
+  filter: drop-shadow(0 0 1px var(--gold-hi)) drop-shadow(0 0 12px rgba(255, 190, 60, 0.7)) drop-shadow(0 0 28px rgba(255, 150, 20, 0.35));
+}
+.recap-line--gold span {
+  color: transparent;
+  background: linear-gradient(100deg, #ffd978 0%, #ffd978 40%, #fffaf0 50%, #ffd978 60%, #ffd978 100%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.recap-line--gold.is-glinting span { animation: glint 1300ms var(--ease-in-out) both; }
+@keyframes glint { to { background-position: 0% 0; } }
+.recap-line--serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+/* ───────────────────────── Embers + liquid layer ───────────────────────── */
+
+.recap-embers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 39;
+  pointer-events: none;
+}
+
+/* Drops merge through the metaball filter, then glow */
+.recap-goo {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  filter: url(#lava-goo) drop-shadow(0 0 10px rgba(255, 180, 60, 0.55));
+}
+.recap-drop {
+  position: absolute;
+  left: -20px; /* centred on its translate point (40px drop) */
+  top: -20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 32%, #fff8e0 0%, #ffd36b 24%, #ffab2e 58%, #d97a0e 100%);
+  will-change: transform;
+}
+
+/* ───────────────────────── Insights bubble ───────────────────────── */
+
+.memories-core {
+  inset: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 238, 180, 0.95) 0%, rgba(255, 190, 70, 0.75) 30%, rgba(255, 140, 20, 0.22) 60%, transparent 72%);
+  mix-blend-mode: plus-lighter;
+  opacity: 0;
+  pointer-events: none;
+}
+.memories.has-insight .memories-core { animation: core-breathe 4.2s ease-in-out infinite; }
+@keyframes core-breathe {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+/* the glyph is gold in the source art; it gets its colour back once an insight is stored */
+.memories-icon { transition: filter 700ms ease; }
+.memories.has-insight .memories-icon { filter: brightness(1.05); }
+
+.memories-ripple {
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(255, 205, 100, 0.9), 0 0 14px rgba(255, 170, 40, 0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.memories-fill {
+  inset: 1px;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.memories-liquid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: -20%;
+  transform: translateY(100%);
+}
+.memories-wave {
+  position: absolute;
+  inset: 0 -100% 0 0; /* twice as wide; slides left on a loop */
+  background: linear-gradient(to bottom, transparent 0 6px, #ffbf3f 6px, #e8900f 100%);
+  animation: wave 900ms linear infinite;
+}
+.memories-wave svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 7px;
+  fill: #ffcf5c;
+}
+@keyframes wave { to { transform: translateX(-50%); } }
+
+.insight-toast {
+  position: absolute;
+  left: 24px;
+  top: 114px;
+  z-index: 41;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 99px;
+  background: rgba(46, 30, 8, 0.55);
+  border: 0.8px solid rgba(255, 200, 100, 0.25);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #ffe2a0;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(-4px) scale(0.96);
+  transform-origin: 22px 0;
+  transition: opacity 200ms ease, filter 200ms ease, transform 200ms var(--ease-out);
+}
+.insight-toast.is-shown {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  transition-duration: 420ms;
+}
+.insight-toast i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px #ffb02e;
+}
+
+/* ───────────────────────── Other agents light up ───────────────────────── */
+
+.agent[data-index="0"] { --agent-rgb: 124, 96, 255; }
+.agent[data-index="1"] { --agent-rgb: 255, 106, 31; }
+.agent[data-index="2"] { --agent-rgb: 150, 230, 90; }
+
+/* a soft halo in the agent's colour, behind the avatar */
+.agent-press::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--agent-rgb), 0.6) 0%, rgba(var(--agent-rgb), 0.18) 45%, transparent 70%);
+  opacity: 0;
+  transition: opacity 600ms ease;
+  pointer-events: none;
+}
+
+/* brighter than a resting side avatar (beats the ring's inline opacity while it has news) */
+.agent.has-news .agent-photo { opacity: 0.62 !important; transition: opacity 900ms ease; }
+.agent.has-news .agent-chrome { opacity: 0.7 !important; transition: opacity 900ms ease; }
+
+/* Glow: halo + brightness pulse */
+.phone[data-cue="glow"] .agent.has-news .agent-press { animation: cue-glow 2.6s ease-in-out infinite; }
+.phone[data-cue="glow"] .agent.has-news .agent-press::before { animation: cue-halo 2.6s ease-in-out infinite; }
+@keyframes cue-glow {
+  0%, 100% { filter: brightness(1.1); }
+  50% { filter: brightness(1.75) saturate(1.2); }
+}
+@keyframes cue-halo {
+  0%, 100% { opacity: 0.25; transform: scale(0.9); }
+  50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+/* Breathe: the photo slowly zooms in and out inside its circle (the clip shrinks as it scales) */
+.phone[data-cue="breathe"] .agent.has-news .agent-photo { animation: cue-breathe 3.4s ease-in-out infinite; }
+.phone[data-cue="breathe"] .agent.has-news .agent-press::before { opacity: 0.45; }
+@keyframes cue-breathe {
+  0%, 100% { transform: scale(1); clip-path: circle(50%); filter: brightness(1.15); }
+  50% { transform: scale(1.18); clip-path: circle(42.4%); filter: brightness(1.45); }
+}
+
+/* Liquid: the photo ripples like it's under water, with a slow halo */
+.phone[data-cue="liquid"] .agent.has-news .agent-photo { filter: url(#agent-liquify) brightness(1.35); }
+.phone[data-cue="liquid"] .agent.has-news .agent-press::before { animation: cue-halo 4s ease-in-out infinite; }
+
+/* ───────────────────────── Openers ───────────────────────── */
+
+.recap-stage[data-agent="0"] { --agent-rgb: 124, 96, 255; --agent-font: "Shrikhand", cursive; --agent-font-style: normal; }
+.recap-stage[data-agent="2"] { --agent-rgb: 150, 230, 90; --agent-font: "EB Garamond", Georgia, serif; --agent-font-style: italic; }
+.recap-stage { --agent-ink: color-mix(in srgb, rgb(var(--agent-rgb, 255, 255, 255)) 28%, #fff); }
+
+/* Bubbles */
+.op-thread {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--font-body);
+}
+.op-name {
+  margin: 0 0 2px 4px;
+  font-family: var(--agent-font);
+  font-style: var(--agent-font-style);
+  font-size: 14px;
+  color: var(--agent-ink);
+  opacity: 0.85;
+}
+.op-bubble,
+.op-typing {
+  max-width: 82%;
+  padding: 10px 15px;
+  border-radius: 20px 20px 20px 6px;
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--agent-ink);
+  background: color-mix(in srgb, rgb(var(--agent-rgb)) 14%, rgba(14, 14, 16, 0.74));
+  border: 0.839px solid rgba(var(--agent-rgb), 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 0 24px -8px rgba(var(--agent-rgb), 0.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6);
+}
+.op-typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: 40px;
+}
+.op-typing i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--agent-ink);
+  opacity: 0.3;
+  animation: op-dot 1s ease-in-out infinite;
+}
+.op-typing i:nth-child(2) { animation-delay: 150ms; }
+.op-typing i:nth-child(3) { animation-delay: 300ms; }
+@keyframes op-dot { 30% { opacity: 0.85; transform: translateY(-2px); } }
+
+/* Voice: big, in the agent's own typeface */
+.op-voice {
+  position: absolute;
+  inset: 0 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+.op-voice-line {
+  margin: 0;
+  font-family: var(--agent-font);
+  font-style: var(--agent-font-style);
+  font-size: 25px;
+  line-height: 1.18;
+  text-wrap: balance;
+  color: var(--agent-ink);
+  text-shadow: 0 0 18px rgba(var(--agent-rgb), 0.55);
+}
+.op-voice-line + .op-voice-line { font-size: 19px; opacity: 0.85; }
+.recap-stage[data-agent="2"] .op-voice-line { font-size: 30px; }
+.recap-stage[data-agent="2"] .op-voice-line + .op-voice-line { font-size: 22px; }
+.op-voice-line span { display: inline-block; }
+
+/* Card: a notification from a friend */
+.op-card {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 6px;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  column-gap: 11px;
+  row-gap: 3px;
+  padding: 12px 14px;
+  border-radius: 22px;
+  text-align: left;
+  font-family: var(--font-body);
+  color: var(--agent-ink);
+  background: color-mix(in srgb, rgb(var(--agent-rgb)) 12%, rgba(14, 14, 16, 0.74));
+  border: 0.839px solid rgba(var(--agent-rgb), 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 32px rgba(0, 0, 0, 0.35), 0 0 30px -10px rgba(var(--agent-rgb), 0.7);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6);
+  pointer-events: auto;
+  transition: transform 160ms var(--ease-out);
+}
+.op-card:active { transform: scale(0.98); }
+.op-card img {
+  grid-row: 1 / 4;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(var(--agent-rgb), 0.5), 0 0 14px rgba(var(--agent-rgb), 0.5);
+}
+.op-card-head { display: flex; justify-content: space-between; align-items: baseline; }
+.op-card-head b {
+  font-weight: 400;
+  font-family: var(--agent-font);
+  font-style: var(--agent-font-style);
+  font-size: 15px;
+}
+.op-card-head small { font-size: 11px; opacity: 0.45; }
+.op-card-body { font-size: 14px; line-height: 1.38; opacity: 0.9; min-height: 19px; }
+.op-card-body .op-typing { height: auto; padding: 4px 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.op-card-cta { margin-top: 4px; font-size: 12px; opacity: 0.55; }
+
+/* ───────────────────────── Panel (design exploration) ───────────────────────── */
+
+.seq-panel {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 10;
+  width: 232px;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #1a1a1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.86);
+}
+.seq-head { display: flex; align-items: center; justify-content: space-between; }
+.seq-head .style-picker-title { padding: 0; }
+.seq-replay {
+  padding: 5px 11px;
+  border-radius: 99px;
+  background: rgba(255, 196, 77, 0.16);
+  color: #ffd27a;
+  font-size: 12px;
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.seq-replay:active { transform: scale(0.96); }
+.seq-group { display: flex; flex-direction: column; gap: 6px; }
+.seq-title { font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+.seq-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.seq-chips button {
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.seq-chips button:active { transform: scale(0.97); }
+.seq-chips button[aria-pressed="true"] { background: rgba(255, 255, 255, 0.14); color: #fff; }
+@media (hover: hover) and (pointer: fine) {
+  .seq-chips button:hover { background: rgba(255, 255, 255, 0.08); }
+  .seq-chips button[aria-pressed="true"]:hover { background: rgba(255, 255, 255, 0.16); }
+  .seq-replay:hover { background: rgba(255, 196, 77, 0.24); }
+}
+.seq-hint { margin: 0; font-size: 11px; line-height: 1.4; color: rgba(255, 255, 255, 0.4); }
+
+@media (max-width: 960px) {
+  .seq-panel { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent.has-news .agent-press,
+  .agent.has-news .agent-press::before,
+  .agent.has-news .agent-photo,
+  .memories.has-insight .memories-core { animation: none !important; }
+  .memories.has-insight .memories-core { opacity: 0.6; }
+}

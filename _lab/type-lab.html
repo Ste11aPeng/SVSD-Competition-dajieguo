@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Type Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&family=Fredoka:wght@600;700&family=Nunito:wght@900;1000&display=swap" rel="stylesheet" />
+  <style>
+    body { margin: 0; background: #222; color: #ccc; font: 13px -apple-system, system-ui, sans-serif; }
+    .row { padding: 16px; border-bottom: 1px solid #333; }
+    .row img { display: block; max-width: 100%; }
+    .mine { display: flex; align-items: center; justify-content: center; margin-top: 8px; overflow: hidden; }
+    h3 { margin: 0 0 8px; font-weight: 600; color: #fff; }
+    .small { display: flex; gap: 28px; align-items: center; padding: 24px; background: #000; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div id="rows"></div>
+  <h3 style="padding:16px 16px 0">At label size (34px glyph box) on black</h3>
+  <div class="small" id="small"></div>
+  <script src="../name-effects.js"></script>
+  <script>
+    // [effect, word, ink, background, reference, glyph-box height in the reference's own pixels]
+    const cases = [
+      ['distressed', 'Distressed', '#e9e3d7', '#0b0a09', 'refs/distressed.webp', 143],
+      ['dissolve', 'Restore', '#111', '#fff', 'refs/dissolve.png', 84],
+      ['zoom', 'reality', '#12303f', '#eeeeec', 'refs/zoom.png', 335],
+      ['halftone', 'half', '#f2f2f0', '#0d0d0d', 'refs/halftone.webp', 327],
+      ['blur', 'Blur', '#1b1b1b', '#e9e7e2', 'refs/blur.png', 300],
+      ['vibe', 'Vibe', '#fff', '#0b0b0e', 'refs/vibe.webp', 560],
+    ];
+    const only = location.hash.slice(1);
+    const loaded = (img) => (img.complete ? Promise.resolve() : new Promise((r) => (img.onload = r)));
+    document.fonts.ready.then(async () => {
+      const rows = document.getElementById('rows');
+      for (const [fx, word, ink, bg, ref, refH] of cases) {
+        if (only && only !== fx) continue;
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.dataset.fx = fx;
+        row.innerHTML = `<h3>${fx}</h3><img src="${ref}"><div class="mine" style="background:${bg}"></div>`;
+        rows.appendChild(row);
+        const img = row.querySelector('img');
+        await loaded(img);
+        const factor = img.clientWidth / img.naturalWidth; // same scale as the reference on screen
+        row.querySelector('.mine').appendChild(NameEffects.render(fx, word, { ink, height: refH * factor }));
+      }
+      const small = document.getElementById('small');
+      for (const [fx] of cases) small.appendChild(NameEffects.render(fx, 'Die Hard', { ink: '#f4efe6', height: 34 }));
+    });
+    window.addEventListener('hashchange', () => location.reload());
+  </script>
+</body>
+</html>

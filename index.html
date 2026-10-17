@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=overlays-content" />
+  <meta name="theme-color" content="#000000" />
+  <title>Lava Composer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Varela+Round&family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&family=Nunito:wght@900;1000&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@1,400..600&family=Shrikhand&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="recap.css" />
+</head>
+<body>
+  <main class="phone" id="phone" data-keyboard="open" data-agent="1" data-bg="lava" data-name="original" data-screen="pre" data-pre="1" data-typing="off">
+
+    <!-- Backgrounds: three styles, each with one layer per agent hue (crossfaded on switch) -->
+    <div class="bg bg--lava" data-set="lava" aria-hidden="true">
+      <div class="bg-layer" data-for="0"><img src="assets/background.svg" alt="" /></div>
+      <div class="bg-layer" data-for="1"><img src="assets/background.svg" alt="" /></div>
+      <div class="bg-layer" data-for="2"><img src="assets/background.svg" alt="" /></div>
+    </div>
+    <div class="bg bg--edge" data-set="edge" aria-hidden="true">
+      <div class="bg-layer" data-for="0"><img src="assets/bg-edge-night-owl.webp" alt="" /></div>
+      <div class="bg-layer" data-for="1"><img src="assets/bg-edge-die-hard.webp" alt="" /></div>
+      <div class="bg-layer" data-for="2"><img src="assets/bg-edge-wildflower.webp" alt="" /></div>
+      <div class="bg-grain bg-grain--film"></div>
+    </div>
+    <!-- Gradient map for the Ride-or-Die edge glow: maps the art's brightness onto warm ember tones
+         (purple → deep red, pink → orange, yellow → soft gold) so no purple shows -->
+    <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="edge-ember" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="table" tableValues="0 0.42 0.92 1" />
+          <feFuncG type="table" tableValues="0 0.07 0.38 0.80" />
+          <feFuncB type="table" tableValues="0 0.03 0.12 0.52" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
+    <div class="bg bg--haze" data-set="haze" aria-hidden="true">
+      <div class="bg-layer" data-for="0"></div>
+      <div class="bg-layer" data-for="1"></div>
+      <div class="bg-layer" data-for="2"></div>
+      <div class="bg-grain"></div>
+    </div>
+
+    <!-- Memories -->
+    <button class="memories pressable" type="button" aria-label="Memories">
+      <span class="memories-button"></span>
+      <img class="memories-ring" src="assets/mic-ring-2.png" alt="" width="45.419" height="45.419" />
+      <img class="memories-icon" src="assets/lava-bubble-foam.svg" alt="" width="24" height="24" />
+    </button>
+
+    <!-- Agent switcher -->
+    <nav class="agents" aria-label="Choose who to talk to">
+      <button class="agent" type="button" data-index="0" aria-label="Roaster">
+        <span class="agent-press">
+          <img class="agent-photo" src="assets/agent1.png" alt="" width="44" height="44" />
+          <span class="agent-chrome">
+            <span class="agent-button"></span>
+            <img class="agent-ring" src="assets/mic-ring-1.svg" alt="" />
+            <img class="agent-glow" src="assets/image170.png" alt="" />
+          </span>
+        </span>
+      </button>
+      <button class="agent" type="button" data-index="1" aria-label="Ride-or-Die">
+        <span class="agent-press">
+          <img class="agent-photo" src="assets/agent2.png" alt="" width="44" height="44" />
+          <span class="agent-chrome">
+            <span class="agent-button"></span>
+            <img class="agent-ring" src="assets/mic-ring-1.svg" alt="" />
+            <img class="agent-glow agent-glow--wide" src="assets/image171.png" alt="" />
+          </span>
+        </span>
+      </button>
+      <button class="agent" type="button" data-index="2" aria-label="Calm Sibling">
+        <span class="agent-press">
+          <img class="agent-photo" src="assets/agent3.png" alt="" width="44" height="44" />
+          <span class="agent-chrome">
+            <span class="agent-button"></span>
+            <img class="agent-ring" src="assets/mic-ring-1.svg" alt="" />
+            <img class="agent-glow agent-glow--round" src="assets/image33.png" alt="" />
+          </span>
+        </span>
+      </button>
+    </nav>
+
+    <div class="agent-labels agent-labels--original" aria-live="polite">
+      <span class="agent-label agent-label--text" data-for="0">Roaster</span>
+      <span class="agent-label agent-label--text" data-for="1">Ride-or-Die</span>
+      <span class="agent-label agent-label--text" data-for="2">Calm Sibling</span>
+    </div>
+    <!-- Agent names drawn with a text effect (see name-effects.js); filled in by script.js -->
+    <div class="agent-labels agent-labels--fx" id="fxLabels" aria-hidden="true"></div>
+
+    <!-- Pre-screen: what a first visit shows before anything is typed (no agent picked yet).
+         Five explorations; the "First screen" picker switches between them. -->
+    <section class="pre" id="pre" aria-label="Start a conversation">
+
+      <!-- 1 · Starters — ChatGPT-style: greeting + starter rows pulled from mail, chats, calendar -->
+      <div class="pre-variant" data-v="1" data-placeholder="I’m bothered on...">
+        <div class="pre-center">
+          <h1 class="pre-title" style="--i:0">What’s on your mind, <em>Cherry</em>?</h1>
+          <p class="pre-sub" style="--i:1">No need to catch me up. I remember.</p>
+        </div>
+        <ul class="pre-starters pre-rows">
+          <li style="--i:2"><button class="pre-row pre-hit" type="button" data-fill="ok so about that rejection email… ">
+            <svg class="pre-row-icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4.5" width="15" height="11" rx="2.5"/><path d="m3.5 6 6.5 5 6.5-5"/></svg>
+            <span class="pre-row-text">Chat on the rejection email</span>
+            <span class="pre-row-meta">Gmail · 2h</span>
+          </button></li>
+          <li style="--i:3"><button class="pre-row pre-hit" type="button" data-fill="update on Kevin: ">
+            <svg class="pre-row-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5c4.1 0 7 2.6 7 5.8s-2.9 5.8-7 5.8c-.8 0-1.6-.1-2.3-.3L4 16.5l.9-3.1C3.7 12.3 3 10.9 3 9.3 3 6.1 5.9 3.5 10 3.5Z"/></svg>
+            <span class="pre-row-text">Circle back on Kevin slacking</span>
+            <span class="pre-row-meta">Tue</span>
+          </button></li>
+          <li style="--i:4"><button class="pre-row pre-hit" type="button" data-fill="ok so the situationship… ">
+            <svg class="pre-row-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5S3 12.4 3 7.8C3 5.6 4.7 4 6.7 4c1.4 0 2.6.8 3.3 2 .7-1.2 1.9-2 3.3-2 2 0 3.7 1.6 3.7 3.8 0 4.6-7 8.7-7 8.7Z"/></svg>
+            <span class="pre-row-text">The situationship update you owe me</span>
+            <span class="pre-row-meta">Sat</span>
+          </button></li>
+          <li style="--i:5"><button class="pre-row pre-hit" type="button" data-fill="help me prep for my 1:1 with Dana, ">
+            <svg class="pre-row-icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12" rx="2.5"/><path d="M3 8.5h14M7 2.8v3.4M13 2.8v3.4"/></svg>
+            <span class="pre-row-text">Prep for Friday’s 1:1 with Dana</span>
+            <span class="pre-row-meta">Cal · Fri</span>
+          </button></li>
+        </ul>
+      </div>
+
+      <!-- 2 · Remember… — people-first, the way friends actually open: "do you remember Kevin? omg he…" -->
+      <div class="pre-variant" data-v="2" data-placeholder="do you remember…">
+        <div class="pre-center">
+          <h1 class="pre-title pre-title--remember" style="--i:0">
+            ok wait, do you<br />remember
+            <span class="pre-rotator" id="rotator" aria-live="polite"><em>Kevin?</em></span>
+          </h1>
+          <p class="pre-sub" style="--i:1">Drop a name. I’ll catch up.</p>
+        </div>
+        <div class="pre-starters" style="--i:2">
+          <p class="pre-label">Lately in your world</p>
+          <div class="pre-people">
+            <button class="pre-person pre-hit" type="button" data-fill="do you remember Kevin? omg he " style="--hue:28">
+              <span class="pre-avatar">K</span><span class="pre-person-text"><b>Kevin</b><small>still no slides</small></span>
+            </button>
+            <button class="pre-person pre-hit" type="button" data-fill="do you remember that Studio Arcade email? ugh " style="--hue:0">
+              <span class="pre-avatar pre-avatar--icon"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4.5" width="15" height="11" rx="2.5"/><path d="m3.5 6 6.5 5 6.5-5"/></svg></span><span class="pre-person-text"><b>Studio Arcade</b><small>the rejection</small></span>
+            </button>
+            <button class="pre-person pre-hit" type="button" data-fill="do you remember Leo from the gym? so he " style="--hue:330">
+              <span class="pre-avatar">L</span><span class="pre-person-text"><b>Leo</b><small>gym guy</small></span>
+            </button>
+            <button class="pre-person pre-hit" type="button" data-fill="ok so Dana, my manager, " style="--hue:200">
+              <span class="pre-avatar">D</span><span class="pre-person-text"><b>Dana</b><small>your manager</small></span>
+            </button>
+            <button class="pre-person pre-hit" type="button" data-fill="so my mom called and " style="--hue:60">
+              <span class="pre-avatar">M</span><span class="pre-person-text"><b>Mom</b><small>Sunday call</small></span>
+            </button>
+            <button class="pre-person pre-hit" type="button" data-fill="remember Priya, my roommate? " style="--hue:150">
+              <span class="pre-avatar">P</span><span class="pre-person-text"><b>Priya</b><small>roommate</small></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 · Lava texts first — like a friend checking in, with quick replies -->
+      <div class="pre-variant pre-variant--chat" data-v="4" data-placeholder="Reply to Lava…">
+        <div class="pre-thread" id="thread">
+          <p class="pre-stamp">Today 2:44 PM</p>
+          <div class="pre-bubble" data-delay="500">heyyy 👀</div>
+          <div class="pre-bubble" data-delay="900">so did Kevin ever send his slides or…</div>
+          <div class="pre-bubble" data-delay="1100">also still thinking about that email from yesterday. you ok?</div>
+          <div class="pre-typing" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <div class="pre-starters pre-replies" id="replies">
+          <button class="pre-reply pre-hit" type="button" data-fill="ugh don’t get me started. ">ugh, don’t get me started</button>
+          <button class="pre-reply pre-hit" type="button" data-fill="he did NOT. ">he did NOT</button>
+          <button class="pre-reply pre-hit" type="button" data-fill="wait, new drama first: ">wait, new drama first</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Keyboard material: siblings (not children) so their blend modes reach the background -->
+    <div class="kb-material kb-material--plus" aria-hidden="true"></div>
+    <div class="kb-material kb-material--lum" aria-hidden="true"></div>
+
+    <!-- Keyboard -->
+    <div class="keyboard" id="keyboard" role="group" aria-label="Keyboard">
+      <div class="kb-suggestions">
+        <button class="kb-suggestion" type="button" tabindex="-1" data-insert="The">“The”</button>
+        <span class="kb-separator"></span>
+        <button class="kb-suggestion" type="button" tabindex="-1" data-insert="the">the</button>
+        <span class="kb-separator"></span>
+        <button class="kb-suggestion" type="button" tabindex="-1" data-insert="to">to</button>
+      </div>
+
+      <div class="kb-keys">
+        <div class="kb-row">
+          <button class="key" type="button" tabindex="-1" data-char="q">q</button><button class="key" type="button" tabindex="-1" data-char="w">w</button><button class="key" type="button" tabindex="-1" data-char="e">e</button><button class="key" type="button" tabindex="-1" data-char="r">r</button><button class="key" type="button" tabindex="-1" data-char="t">t</button><button class="key" type="button" tabindex="-1" data-char="y">y</button><button class="key" type="button" tabindex="-1" data-char="u">u</button><button class="key" type="button" tabindex="-1" data-char="i">i</button><button class="key" type="button" tabindex="-1" data-char="o">o</button><button class="key" type="button" tabindex="-1" data-char="p">p</button>
+        </div>
+        <div class="kb-row kb-row--inset">
+          <button class="key" type="button" tabindex="-1" data-char="a">a</button><button class="key" type="button" tabindex="-1" data-char="s">s</button><button class="key" type="button" tabindex="-1" data-char="d">d</button><button class="key" type="button" tabindex="-1" data-char="f">f</button><button class="key" type="button" tabindex="-1" data-char="g">g</button><button class="key" type="button" tabindex="-1" data-char="h">h</button><button class="key" type="button" tabindex="-1" data-char="j">j</button><button class="key" type="button" tabindex="-1" data-char="k">k</button><button class="key" type="button" tabindex="-1" data-char="l">l</button>
+        </div>
+        <div class="kb-row kb-row--third">
+          <button class="key key--mod" type="button" tabindex="-1" data-action="shift" aria-label="Shift">
+            <svg width="20" height="18" viewBox="0 0 20 18" aria-hidden="true"><path d="M10 1.2 18.6 9.6c.5.5.15 1.3-.55 1.3H14.2v4.9c0 .7-.55 1.2-1.2 1.2H7c-.65 0-1.2-.5-1.2-1.2v-4.9H1.95c-.7 0-1.05-.8-.55-1.3Z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="kb-letters">
+            <button class="key" type="button" tabindex="-1" data-char="z">z</button><button class="key" type="button" tabindex="-1" data-char="x">x</button><button class="key" type="button" tabindex="-1" data-char="c">c</button><button class="key" type="button" tabindex="-1" data-char="v">v</button><button class="key" type="button" tabindex="-1" data-char="b">b</button><button class="key" type="button" tabindex="-1" data-char="n">n</button><button class="key" type="button" tabindex="-1" data-char="m">m</button>
+          </div>
+          <button class="key key--mod" type="button" tabindex="-1" data-action="delete" aria-label="Delete">
+            <svg width="24" height="18" viewBox="0 0 24 18" aria-hidden="true"><path d="M8.3 1.5h12.2c1.1 0 2 .9 2 2v11c0 1.1-.9 2-2 2H8.3c-.55 0-1.05-.25-1.45-.65L1.6 9.7a1 1 0 0 1 0-1.4l5.25-6.15c.4-.4.9-.65 1.45-.65Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m11.4 5.8 6.4 6.4m0-6.4-6.4 6.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="kb-row kb-row--bottom">
+          <button class="key key--wide key--abc" type="button" tabindex="-1" data-action="abc">ABC</button>
+          <button class="key key--space" type="button" tabindex="-1" data-char=" " aria-label="Space"></button>
+          <button class="key key--wide key--return" type="button" tabindex="-1" data-action="return" aria-label="Return">
+            <svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><path d="M19 2.5v6.2c0 1.5-1.2 2.8-2.8 2.8H4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8.2 7.2 3.8 11.5l4.4 4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="kb-bottom">
+        <button class="kb-icon" type="button" tabindex="-1" aria-label="Emoji"><img src="assets/emoji.svg" alt="" width="26.8" height="26.8" /></button>
+        <button class="kb-icon" type="button" tabindex="-1" aria-label="Dictation">
+          <svg width="24" height="26" viewBox="0 0 24 26" aria-hidden="true"><rect x="7.6" y="1.4" width="8.8" height="14.4" rx="4.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 12.2a8.2 8.2 0 0 0 16.4 0M12 20.4v4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Composer -->
+    <form class="composer" id="composer" autocomplete="off">
+      <div class="field" id="field">
+        <button class="field-plus pressable" type="button" aria-label="Add attachment">
+          <span class="field-icon field-icon--plus"></span>
+        </button>
+        <input class="field-input" id="message" type="text" inputmode="none" enterkeyhint="send"
+               placeholder="Keep chatting on..." aria-label="Message" />
+        <button class="field-mic pressable" type="button" aria-label="Voice note">
+          <span class="field-icon field-icon--mic"></span>
+        </button>
+      </div>
+      <button class="voice pressable" type="button" aria-label="Talk">
+        <span class="voice-orb">
+          <span class="voice-base"></span>
+          <!-- Each agent's own glow sphere, so the button carries only the current theme's hue -->
+          <img class="voice-glow" data-for="0" src="assets/image170.png" alt="" width="52" height="52" />
+          <img class="voice-glow" data-for="1" src="assets/mic-button-4.png" alt="" width="52" height="52" />
+          <img class="voice-glow" data-for="2" src="assets/image33.png" alt="" width="52" height="52" />
+        </span>
+        <span class="voice-icon" aria-hidden="true"></span>
+      </button>
+    </form>
+  </main>
+
+  <!-- Design exploration: the after-chat sequence on the agent switcher (desktop only, left of the phone) -->
+  <div class="seq-panel" id="seqPanel">
+    <div class="seq-head">
+      <span class="style-picker-title">After-chat sequence</span>
+      <button type="button" class="seq-replay" id="seqReplay">Replay</button>
+    </div>
+    <div class="seq-group" data-key="recap">
+      <span class="seq-title">1 · Recap text</span>
+      <div class="seq-chips"><button type="button" data-v="crawl">Ember crawl</button><button type="button" data-v="rise">Ember rise</button><button type="button" data-v="whisper">Whisper</button></div>
+    </div>
+    <div class="seq-group" data-key="travel">
+      <span class="seq-title">2 · Blob travel</span>
+      <div class="seq-chips"><button type="button" data-v="arc">Arc</button><button type="button" data-v="drops">Droplets</button><button type="button" data-v="float">Float</button></div>
+    </div>
+    <div class="seq-group" data-key="store">
+      <span class="seq-title">3 · Stored in insights</span>
+      <div class="seq-chips"><button type="button" data-v="gulp">Gulp</button><button type="button" data-v="fill">Fill</button><button type="button" data-v="spark">Spark</button></div>
+    </div>
+    <div class="seq-group" data-key="cue">
+      <span class="seq-title">4 · Other agents light up</span>
+      <div class="seq-chips"><button type="button" data-v="glow">Glow</button><button type="button" data-v="breathe">Breathe</button><button type="button" data-v="liquid">Liquid</button></div>
+    </div>
+    <div class="seq-group" data-key="opener">
+      <span class="seq-title">5 · Their opener (tap them)</span>
+      <div class="seq-chips"><button type="button" data-v="bubbles">Bubbles</button><button type="button" data-v="voice">Voice</button><button type="button" data-v="card">Card</button></div>
+    </div>
+    <p class="seq-hint">Plays on “Agent switcher · after chat”. Then tap Roaster or Calm Sibling.</p>
+  </div>
+
+  <!-- Design exploration: compare styles (desktop only, outside the phone) -->
+  <div class="style-pickers">
+    <div class="style-picker" id="screenPicker" role="radiogroup" aria-label="First screen">
+      <span class="style-picker-title">First screen</span>
+      <button type="button" role="radio" data-screen="1">1 · Starters</button>
+      <button type="button" role="radio" data-screen="2">2 · Remember…</button>
+      <button type="button" role="radio" data-screen="4">4 · Lava texts first</button>
+      <button type="button" role="radio" data-screen="agents">Agent switcher · after chat</button>
+    </div>
+    <div class="style-picker" id="bgPicker" role="radiogroup" aria-label="Background style">
+      <span class="style-picker-title">Background</span>
+      <button type="button" role="radio" data-bg="lava">Bottom gradient</button>
+      <button type="button" role="radio" data-bg="edge">Edge glow</button>
+      <button type="button" role="radio" data-bg="haze">Haze</button>
+    </div>
+    <div class="style-picker" id="namePicker" role="radiogroup" aria-label="Agent name style">
+      <span class="style-picker-title">Name style</span>
+      <button type="button" role="radio" data-name="original">Original</button>
+      <button type="button" role="radio" data-name="distressed">Distressed</button>
+      <button type="button" role="radio" data-name="dissolve">Dissolve</button>
+      <button type="button" role="radio" data-name="zoom">Zoom blur</button>
+      <button type="button" role="radio" data-name="halftone">Halftone</button>
+      <button type="button" role="radio" data-name="blur">Soft blur</button>
+      <button type="button" role="radio" data-name="vibe">Vibe</button>
+    </div>
+  </div>
+
+  <script src="name-effects.js"></script>
+  <script src="script.js"></script>
+  <script src="recap.js"></script>
+</body>
+</html>
