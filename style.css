@@ -1,4 +1,5 @@
 :root {
+  color-scheme: dark;
   /* Motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -108,6 +109,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   transition: opacity var(--color-dur) var(--color-ease);
 }
 
+.phone[data-bg="vent"] .bg--vent,
 .phone[data-bg="lava"] .bg--lava,
 .phone[data-bg="edge"] .bg--edge,
 .phone[data-bg="haze"] .bg--haze { opacity: 1; }
@@ -173,15 +175,25 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 .bg--haze .bg-layer {
   background:
     /* Colour kept to the lower third: the top ~55% of the screen stays black */
-    radial-gradient(150% 26% at 45% 104%, color-mix(in srgb, var(--haze-pale) 85%, transparent) 0%, color-mix(in srgb, var(--haze-pale) 40%, transparent) 55%, transparent 85%),
-    radial-gradient(70% 30% at 0% 82%, color-mix(in srgb, var(--haze-mid) 40%, transparent) 0%, transparent 75%),
-    radial-gradient(100% 44% at 108% 72%, color-mix(in srgb, var(--haze-deep) 80%, transparent) 0%, color-mix(in srgb, var(--haze-deep) 40%, transparent) 40%, transparent 78%),
-    linear-gradient(to bottom, transparent 56%, color-mix(in srgb, var(--haze-deep) 30%, transparent) 74%, color-mix(in srgb, var(--haze-mid) 80%, transparent) 90%, color-mix(in srgb, var(--haze-pale) 70%, var(--haze-mid)) 100%),
+    radial-gradient(150% 26% at 45% 104%, color-mix(in srgb, var(--haze-pale) calc(46% * var(--haze-pk, 1)), transparent) 0%, color-mix(in srgb, var(--haze-pale) calc(22% * var(--haze-pk, 1)), transparent) 55%, transparent 85%),
+    radial-gradient(70% 30% at 0% 82%, color-mix(in srgb, var(--haze-mid) 22%, transparent) 0%, transparent 75%),
+    radial-gradient(100% 44% at 108% 72%, color-mix(in srgb, var(--haze-deep) 44%, transparent) 0%, color-mix(in srgb, var(--haze-deep) 22%, transparent) 40%, transparent 78%),
+    /* a second hue for a little more colour: one wide, soft drift on the left that eases out to nothing */
+    radial-gradient(95% 24% at 6% 66%,
+      color-mix(in srgb, var(--haze-accent) 30%, transparent) 0%,
+      color-mix(in srgb, var(--haze-accent) 18%, transparent) 30%,
+      color-mix(in srgb, var(--haze-accent) 7%, transparent) 58%,
+      transparent 88%),
+    radial-gradient(120% 30% at 20% 100%,
+      color-mix(in srgb, var(--haze-accent) 22%, transparent) 0%,
+      color-mix(in srgb, var(--haze-accent) 9%, transparent) 50%,
+      transparent 90%),
+    linear-gradient(to bottom, transparent 56%, color-mix(in srgb, var(--haze-deep) 18%, transparent) 74%, color-mix(in srgb, var(--haze-mid) 44%, transparent) 90%, color-mix(in srgb, var(--haze-pale) calc(46% * var(--haze-pk, 1)), var(--haze-mid)) 100%),
     #000;
 }
-.bg--haze .bg-layer[data-for="0"] { --haze-deep: rgb(0, 34, 128);  --haze-mid: rgb(64, 86, 146);  --haze-pale: rgb(146, 164, 194); } /* Roaster · blue */
-.bg--haze .bg-layer[data-for="1"] { --haze-deep: rgb(128, 30, 4);  --haze-mid: rgb(146, 82, 58);  --haze-pale: rgb(198, 168, 150); } /* Ride-or-Die · ember */
-.bg--haze .bg-layer[data-for="2"] { --haze-deep: rgb(8, 92, 40);   --haze-mid: rgb(66, 122, 86);  --haze-pale: rgb(158, 186, 160); } /* Calm Sibling · moss */
+.bg--haze .bg-layer[data-for="0"] { --haze-deep: rgb(0, 34, 128);  --haze-mid: rgb(64, 86, 146);  --haze-pale: rgb(146, 164, 194); --haze-accent: rgb(196, 112, 214); } /* Roaster · blue, a hint of pinkish purple */
+.bg--haze .bg-layer[data-for="1"] { --haze-deep: rgb(128, 30, 4);  --haze-mid: rgb(146, 82, 58);  --haze-pale: rgb(198, 168, 150); --haze-accent: rgb(232, 96, 150); } /* Ride-or-Die · ember, a hint of rose */
+.bg--haze .bg-layer[data-for="2"] { --haze-deep: rgb(8, 92, 40);   --haze-mid: rgb(66, 122, 86);  --haze-pale: rgb(158, 186, 160); --haze-accent: rgb(206, 222, 96); } /* Calm Sibling · moss, with yellow grass green */
 
 .bg-grain {
   position: absolute;
@@ -354,10 +366,10 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 .agent-labels {
   position: absolute;
-  top: 116px;
+  top: 115px;
   left: 0;
   right: 0;
-  height: 9px;
+  height: 11px;
   display: grid;
   place-items: center;
   pointer-events: none;
@@ -366,8 +378,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 /* Effect names: same size and centre line as the original label (glyph box ≈ 11.5px);
    each SVG is taller than the box so its bleed overflows evenly above and below */
 .agent-labels--fx {
-  top: 114.75px;
-  height: 11.5px;
+  top: 113.75px;
+  height: 13.5px;
   /* fixed tracks: the SVG's bleed padding overflows evenly instead of growing the row/column */
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
@@ -406,8 +418,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 .agent-label--text {
   font-family: "Varela Round", var(--font-ui);
-  font-size: 9.5px;
-  line-height: 9px;
+  font-size: 11.5px;
+  line-height: 11px;
   letter-spacing: 0.01em;
   color: #fff;
   white-space: nowrap;
@@ -523,7 +535,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   color: #000;
   font-family: var(--font-key);
   font-size: 25px;
-  font-weight: 458;
+  font-weight: 360; /* lighter than iOS (458) so the letters sit lighter on the tinted keys */
   line-height: 30px;
   padding-bottom: 5px;
   display: flex;
@@ -581,8 +593,8 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 
 .composer {
   position: absolute;
-  left: 24px;
-  right: 24px;
+  left: 16px;
+  right: 16px;
   bottom: var(--composer-rest);
   display: flex;
   align-items: center;
@@ -592,6 +604,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   transition: transform var(--kb-dur) var(--ease-drawer);
 }
 
+.phone[data-bg="vent"] .composer { --field-bg: rgb(138, 8, 17); } /* Vent paints this flat red behind the keys */
 .phone[data-keyboard="closed"] .composer { transform: translateY(0); }
 
 .field {
@@ -671,6 +684,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
 }
 
 .field-input::placeholder {
+  font-size: 14px; /* 2px under the typed text */
   color: var(--ink);
   opacity: var(--ink-placeholder);
 }
@@ -697,10 +711,9 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   background: var(--field-bg);
   -webkit-backdrop-filter: var(--field-blur);
   backdrop-filter: var(--field-blur);
-  box-shadow: inset 0 -10.065px 16.774px 6.71px color-mix(in srgb, var(--theme) 20%, transparent);
-  transform: rotate(180deg);
 }
 .voice-glow {
+  display: none; /* the button wears the field's plain material, no agent glow */
   inset: 0;
   width: 52px;
   height: 52px;
@@ -728,10 +741,30 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   top: 10px;
   width: 32px;
   height: 32px;
-  background: var(--ink);
-  -webkit-mask: url("assets/voice-fading-pills.svg") center / 100% 100% no-repeat;
-  mask: url("assets/voice-fading-pills.svg") center / 100% 100% no-repeat;
+  fill: var(--ink);
+  overflow: visible;
 }
+
+/* Typing turns the voice button into send, and the field's mic steps aside.
+   A quick crossfade with a touch of blur and scale, so it reads as one glyph becoming another. */
+.voice-icon,
+.voice-send,
+.field-mic {
+  transition: opacity 160ms ease, filter 160ms ease, transform 160ms var(--ease-out);
+}
+.voice-send {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  color: var(--ink);
+  opacity: 0;
+  filter: blur(2px);
+  transform: scale(0.8);
+  pointer-events: none;
+}
+.phone[data-typing="on"] .voice-icon { opacity: 0; filter: blur(2px); transform: scale(0.8); }
+.phone[data-typing="on"] .voice-send { opacity: 1; filter: blur(0); transform: none; }
+.phone[data-typing="on"] .field-mic { opacity: 0; filter: blur(2px); transform: scale(0.8); pointer-events: none; }
 
 /* ───────────────────────── Pre-screen (first visit, no agent yet) ───────────────────────── */
 
@@ -765,6 +798,7 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   flex-direction: column;
   padding: 0 24px;
 }
+.phone[data-pre="5"] .pre-variant[data-v="5"],
 .phone[data-pre="1"] .pre-variant[data-v="1"],
 .phone[data-pre="2"] .pre-variant[data-v="2"],
 .phone[data-pre="4"] .pre-variant[data-v="4"] { display: flex; }
@@ -1109,3 +1143,256 @@ img { display: block; -webkit-user-drag: none; user-select: none; }
   .agent, .pressable, .agent-press { transition-duration: 0ms; }
   .agent-label { transform: none !important; filter: none !important; }
 }
+
+/* ───────────────────────── Vent background ───────────────────────── */
+
+.bg--vent { background: #000; }
+.bg--vent canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.92;
+}
+.phone[data-bg="vent"][data-agent="1"] { --theme: rgb(255, 104, 40); }
+
+/* ───────────────────────── "Ready to vent?" first screen ───────────────────────── */
+
+.vent-center { padding-top: 35px; }
+.vent-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: normal;
+  letter-spacing: -0.44px;
+  color: #fff;
+}
+
+/* Recent chats: horizontal strip that bleeds off the right edge */
+.vent-cards {
+  display: flex;
+  gap: 8px;
+  margin: 0 -24px;
+  padding: 0 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.vent-cards::-webkit-scrollbar { display: none; }
+
+.vent-card {
+  position: relative;
+  flex: none;
+  width: 136px;
+  height: 90px;
+  padding: 0 12px;
+  display: block;
+  text-align: left;
+  border-radius: 16px;
+  border: 0;
+  /* white frosted glass: the cloud's own colour shows through instead of going grey */
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 40.1px 3px rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+}
+.vent-card:first-child { width: 140px; }
+.vent-card:first-child .vent-card-title { max-width: 116px; }
+.vent-card:active { transform: scale(0.97); }
+
+.vent-avatar {
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  font-size: 13px;
+  color: #fff;
+  opacity: 1;
+}
+.vent-avatar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vent-card-title,
+.vent-card-meta {
+  position: absolute;
+  left: 12px;
+  white-space: nowrap;
+}
+.vent-card-title {
+  top: 46px;
+  max-width: 112px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  letter-spacing: -0.28px;
+  color: #fff;
+  opacity: 1;
+  text-shadow: 0 1px 4px rgba(60, 0, 4, 0.2);
+}
+.vent-card-meta {
+  top: 64px;
+  font-size: 12px;
+  letter-spacing: -0.24px;
+  color: #ffe3dd;
+  opacity: 0.88;
+  text-shadow: 0 1px 4px rgba(60, 0, 4, 0.2);
+}
+
+/* ───────────────────────── Voice button: listening animation on load ─────────────────────────
+   Each pill of the glyph stretches and squashes about its own centre, keeping its oval ends.
+   Keyframes start and end at rest, so when script.js stops a pill after a full cycle it lands
+   exactly on the default glyph. */
+
+.voice-pill {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes voice-pill {
+  0%, 100% { transform: scaleY(1); }
+  25% { transform: scaleY(1.55); }
+  55% { transform: scaleY(0.62); }
+  80% { transform: scaleY(1.25); }
+}
+/* the last pill carries the round head, so it breathes as a whole and less */
+@keyframes voice-head {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.08, 1.18); }
+  65% { transform: scale(0.94, 0.86); }
+}
+
+.voice.is-listening .voice-pill { animation: voice-pill 900ms cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.voice.is-listening .voice-pill:nth-child(1) { animation-duration: 760ms; animation-delay: -200ms; }
+.voice.is-listening .voice-pill:nth-child(2) { animation-duration: 880ms; animation-delay: -520ms; }
+.voice.is-listening .voice-pill:nth-child(3) { animation-duration: 1000ms; animation-delay: -80ms; }
+.voice.is-listening .voice-pill:nth-child(4) { animation-name: voice-head; animation-duration: 1100ms; animation-delay: -360ms; }
+.voice-pill.is-settled { animation: none !important; }
+
+/* Composer + voice button: shaded dark red while the keyboard is up, frosted glass once it folds */
+.composer {
+  /* the keyboard's backdrop colour (.bg-kbtint), solid; the field then wears the keyboard's own
+     material on top (below), so field, voice button and keyboard come out the exact same colour */
+  --field-bg: color-mix(in oklab, var(--theme) 60%, #000);
+  --field-border: rgba(255, 255, 255, 0.09);
+  --field-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --field-blur: blur(24px) saturate(1.5);
+  --ink: #fff0ec;
+  --ink-placeholder: 0.72;
+}
+.phone[data-keyboard="closed"] .composer {
+  --field-bg: color-mix(in oklab, var(--me-c, rgb(150, 10, 14)) 22%, transparent);
+  --field-border: rgba(255, 255, 255, 0.07);
+  --field-shadow: inset 0 0 26px 1px rgba(255, 255, 255, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --field-blur: blur(20px) saturate(1.4) brightness(0.9);
+}
+.field,
+.voice-base,
+.voice::after {
+  transition: background 320ms var(--ease-out), box-shadow 320ms var(--ease-out), border-color 320ms var(--ease-out);
+}
+
+/* First card sits on the brightest part of the cloud: a little extra shade on its left keeps its text readable, easing off to the right */
+.vent-card:first-child {
+  background: linear-gradient(to right, rgba(130, 24, 0, 0.3) 0%, rgba(130, 24, 0, 0.14) 55%, rgba(130, 24, 0, 0) 100%), rgba(255, 255, 255, 0.14);
+}
+
+/* Third card dissolves toward the right edge, text included */
+.vent-card:nth-child(3) {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.85) 30%, transparent 78%);
+  mask-image: linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0.85) 30%, transparent 78%);
+}
+
+/* ───────────────────────── Page colour behind the keyboard ─────────────────────────
+   Edge glow, Haze and Bottom gradient: the agent's theme colour fills the space under the keys
+   (deepened so the keyboard stays legible), easing up past the keyboard's top edge. */
+
+.bg-kbtint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--kb-h) + 150px);
+  z-index: 0;
+  pointer-events: none;
+  --kb-tint: color-mix(in oklab, var(--theme) 60%, #000);
+  background: linear-gradient(
+    to top,
+    var(--kb-tint) 0,
+    var(--kb-tint) calc(var(--kb-h) - 20px),
+    color-mix(in oklab, var(--kb-tint) 55%, transparent) calc(var(--kb-h) + 30px),
+    transparent 100%
+  );
+  transition: transform var(--kb-dur) var(--ease-drawer);
+}
+.phone[data-keyboard="closed"] .bg-kbtint { transform: translateY(calc(100% + 2px)); }
+.phone[data-bg="vent"] .bg-kbtint { display: none; }
+
+/* ── Field + voice button wear the keyboard material while the keyboard is up ──
+   Same stack as .kb-material: +#0d0d0d (plus-lighter), then 38-grey luminosity at 90%. Blended inside
+   each element (isolated), over the solid --field-bg, they land on the keyboard's exact colour. */
+.field,
+.voice-base { isolation: isolate; }
+.field::before,
+.field::after,
+.voice-base::before,
+.voice-base::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 320ms var(--ease-out);
+}
+.field::before,
+.voice-base::before { background: #0d0d0d; mix-blend-mode: plus-lighter; }
+.field::after,
+.voice-base::after { background: rgba(38, 38, 38, 0.9); mix-blend-mode: luminosity; }
+.phone[data-keyboard="closed"] .field::before,
+.phone[data-keyboard="closed"] .field::after,
+.phone[data-keyboard="closed"] .voice-base::before,
+.phone[data-keyboard="closed"] .voice-base::after { opacity: 0; }
+
+/* Haze with the keyboard up: its colour band lives in the lower third, which the keyboard covers,
+   so the band rises with the keyboard to sit in the space above it; the keyboard's own tint stays
+   behind the keys only (no wash fading up over the haze) */
+.bg--haze .bg-layer { transition: opacity var(--color-dur) var(--color-ease), transform var(--kb-dur) var(--ease-drawer); }
+.phone[data-bg="haze"][data-keyboard="open"] .bg--haze .bg-layer { transform: translateY(calc(-1 * var(--kb-h) + 70px)); }
+/* the raised band's pale bottom edge would sit just above the keys as a light strip; the keyboard's
+   tint covers it solidly to the composer, then eases out so the haze colours above stay visible */
+.phone[data-bg="haze"] .bg-kbtint {
+  height: calc(var(--kb-h) + 190px);
+  background: linear-gradient(to top,
+    var(--kb-tint) 0,
+    var(--kb-tint) calc(var(--kb-h) + 30px),
+    color-mix(in oklab, var(--kb-tint) 72%, transparent) calc(var(--kb-h) + 70px),
+    color-mix(in oklab, var(--kb-tint) 38%, transparent) calc(var(--kb-h) + 115px),
+    color-mix(in oklab, var(--kb-tint) 12%, transparent) calc(var(--kb-h) + 160px),
+    transparent 100%);
+}
+/* with the keyboard up the haze's pale bottom glow is dialled down, so no light band sits above the keys */
+.phone[data-bg="haze"][data-keyboard="open"] .bg--haze .bg-layer { --haze-pk: 0.3; }
+
+/* "Ready to vent?" drawn in an effect name style: the SVG keeps its own bleed, centred */
+.vent-title.is-fx { display: grid; place-items: center; height: 27px; }
+.vent-title.is-fx svg { overflow: visible; }
+
+/* Home + Chat: the exploration panels stay hidden; only the stage switcher shows */
+.style-pickers[hidden], .seq-panel[hidden] { display: none !important; }
+.vent-title .vent-title-trail { opacity: 0.55; filter: brightness(0.72) saturate(1.1); }
+
+/* Home + Chat: everything lines up with the composer's 16px side margins */
+.pre-variant[data-v="5"] { padding-left: 16px; padding-right: 16px; }
+.vent-cards { margin: 0 -16px; padding: 0 16px; }
+#phone { --chat-pad: 16px; } /* recap.css sets it per chat style */

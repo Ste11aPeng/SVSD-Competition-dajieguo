@@ -215,19 +215,19 @@ window.NameEffects = (() => {
         scaleY: 0.46,
         rotate: 0,
         colors: ['#ffe9fb', '#f2b8ea', '#4d9cc9', '#1d5578'],
-        opacity: (t) => 0.3 * Math.pow(1 - t, 1.2),
-        blur: 4,
-        grain: 1.5,
+        opacity: (t) => 0.2 * Math.pow(1 - t, 1.4), // Home + Chat: a lighter trail
+        blur: 2.5,
+        grain: 0.6,
         grainLevel: [2.2, -0.25],
         // directional haze: [dx, dy] as a fraction of the word box, blur, colour, opacity, which side
         haze: [
-          { dx: -0.03, dy: -0.36, blur: 16, color: '#3b97c6', opacity: 1, side: 'left' },
-          { dx: -0.05, dy: -0.12, blur: 12, color: '#2f86b4', opacity: 0.7, side: 'left' },
-          { dx: 0.02, dy: -0.18, blur: 9, color: '#e7b3ea', opacity: 0.5, side: 'left' },
-          { dx: 0.04, dy: 0.22, blur: 12, color: '#4a9ccb', opacity: 0.95, side: 'right' },
+          { dx: -0.03, dy: -0.36, blur: 12, color: '#3b97c6', opacity: 0.6, side: 'left' },
+          { dx: -0.05, dy: -0.12, blur: 9, color: '#2f86b4', opacity: 0.45, side: 'left' },
+          { dx: 0.02, dy: -0.18, blur: 7, color: '#e7b3ea', opacity: 0.32, side: 'left' },
+          { dx: 0.04, dy: 0.22, blur: 9, color: '#4a9ccb', opacity: 0.6, side: 'right' },
         ],
       },
-      core: { colors: '#fffaff', blur: 3 },
+      core: { colors: '#fffaff', blur: 1.4 },
     },
   };
 

@@ -22,254 +22,79 @@
 .phone[data-keyboard="closed"] .recap-stage { bottom: calc(var(--composer-rest) + 52px + 18px); }
 .phone[data-screen="agents"] .recap-stage { display: block; }
 
-/* Recap lines: bold, warm-white, glowing like heat (the "words turn to embers" reference) */
-.recap-line {
-  font-weight: 650;
-  font-size: 21px;
-  line-height: 1.22;
-  letter-spacing: -0.01em;
-  text-align: center;
-  text-wrap: balance;
-  color: #fff4ea;
-  text-shadow:
-    0 0 1px rgba(255, 236, 214, 0.9),
-    0 0 14px rgba(255, 138, 64, 0.55),
-    0 0 34px rgba(255, 90, 20, 0.25);
-}
-.recap-line span { display: inline-block; }
-
-/* ── Ember crawl: a tilted plane the lines drift away on ── */
-.recap-crawl {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  perspective: 320px;
-  perspective-origin: 50% 0%;
-  -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 34%, #000 100%);
-  mask: linear-gradient(to bottom, transparent 0%, #000 34%, #000 100%);
-}
-.recap-plane {
-  position: absolute;
-  inset: 0 28px;
-  transform: rotateX(28deg);
-  transform-origin: 50% 100%;
-  transform-style: preserve-3d;
-}
-.recap-plane .recap-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -30px;
-}
-
-/* ── Ember rise: lines stack up from a baseline; the oldest burn off ── */
-.recap-rise {
-  position: absolute;
-  left: 30px;
-  right: 30px;
-  top: 0;
-  bottom: 30%;
-  -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 30%);
-  mask: linear-gradient(to bottom, transparent 0%, #000 30%);
-}
-.recap-rise .recap-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: transform 640ms var(--ease-out);
-}
-
-/* ── Whisper: one soft serif phrase at a time ── */
-.recap-whisper {
-  position: absolute;
-  inset: 0 34px;
-  display: grid;
-  place-items: center;
-}
-.recap-phrase {
-  grid-area: 1 / 1;
-  margin: 0;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 31px;
-  line-height: 1.1;
-  text-align: center;
-  text-wrap: balance;
-  color: var(--ink);
-  text-shadow: 0 0 18px color-mix(in srgb, var(--theme) 45%, transparent);
-}
-.recap-phrase span { display: inline-block; }
-
-/* ── The gold core insight ── */
-.recap-insight {
-  position: absolute;
-  inset: 0 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-.recap-insight-label {
-  font-family: var(--font-body);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-}
-.recap-line--gold {
-  font-size: 23px;
-  text-shadow: none;
-  /* a glint sweeps across once it lands; the glow is a drop-shadow so it sits under the gradient fill */
-  filter: drop-shadow(0 0 1px var(--gold-hi)) drop-shadow(0 0 12px rgba(255, 190, 60, 0.7)) drop-shadow(0 0 28px rgba(255, 150, 20, 0.35));
-}
-.recap-line--gold span {
-  color: transparent;
-  background: linear-gradient(100deg, #ffd978 0%, #ffd978 40%, #fffaf0 50%, #ffd978 60%, #ffd978 100%);
-  background-size: 260% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-.recap-line--gold.is-glinting span { animation: glint 1300ms var(--ease-in-out) both; }
-@keyframes glint { to { background-position: 0% 0; } }
-.recap-line--serif {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 34px;
-  line-height: 1.05;
-}
-
-/* ───────────────────────── Embers + liquid layer ───────────────────────── */
-
-.recap-embers {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 39;
-  pointer-events: none;
-}
-
-/* Drops merge through the metaball filter, then glow */
-.recap-goo {
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  filter: url(#lava-goo) drop-shadow(0 0 10px rgba(255, 180, 60, 0.55));
-}
-.recap-drop {
-  position: absolute;
-  left: -20px; /* centred on its translate point (40px drop) */
-  top: -20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 36% 32%, #fff8e0 0%, #ffd36b 24%, #ffab2e 58%, #d97a0e 100%);
-  will-change: transform;
-}
-
 /* ───────────────────────── Insights bubble ───────────────────────── */
 
 .memories-core {
-  inset: 3px;
+  /* a light glass glow: a faint rim, a soft highlight up top, and a pool of gold liquid (below) */
+  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 238, 180, 0.95) 0%, rgba(255, 190, 70, 0.75) 30%, rgba(255, 140, 20, 0.22) 60%, transparent 72%);
+  overflow: hidden;
+  background: radial-gradient(28% 16% at 35% 24%, rgba(255, 246, 228, 0.3), transparent 72%);
+  box-shadow: inset 0 0 6px 1px rgba(255, 214, 130, 0.22);
   mix-blend-mode: plus-lighter;
   opacity: 0;
   pointer-events: none;
 }
-.memories.has-insight .memories-core { animation: core-breathe 4.2s ease-in-out infinite; }
-@keyframes core-breathe {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.08); }
+/* the liquid: a gold pool that rises from the bottom and sways (Glass+) */
+.memories-pool {
+  position: absolute;
+  left: -15%;
+  right: -15%;
+  top: 30%;
+  height: 90%;
+  border-radius: 50%;
+  transform: translateY(60%);
 }
+/* Glass+ (the default) brightens the pool; the other versions bring their own light instead */
+.memories-pool { background: radial-gradient(50% 50% at 50% 50%, rgba(255, 210, 120, 0.7) 0%, rgba(255, 170, 60, 0.32) 45%, transparent 72%); }
+.memories-core:not([data-v="glass"]) .memories-pool { display: none; }
+
+/* every light lives inside the core, which clips it to the circle */
+.memories-fx { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+/* Caustics: patches of light, as if refracted through water */
+.memories-fx--caustic {
+  inset: -25%;
+  background:
+    radial-gradient(16% 11% at 34% 42%, rgba(255, 236, 170, 0.95), transparent 72%),
+    radial-gradient(12% 18% at 64% 60%, rgba(255, 205, 100, 0.85), transparent 72%),
+    radial-gradient(20% 10% at 52% 30%, rgba(255, 246, 210, 0.8), transparent 72%),
+    radial-gradient(14% 14% at 40% 72%, rgba(255, 180, 70, 0.8), transparent 72%),
+    radial-gradient(10% 16% at 72% 38%, rgba(255, 225, 150, 0.75), transparent 72%);
+  filter: blur(1.4px);
+}
+/* Lava lamp: soft gold blobs */
+.memories-fx--lamp { filter: blur(1.5px); }
+.memories-blob {
+  position: absolute;
+  bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(255, 240, 190, 0.95), rgba(255, 190, 80, 0.75) 45%, rgba(255, 150, 40, 0) 72%);
+}
+/* Swirl: arms of gold in a vortex, softer toward the middle so the glyph reads */
+.memories-fx--swirl {
+  inset: -30%;
+  background: conic-gradient(from 0deg, transparent 0 8%, rgba(255, 214, 120, 0.9) 18%, transparent 30%,
+      rgba(255, 170, 60, 0.7) 48%, transparent 60%, rgba(255, 238, 180, 0.85) 78%, transparent 90%);
+  -webkit-mask: radial-gradient(circle, rgba(0, 0, 0, 0.35) 0 18%, #000 42%);
+  mask: radial-gradient(circle, rgba(0, 0, 0, 0.35) 0 18%, #000 42%);
+  filter: blur(2.5px);
+}
+/* Starlight: thin rays fanning out from the star */
+.memories-fx--rays {
+  background: repeating-conic-gradient(from 0deg at 59% 39%, rgba(255, 226, 150, 0.6) 0 5deg, transparent 5deg 24deg);
+  -webkit-mask: radial-gradient(circle at 59% 39%, #000 0 18%, transparent 72%);
+  mask: radial-gradient(circle at 59% 39%, #000 0 18%, transparent 72%);
+  transform-origin: 59% 39%;
+}
+
+/* the glyph's bubbles swell and its star turns, each about its own centre */
+.foam-hole,
+.memories-star { transform-box: fill-box; transform-origin: center; }
 
 /* the glyph is gold in the source art; it gets its colour back once an insight is stored */
 .memories-icon { transition: filter 700ms ease; }
-.memories.has-insight .memories-icon { filter: brightness(1.05); }
-
-.memories-ripple {
-  inset: 0;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1.5px rgba(255, 205, 100, 0.9), 0 0 14px rgba(255, 170, 40, 0.6);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.memories-fill {
-  inset: 1px;
-  border-radius: 50%;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-.memories-liquid {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: -20%;
-  transform: translateY(100%);
-}
-.memories-wave {
-  position: absolute;
-  inset: 0 -100% 0 0; /* twice as wide; slides left on a loop */
-  background: linear-gradient(to bottom, transparent 0 6px, #ffbf3f 6px, #e8900f 100%);
-  animation: wave 900ms linear infinite;
-}
-.memories-wave svg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 7px;
-  fill: #ffcf5c;
-}
-@keyframes wave { to { transform: translateX(-50%); } }
-
-.insight-toast {
-  position: absolute;
-  left: 24px;
-  top: 114px;
-  z-index: 41;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px 5px 8px;
-  border-radius: 99px;
-  background: rgba(46, 30, 8, 0.55);
-  border: 0.8px solid rgba(255, 200, 100, 0.25);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: #ffe2a0;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  filter: blur(4px);
-  transform: translateY(-4px) scale(0.96);
-  transform-origin: 22px 0;
-  transition: opacity 200ms ease, filter 200ms ease, transform 200ms var(--ease-out);
-}
-.insight-toast.is-shown {
-  opacity: 1;
-  filter: blur(0);
-  transform: none;
-  transition-duration: 420ms;
-}
-.insight-toast i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 8px #ffb02e;
-}
+/* same filter list as the resting glyph, so the cool-down eases instead of snapping */
+.memories.has-insight .memories-icon { filter: grayscale(0) brightness(1.05); }
 
 /* ───────────────────────── Other agents light up ───────────────────────── */
 
@@ -289,160 +114,298 @@
   pointer-events: none;
 }
 
+/* Inside the frame: the agent's colour washes over the photo like the light inside a glass orb,
+   heaviest at the rim; its stops are animatable (see @property below) so the colour can rise and fall */
+.agent-press::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(to top, rgba(var(--agent-rgb), 0.95) 0%, rgba(var(--agent-rgb), 0.4) var(--fill-mid), transparent var(--fill-end));
+  box-shadow: inset 0 0 8px 1px rgba(var(--agent-rgb), 0.8);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* brighter than a resting side avatar (beats the ring's inline opacity while it has news) */
 .agent.has-news .agent-photo { opacity: 0.62 !important; transition: opacity 900ms ease; }
 .agent.has-news .agent-chrome { opacity: 0.7 !important; transition: opacity 900ms ease; }
 
-/* Glow: halo + brightness pulse */
-.phone[data-cue="glow"] .agent.has-news .agent-press { animation: cue-glow 2.6s ease-in-out infinite; }
-.phone[data-cue="glow"] .agent.has-news .agent-press::before { animation: cue-halo 2.6s ease-in-out infinite; }
-@keyframes cue-glow {
-  0%, 100% { filter: brightness(1.1); }
-  50% { filter: brightness(1.75) saturate(1.2); }
-}
+/* Glow + zoom, in one rhythm: the halo swells while the photo zooms 10% inside its circle and back
+   (the clip shrinks by the same 10%, so the frame itself never grows) */
+.agent.has-news .agent-press::before { animation: cue-halo 2.8s ease-in-out infinite; }
+.agent.has-news .agent-press::after { animation: cue-fill 2.8s ease-in-out infinite; }
+.agent.has-news .agent-photo { animation: cue-zoom 2.8s ease-in-out infinite; }
+/* low point nearly dark, so the swell to full glow reads clearly */
 @keyframes cue-halo {
-  0%, 100% { opacity: 0.25; transform: scale(0.9); }
-  50% { opacity: 0.9; transform: scale(1.08); }
+  0%, 100% { opacity: 0.04; transform: scale(0.9); }
+  50% { opacity: 0.95; transform: scale(1.08); }
 }
-
-/* Breathe: the photo slowly zooms in and out inside its circle (the clip shrinks as it scales) */
-.phone[data-cue="breathe"] .agent.has-news .agent-photo { animation: cue-breathe 3.4s ease-in-out infinite; }
-.phone[data-cue="breathe"] .agent.has-news .agent-press::before { opacity: 0.45; }
-@keyframes cue-breathe {
-  0%, 100% { transform: scale(1); clip-path: circle(50%); filter: brightness(1.15); }
-  50% { transform: scale(1.18); clip-path: circle(42.4%); filter: brightness(1.45); }
+/* the colour inside sinks to a thin band at the bottom, then rises to wash the whole photo */
+@property --fill-mid { syntax: "<percentage>"; inherits: false; initial-value: 20%; }
+@property --fill-end { syntax: "<percentage>"; inherits: false; initial-value: 50%; }
+@keyframes cue-fill {
+  0%, 100% { opacity: 0.25; --fill-mid: 0%; --fill-end: 22%; }
+  50% { opacity: 0.85; --fill-mid: 55%; --fill-end: 110%; }
 }
-
-/* Liquid: the photo ripples like it's under water, with a slow halo */
-.phone[data-cue="liquid"] .agent.has-news .agent-photo { filter: url(#agent-liquify) brightness(1.35); }
-.phone[data-cue="liquid"] .agent.has-news .agent-press::before { animation: cue-halo 4s ease-in-out infinite; }
+@keyframes cue-zoom {
+  0%, 100% { transform: scale(1); clip-path: circle(50%); filter: brightness(0.85); }
+  50% { transform: scale(1.1); clip-path: circle(45.45%); filter: brightness(1.6); }
+}
 
 /* ───────────────────────── Openers ───────────────────────── */
 
-.recap-stage[data-agent="0"] { --agent-rgb: 124, 96, 255; --agent-font: "Shrikhand", cursive; --agent-font-style: normal; }
-.recap-stage[data-agent="2"] { --agent-rgb: 150, 230, 90; --agent-font: "EB Garamond", Georgia, serif; --agent-font-style: italic; }
-.recap-stage { --agent-ink: color-mix(in srgb, rgb(var(--agent-rgb, 255, 255, 255)) 28%, #fff); }
+/* each agent's colour and how much of it shows in its words */
+.recap-stage[data-agent="0"],
+.op-thread[data-agent="0"] { --agent-rgb: 124, 96, 255; --agent-ink: color-mix(in srgb, rgb(150, 125, 255) 70%, #fff); }
+.recap-stage[data-agent="1"],
+.op-thread[data-agent="1"] { --agent-rgb: 255, 106, 31; --agent-ink: color-mix(in srgb, rgb(255, 130, 60) 60%, #fff); }
+.recap-stage[data-agent="2"],
+.op-thread[data-agent="2"] { --agent-rgb: 150, 230, 90; --agent-ink: color-mix(in srgb, rgb(150, 230, 90) 40%, #fff); }
 
-/* Bubbles */
+/* the agent's status ("Typing…", "Drafting…") takes the place of its name under the avatars,
+   drawn like the name (script.js: Lava.nameGraphic / nameColor) */
+.agent-status {
+  position: absolute;
+  top: 115px;
+  left: 0;
+  right: 0;
+  height: 11px;
+  display: grid;
+  place-items: center;
+  font-family: "Varela Round", var(--font-ui);
+  font-size: 11.5px;
+  line-height: 11px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: status-breathe 1.6s ease-in-out infinite;
+}
+.agent-status:empty { display: none; }
+/* in an effect name style it's an SVG, placed exactly like the effect names */
+.agent-status.is-fx {
+  top: 113.75px;
+  height: 13.5px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+.agent-status svg { overflow: visible; }
+@keyframes status-breathe { 50% { opacity: 0.55; } }
+.phone[data-status="on"] .agent-labels { opacity: 0; }
+
+/* only the conversation with the agent in front shows */
+.recap-stage > * { transition: opacity 240ms ease, filter 240ms ease; }
+.recap-stage > .is-away { opacity: 0; filter: blur(4px); pointer-events: none; }
+
+/* a conversation: one column of text, no bubbles, all in Geist and never bold. It fills the space
+   and scrolls; older lines fade out at the top. Spacing comes from the chat style (below). */
 .op-thread {
   position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  font-family: var(--font-body);
-}
-.op-name {
-  margin: 0 0 2px 4px;
-  font-family: var(--agent-font);
-  font-style: var(--agent-font-style);
-  font-size: 14px;
-  color: var(--agent-ink);
-  opacity: 0.85;
-}
-.op-bubble,
-.op-typing {
-  max-width: 82%;
-  padding: 10px 15px;
-  border-radius: 20px 20px 20px 6px;
-  font-size: 16px;
-  line-height: 1.35;
-  color: var(--agent-ink);
-  background: color-mix(in srgb, rgb(var(--agent-rgb)) 14%, rgba(14, 14, 16, 0.74));
-  border: 0.839px solid rgba(var(--agent-rgb), 0.28);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 0 24px -8px rgba(var(--agent-rgb), 0.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  backdrop-filter: blur(24px) saturate(1.6);
-}
-.op-typing {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  height: 40px;
-}
-.op-typing i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--agent-ink);
-  opacity: 0.3;
-  animation: op-dot 1s ease-in-out infinite;
-}
-.op-typing i:nth-child(2) { animation-delay: 150ms; }
-.op-typing i:nth-child(3) { animation-delay: 300ms; }
-@keyframes op-dot { 30% { opacity: 0.85; transform: translateY(-2px); } }
-
-/* Voice: big, in the agent's own typeface */
-.op-voice {
-  position: absolute;
-  inset: 0 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 14px;
-  text-align: center;
-}
-.op-voice-line {
-  margin: 0;
-  font-family: var(--agent-font);
-  font-style: var(--agent-font-style);
-  font-size: 25px;
-  line-height: 1.18;
-  text-wrap: balance;
-  color: var(--agent-ink);
-  text-shadow: 0 0 18px rgba(var(--agent-rgb), 0.55);
-}
-.op-voice-line + .op-voice-line { font-size: 19px; opacity: 0.85; }
-.recap-stage[data-agent="2"] .op-voice-line { font-size: 30px; }
-.recap-stage[data-agent="2"] .op-voice-line + .op-voice-line { font-size: 22px; }
-.op-voice-line span { display: inline-block; }
-
-/* Card: a notification from a friend */
-.op-card {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 6px;
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  column-gap: 11px;
-  row-gap: 3px;
-  padding: 12px 14px;
-  border-radius: 22px;
-  text-align: left;
-  font-family: var(--font-body);
-  color: var(--agent-ink);
-  background: color-mix(in srgb, rgb(var(--agent-rgb)) 12%, rgba(14, 14, 16, 0.74));
-  border: 0.839px solid rgba(var(--agent-rgb), 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 32px rgba(0, 0, 0, 0.35), 0 0 30px -10px rgba(var(--agent-rgb), 0.7);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  backdrop-filter: blur(24px) saturate(1.6);
+  top: 0;
+  bottom: 0;
+  left: var(--chat-pad);
+  right: calc(var(--chat-pad) - 14px); /* reaches into the margin so stickers aren't clipped; the list pads text back */
+  overflow-y: auto;
+  scrollbar-width: none;
   pointer-events: auto;
-  transition: transform 160ms var(--ease-out);
+  -webkit-mask: linear-gradient(to bottom, transparent 0, #000 24px);
+  mask: linear-gradient(to bottom, transparent 0, #000 24px);
 }
-.op-card:active { transform: scale(0.98); }
-.op-card img {
-  grid-row: 1 / 4;
+.op-thread::-webkit-scrollbar { display: none; }
+.op-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--chat-gap);
+  min-height: 100%;
+  padding: 24px 14px 12px 0;
+  font-family: var(--font-body);
+}
+/* the agent's words, on the left edge, in its own colour */
+.op-msg {
+  align-self: flex-start;
+  max-width: 86%;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--chat-size);
+  font-weight: 300;
+  line-height: var(--chat-lh);
+  color: var(--agent-ink);
+  text-wrap: pretty;
+}
+.op-msg span { display: inline-block; }
+/* where the conversation changes hands, a little more room */
+.op-msg.is-turn,
+.op-chips.is-turn { margin-top: calc(var(--chat-turn) - var(--chat-gap)); }
+
+/* ── Chat styles: five takes on spacing and on how key words flare ── */
+.phone,
+.phone[data-chat="1"] { --chat-gap: 18px; --chat-turn: 18px; --chat-pad: 28px; --chat-size: 16px; --chat-lh: 1.45; }
+.phone[data-chat="2"] { --chat-gap: 24px; --chat-turn: 24px; --chat-pad: 24px; --chat-size: 15.5px; --chat-lh: 1.5; }
+.phone[data-chat="3"] { --chat-gap: 8px; --chat-turn: 30px; --chat-pad: 26px; --chat-size: 16px; --chat-lh: 1.42; }
+.phone[data-chat="4"] { --chat-gap: 20px; --chat-turn: 20px; --chat-pad: 32px; --chat-size: 17px; --chat-lh: 1.42; --chat-me-size: 15px; }
+.phone[data-chat="5"] { --chat-gap: 16px; --chat-turn: 22px; --chat-pad: 24px; --chat-size: 15px; --chat-lh: 1.55; }
+
+/* each voice's flare colours: a hot highlight and a warm accent */
+.op-thread[data-agent="0"] { --flare-hot: #e6dcff; --flare-warm: #ff7ad9; }
+.op-thread[data-agent="1"] { --flare-hot: #fff0d0; --flare-warm: #ffb347; }
+.op-thread[data-agent="2"] { --flare-hot: #efffd6; --flare-warm: #6fe3c4; }
+.op-msg--me { --flare-hot: #ffe6b0; --flare-warm: #ff6a3d; }
+
+/* key words; the flare plays as each one appears (history is already there, so it just rests) */
+.kw.is-static { animation: none !important; }
+
+/* 1 · Sweep: a band of hot colour passes across the word, leaving it warm-tinted */
+.phone[data-chat="1"] .kw {
+  background: linear-gradient(100deg,
+      color-mix(in srgb, currentColor 62%, var(--flare-warm)) 0 34%,
+      var(--flare-warm) 44%, var(--flare-hot) 50%, var(--flare-warm) 56%,
+      currentColor 66% 100%) 0 0 / 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: kw-sweep 1.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes kw-sweep { from { background-position: 100% 0; } }
+
+/* 2 · Bloom: the word glows up in its colour, then settles to a soft halo */
+.phone[data-chat="2"] .kw {
+  color: color-mix(in srgb, currentColor 55%, var(--flare-hot));
+  text-shadow: 0 0 8px color-mix(in srgb, var(--flare-warm) 45%, transparent);
+  animation: kw-bloom 1.6s ease-out both;
+}
+@keyframes kw-bloom {
+  0% { text-shadow: 0 0 0 transparent; }
+  30% { color: var(--flare-hot); text-shadow: 0 0 16px var(--flare-warm), 0 0 3px var(--flare-hot); }
+}
+
+/* 3 · Heat: white-hot when it lands, cooling into a gradient of the voice's colours */
+.phone[data-chat="3"] .kw {
+  background: linear-gradient(90deg, var(--flare-hot), var(--flare-warm));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: kw-heat 1.4s ease-out both;
+}
+@keyframes kw-heat {
+  0% { -webkit-text-fill-color: #fff; text-shadow: 0 0 12px var(--flare-warm); }
+  100% { text-shadow: 0 0 0 transparent; }
+}
+
+/* 4 · Underline: a gradient line draws itself under the word */
+.phone[data-chat="4"] .kw {
+  color: color-mix(in srgb, currentColor 70%, var(--flare-hot));
+  background: linear-gradient(90deg, var(--flare-warm), var(--flare-hot)) 0 100% / 100% 1.5px no-repeat;
+  padding-bottom: 1px;
+  animation: kw-line 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+@keyframes kw-line { from { background-size: 0% 1.5px; } }
+.phone[data-chat="4"] .op-msg--me { font-size: var(--chat-me-size); }
+
+/* 5 · Ember: the word smoulders in warm colours, one bright pass as it appears */
+.phone[data-chat="5"] .kw {
+  background: linear-gradient(90deg, var(--flare-hot), var(--flare-warm),
+      color-mix(in srgb, currentColor 40%, var(--flare-warm)), var(--flare-hot)) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: kw-ember 1.8s ease-out both;
+}
+@keyframes kw-ember { from { background-position: 100% 0; filter: brightness(1.6); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kw { animation: none !important; }
+}
+
+/* reaction stickers on your messages (tapbacks) */
+.op-msg--me.has-react { position: relative; margin-top: 18px; }
+.op-msg--me.has-react--thought { margin-top: 22px; }
+/* sits on the message's top-left corner, like a tapback
+   (scoped under .op-msg to win over the per-word `.op-msg span` rule) */
+.op-msg .op-react {
+  position: absolute;
+  left: -26px;
+  top: -22px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #44444b; /* solid, so nothing shows through */
+  box-shadow: 0 0 0 2px #0b0b0d, 0 4px 10px rgba(0, 0, 0, 0.4);
+  font-size: 17px;
+  line-height: 1;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  transform-origin: 70% 80%;
+}
+/* a thought bubble above the start of the message, trailing two little dots toward it */
+.op-msg .op-react--thought {
+  left: -22px;
+  top: -32px;
   width: 36px;
   height: 36px;
+  font-size: 20px;
+  transform-origin: 80% 100%;
+}
+/* emoji fonts carry their own line metrics; give the glyph a box of its own and centre that */
+.op-msg .op-react-emoji {
+  display: block;
+  height: 1em;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  line-height: 1;
+  text-align: center;
+}
+.op-react-dot {
+  position: absolute;
+  left: 4px;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 0 1px rgba(var(--agent-rgb), 0.5), 0 0 14px rgba(var(--agent-rgb), 0.5);
+  background: #44444b;
 }
-.op-card-head { display: flex; justify-content: space-between; align-items: baseline; }
-.op-card-head b {
-  font-weight: 400;
-  font-family: var(--agent-font);
-  font-style: var(--agent-font-style);
-  font-size: 15px;
+.op-react-dot--small { left: -3px; bottom: -11px; width: 5px; height: 5px; }
+
+/* emoji sent on their own: big, full brightness, each at its own angle */
+.op-msg--me.is-emoji {
+  color: #fff;
+  line-height: 1;
+  transform-origin: 70% 60%;
 }
-.op-card-head small { font-size: 11px; opacity: 0.45; }
-.op-card-body { font-size: 14px; line-height: 1.38; opacity: 0.9; min-height: 19px; }
-.op-card-body .op-typing { height: auto; padding: 4px 0; background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
-.op-card-cta { margin-top: 4px; font-size: 12px; opacity: 0.55; }
+/* yours: on the right edge, neutral white, softened like the text in the field
+   (a soft colour rather than opacity, so key words and stickers can be brighter) */
+.op-msg--me {
+  align-self: flex-end;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.58);
+}
+/* shouted: bigger and brighter, never bold */
+.op-msg--me.is-loud {
+  font-size: calc(var(--chat-me-size, var(--chat-size)) + 2px);
+  color: rgba(255, 255, 255, 0.8);
+}
+/* typed in a temper: it leans */
+.op-msg--me.is-tilted { transform: rotate(-4deg); transform-origin: 100% 50%; }
+/* quick replies are yours, so they sit on the right */
+.op-chips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; align-self: flex-end; }
+.op-chip {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 17px;
+  border: 0.839px solid rgba(var(--agent-rgb), 0.45);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--agent-ink);
+  transition: transform 160ms var(--ease-out), background-color 150ms ease;
+}
+.op-chip:active { transform: scale(0.96); background: rgba(var(--agent-rgb), 0.15); }
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-status { animation: none; }
+}
 
 /* ───────────────────────── Panel (design exploration) ───────────────────────── */
 
@@ -502,7 +465,124 @@
 @media (prefers-reduced-motion: reduce) {
   .agent.has-news .agent-press,
   .agent.has-news .agent-press::before,
-  .agent.has-news .agent-photo,
-  .memories.has-insight .memories-core { animation: none !important; }
-  .memories.has-insight .memories-core { opacity: 0.6; }
+  .agent.has-news .agent-photo { animation: none !important; }
+  .agent.has-news .agent-press::after { animation: none; opacity: 0.55; --fill-mid: 30%; --fill-end: 75%; }
 }
+
+.seq-title-row { display: flex; align-items: center; justify-content: space-between; }
+.seq-mini {
+  font-size: 11px;
+  color: #ffd27a;
+  opacity: 0.8;
+  transition: opacity 150ms ease, transform 160ms var(--ease-out);
+}
+.seq-mini:active { transform: scale(0.96); }
+@media (hover: hover) and (pointer: fine) {
+  .seq-mini:hover { opacity: 1; }
+}
+.seq-note { margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.7); }
+
+/* ── Email draft: what an agent wrote for you, waiting for your OK before it's sent ── */
+.op-draft {
+  align-self: flex-start;
+  width: 88%;
+  margin: 6px 0 2px;
+  padding: 12px 14px 12px;
+  border-radius: 18px;
+  font-family: var(--font-body);
+  letter-spacing: -0.02em;
+  color: #fff;
+  background: var(--ab-b, rgba(88, 16, 26, 0.7));
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.op-draft-label {
+  margin: 0 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.op-draft-head {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 9px;
+  margin-bottom: 9px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.16);
+}
+.op-draft-row {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.35;
+  min-width: 0;
+}
+.op-draft-key { flex: none; width: 52px; opacity: 0.55; }
+.op-draft-val { min-width: 0; overflow-wrap: anywhere; }
+.op-draft-row:last-child .op-draft-val { font-weight: 600; }
+.op-draft-body {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.42;
+  opacity: 0.92;
+  border-radius: 8px;
+  outline: none;
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.op-draft-body p { margin: 0; white-space: pre-line; }
+.op-draft.is-editing .op-draft-body {
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.18), 0 0 0 7px rgba(255, 255, 255, 0.22);
+  cursor: text;
+}
+.op-draft-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+.op-draft-btn {
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.22);
+  transition: transform 160ms var(--ease-out), background-color 160ms ease;
+}
+.op-draft-btn:active { transform: scale(0.96); }
+.op-draft-btn--send {
+  background: var(--me-c, #f8502f);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.op-draft-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.op-draft.is-sent { opacity: 0.75; transition: opacity 400ms ease; }
+
+/* Home + Chat: older messages fade out under the names on a long, eased curve instead of a 24px cut,
+   and the bottom eases out too */
+.op-thread {
+  --fade: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0, 0, 0, 0.04) 10px,
+    rgba(0, 0, 0, 0.14) 22px,
+    rgba(0, 0, 0, 0.32) 36px,
+    rgba(0, 0, 0, 0.55) 50px,
+    rgba(0, 0, 0, 0.78) 64px,
+    rgba(0, 0, 0, 0.93) 78px,
+    #000 92px,
+    /* and the same kind of ease at the bottom, as messages pass behind the composer */
+    #000 calc(100% - 44px),
+    rgba(0, 0, 0, 0.8) calc(100% - 32px),
+    rgba(0, 0, 0, 0.45) calc(100% - 18px),
+    rgba(0, 0, 0, 0.15) calc(100% - 7px),
+    transparent 100%);
+  -webkit-mask: var(--fade);
+  mask: var(--fade);
+}
+.op-list { padding-top: 64px; padding-bottom: 40px; } /* the newest message rests clear of the bottom fade */

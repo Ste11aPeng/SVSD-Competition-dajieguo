@@ -272,9 +272,19 @@
     setKeyboard(false);
   });
 
+  // With something typed, the voice button is the send button
+  const voiceButton = composer.querySelector('.voice');
+  voiceButton.addEventListener('click', () => {
+    if (input.value.trim()) composer.requestSubmit();
+  });
+  input.addEventListener('input', () => {
+    voiceButton.setAttribute('aria-label', input.value.trim() ? 'Send' : 'Talk');
+  });
+
+  // Sending keeps the keyboard up so you can keep typing; return on an empty field puts it away
   composer.addEventListener('submit', (e) => {
     e.preventDefault();
-    setKeyboard(false);
+    if (!input.value.trim()) setKeyboard(false);
   });
 
   document.addEventListener('keydown', (e) => {
@@ -369,7 +379,7 @@
         setShift(!shift);
         break;
       case 'return':
-        setKeyboard(false);
+        composer.requestSubmit(); // sends, like a real keyboard's return
         break;
       default:
         break;
@@ -392,7 +402,7 @@
   /* ───────────── Background style picker (design exploration) ───────────── */
 
   const bgPicker = document.getElementById('bgPicker');
-  const BG_KEY = 'lava.bgStyle';
+  const BG_KEY = 'lava.bgStyle.v2';
 
   function setBgStyle(name) {
     phone.dataset.bg = name;
@@ -419,7 +429,7 @@
   const fxLabels = document.getElementById('fxLabels');
   const NAME_KEY = 'lava.nameStyle';
   const agentNames = agentButtons.map((b) => b.getAttribute('aria-label'));
-  const NAME_HEIGHT = 11.5; // same size as the original label (≈9.5px type)
+  const NAME_HEIGHT = 13.5; // same size as the original label (≈11.5px type)
   // per-style size tweaks, in px of type size (the glyph box is ~1.21× the type size)
   const NAME_SIZE_BUMP = { zoom: 2 };
   // per-agent variants of a style: Roaster is set crisp (no streak), Calm Sibling breathes softly
@@ -507,18 +517,41 @@
     ['430 100px Archivo', '500 100px Archivo', '800 100px Archivo', '900 100px Archivo', '650 100px Inter', '1000 100px Nunito', 'italic 500 100px "EB Garamond"', '100px Shrikhand'].map((f) => document.fonts.load(f))
   ).catch(() => {});
 
+  // Any text drawn the way agent i's name is in `style` (sizes, per-agent faces, theme colours)
+  function nameGraphic(text, i, style, base = NAME_HEIGHT) {
+    const theme = themeRgb(i);
+    const ink = nameInk(theme);
+    const variant = (NAME_VARIANTS[style] || {})[i] || null;
+    const swap = (NAME_FONTS[style] || {})[i] || null;
+    const height = (base + ((NAME_SIZE_BUMP[style] || 0) + (NAME_VARIANT_BUMP[variant] || 0)) * 1.21) * (swap ? swap.scale : 1);
+    return NameEffects.render(style, text, { ink: toHex(ink), height, palette: namePalette(style, theme, ink), variant, font: swap && swap.font });
+  }
+
+  // "Ready to vent?" on the first screen wears the same name style (in the lava brand colour)
+  const ventTitle = document.querySelector('.vent-title');
+  const VENT_TITLE = ventTitle ? ventTitle.textContent : '';
+  function renderVentTitle(style) {
+    if (!ventTitle) return;
+    ventTitle.classList.toggle('is-fx', style !== 'original');
+    ventTitle.replaceChildren();
+    if (style === 'original') { ventTitle.textContent = VENT_TITLE; return; }
+    const svg = nameGraphic(VENT_TITLE, 1, style, 22 * 1.21);
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', VENT_TITLE);
+    // the trail behind the word (everything before the core) sinks back so it melts into the cloud
+    const trail = svg.querySelector(':scope > defs + g');
+    if (trail && trail.nextElementSibling) trail.classList.add('vent-title-trail');
+    ventTitle.append(svg);
+  }
+
   async function renderNameLabels(style) {
     fxLabels.replaceChildren();
-    if (style === 'original') return;
+    if (style === 'original') { renderVentTitle(style); return; }
     await nameFonts;
     if (phone.dataset.name !== style) return; // picked something else while fonts loaded
+    renderVentTitle(style);
     agentNames.forEach((name, i) => {
-      const theme = themeRgb(i);
-      const ink = nameInk(theme);
-      const variant = (NAME_VARIANTS[style] || {})[i] || null;
-      const swap = (NAME_FONTS[style] || {})[i] || null;
-      const height = (NAME_HEIGHT + ((NAME_SIZE_BUMP[style] || 0) + (NAME_VARIANT_BUMP[variant] || 0)) * 1.21) * (swap ? swap.scale : 1);
-      const svg = NameEffects.render(style, name, { ink: toHex(ink), height, palette: namePalette(style, theme, ink), variant, font: swap && swap.font });
+      const svg = nameGraphic(name, i, style);
       svg.classList.add('agent-label');
       svg.dataset.for = String(i);
       svg.classList.toggle('is-active', i === active);
@@ -556,7 +589,7 @@
 
   const pre = document.getElementById('pre');
   const screenPicker = document.getElementById('screenPicker');
-  const SCREEN_KEY = 'lava.firstScreen';
+  const SCREEN_KEY = 'lava.firstScreen.v2';
   const DEFAULT_PLACEHOLDER = input.placeholder;
 
   // Timers belong to the variant on screen; switching clears them all
@@ -658,6 +691,7 @@
     input.placeholder = variant ? variant.dataset.placeholder : DEFAULT_PLACEHOLDER;
     if (!variant) return;
 
+    if (value === '5' && phone.dataset.bg !== 'vent') setBgStyle('vent');
     selectAgent(1); // no agent picked yet: start from the lava brand colour
     variant.classList.remove('is-entering');
     variant.offsetWidth; // restart the entry animation
@@ -682,7 +716,7 @@
 
   let savedScreen = null;
   try { savedScreen = localStorage.getItem(SCREEN_KEY); } catch {}
-  setScreen(screenPicker.querySelector(`[data-screen="${savedScreen}"]`) ? savedScreen : '1');
+  setScreen(screenPicker.querySelector(`[data-screen="${savedScreen}"]`) ? savedScreen : '5');
 
   /* ───────────── Init ───────────── */
 
@@ -691,6 +725,33 @@
   renderRing();
   input.focus({ preventScroll: true });
 
+  // The voice glyph listens for 2 seconds on first load. Then each pill finishes its current
+  // cycle (keyframes end at rest), so the glyph eases back into its default shape with no jump.
+  const voiceBtn = document.querySelector('.voice');
+  if (voiceBtn && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const pills = [...voiceBtn.querySelectorAll('.voice-pill')];
+    voiceBtn.classList.add('is-listening');
+    setTimeout(() => {
+      let left = pills.length;
+      pills.forEach((pill) => {
+        pill.addEventListener('animationiteration', () => {
+          pill.classList.add('is-settled');
+          if (--left === 0) voiceBtn.classList.remove('is-listening');
+        }, { once: true });
+      });
+    }, 2000);
+  }
+
   // Small surface for recap.js (the after-chat sequence on the agent switcher)
-  window.Lava = { phone, input, setKeyboard, selectAgent, get active() { return active; } };
+  window.Lava = {
+    phone,
+    input,
+    setKeyboard,
+    selectAgent,
+    get active() { return active; },
+    // agent i's name treatment for other text (its status): an SVG in the current name style,
+    // or null for the plain "Original" labels, whose colour is nameColor(i)
+    nameGraphic: (text, i) => (phone.dataset.name === 'original' ? null : nameGraphic(text, i, phone.dataset.name)),
+    nameColor: (i) => toHex(nameInk(themeRgb(i))),
+  };
 })();

@@ -1,0 +1,289 @@
+/* ───────────────────────── Chat bubble explorations (screen 6) ─────────────────────────
+   One thread, two treatments, switched by .phone[data-bubble]. Every bubble is
+   .cb > .cb-fx (the effect layer, clipped to the bubble) + .cb-text (words wrapped in .w). */
+
+.phone[data-pre="6"] .pre-variant[data-v="6"] { display: flex; }
+
+.pre-variant--bubbles { padding: 0 20px; }
+
+.chat {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 0 6px;
+  overflow: hidden;
+  /* older messages fade out under the top bar */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 64px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 64px);
+}
+
+.chat-stamp {
+  margin: 0 0 4px;
+  align-self: center;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #fff;
+  opacity: 0.5;
+}
+
+.cb {
+  position: relative;
+  isolation: isolate;
+  max-width: 76%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-family: "Geist", -apple-system, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+}
+.cb[data-from="lava"] { align-self: flex-start; transform-origin: 0 100%; }
+.cb[data-from="me"]   { align-self: flex-end;   transform-origin: 100% 100%; }
+
+.cb-fx {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cb-fx::before,
+.cb-fx::after { content: ""; position: absolute; pointer-events: none; }
+
+.cb-text { position: relative; margin: 0; }
+.cb-text em { font-style: normal; }
+
+/* Default entrance: rise and settle */
+@keyframes cb-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.cb.is-in { animation: cb-in 420ms var(--ease-out) both; }
+
+
+/* ── Thread — one gradient per sender laid over the whole thread; each bubble shows the slice
+      where it sits (bubbles.js sets --gy, the bubble's top in the thread, and --gh, the thread's
+      height). Consecutive bubbles from the same person tuck their inner corners together. */
+.phone[data-bubble="thread"] .chat { gap: 3px; }
+.phone[data-bubble="thread"] .cb {
+  padding: 8px 14px;
+  font-size: 14px;
+  background-size: 100% var(--gh, 400px);
+  background-position: 0 calc(-1 * var(--gy, 0px));
+  background-repeat: no-repeat;
+}
+.phone[data-bubble="thread"] .cb[data-from="me"] {
+  background-image: linear-gradient(180deg, var(--mt-a) 0%, var(--mt-b) 25%, var(--mt-c) 50%, var(--mt-d) 75%, var(--mt-e) 100%);
+  background-image: linear-gradient(in oklab 180deg, var(--mt-a) 0%, var(--mt-b) 25%, var(--mt-c) 50%, var(--mt-d) 75%, var(--mt-e) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border-radius: 22px 6px 6px 22px;
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--me-c) 40%, rgba(255, 255, 255, 0.14)), 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+.phone[data-bubble="thread"] .cb[data-from="me"] .cb-text { text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18); }
+.phone[data-bubble="thread"] .cb[data-from="lava"] {
+  /* Lava: deep wine glass, a quiet counterpart that lets the cloud glow through */
+  background-image: linear-gradient(180deg, var(--ab-a) 0%, var(--ab-b) 50%, var(--ab-c) 100%);
+  background-image: linear-gradient(in oklab 180deg, var(--ab-a) 0%, var(--ab-b) 50%, var(--ab-c) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border-radius: 6px 22px 22px 6px;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 190, 170, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.phone[data-bubble="thread"] .cb[data-from="me"][data-group="first"]  { border-top-right-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-from="me"][data-group="last"]   { border-bottom-right-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-from="me"][data-group="solo"]   { border-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-from="lava"][data-group="first"] { border-top-left-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-from="lava"][data-group="last"]  { border-bottom-left-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-from="lava"][data-group="solo"]  { border-radius: 22px; }
+.phone[data-bubble="thread"] .cb[data-group="first"]:not(:first-of-type),
+.phone[data-bubble="thread"] .cb[data-group="solo"] { margin-top: 7px; }
+.phone[data-bubble="thread"] .cb-text em { font-style: normal; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cb, .cb.is-in, .cb.is-in .w, .cb-fx, .cb-fx::before, .cb-fx::after { animation: none !important; }
+  .cb { opacity: 1; transform: none; }
+}
+
+/* ───────────────────────── Thread gradient on the agent switcher ─────────────────────────
+   With "Thread gradient" picked, the after-chat conversation wears the same bubbles: yours in the
+   rose → orange wash, each agent's in a deep tint of its own colour. The gradients are pinned to
+   the thread's visible area (bubbles.js sets --gy / --gh as it scrolls), like Messenger. */
+/* Mine are the dark side of the conversation: the palette deepened well down, nearly solid */
+.cb[data-from="me"],
+.op-msg--me {
+  --mt-a: color-mix(in oklab, color-mix(in srgb, var(--me-a) 38%, #000) 94%, transparent);
+  --mt-b: color-mix(in oklab, color-mix(in srgb, var(--me-b) 38%, #000) 94%, transparent);
+  --mt-c: color-mix(in oklab, color-mix(in srgb, var(--me-c) 38%, #000) 94%, transparent);
+  --mt-d: color-mix(in oklab, color-mix(in srgb, var(--me-d) 38%, #000) 94%, transparent);
+  --mt-e: color-mix(in oklab, color-mix(in srgb, var(--me-e) 38%, #000) 94%, transparent);
+}
+
+/* The agent's replies are the light side: frosted white with a touch of its colour */
+.phone, .op-thread {
+  --ab-a: color-mix(in oklab, var(--me-a) 22%, rgba(255, 255, 255, 0.9));
+  --ab-b: color-mix(in oklab, var(--me-c) 16%, rgba(255, 255, 255, 0.88));
+  --ab-c: color-mix(in oklab, var(--me-e) 18%, rgba(255, 255, 255, 0.86));
+}
+
+/* Bubble palettes per agent (--fd is the input bar's deep tint, as on "Ready to vent?"): --me-* is the sender's gradient, --ab-* the agent's tinted glass.
+   Set on the phone (follows the agent in front) and on each agent's own thread on the switcher. */
+.phone[data-agent="0"], .op-thread[data-agent="0"] {
+  --me-a: #4b2be0; --me-b: #5f3cf2; --me-c: #7350ff; --me-d: #8c66ff; --me-e: #a97cff;
+  --fd: rgba(36, 10, 92, 0.86);
+}
+.phone[data-agent="1"], .op-thread[data-agent="1"] {
+  --me-a: #e8285a; --me-b: #f53e45; --me-c: #f8502f; --me-d: #ff6a26; --me-e: #ff8a2a;
+  --fd: rgba(88, 4, 9, 0.86);
+}
+.phone[data-agent="2"], .op-thread[data-agent="2"] {
+  --me-a: #0e7a4c; --me-b: #158c50; --me-c: #1f9e52; --me-d: #33ae4f; --me-e: #52bd48;
+  --fd: rgba(6, 56, 26, 0.88);
+}
+
+.phone[data-bubble="thread"] .op-list { gap: 3px; }
+.phone[data-bubble="thread"] .op-msg.is-turn,
+.phone[data-bubble="thread"] .op-chips.is-turn { margin-top: 12px; }
+
+.phone[data-bubble="thread"] .op-msg:not(.is-emoji) {
+  max-width: 78%;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  text-align: left;
+  text-wrap: wrap; /* plain wrapping, so the shrink-wrapped width doesn't make lines re-balance */
+  color: #fff;
+  background-image: linear-gradient(180deg, var(--ab-a) 0%, var(--ab-b) 50%, var(--ab-c) 100%);
+  background-image: linear-gradient(in oklab 180deg, var(--ab-a) 0%, var(--ab-b) 50%, var(--ab-c) 100%);
+  background-size: 100% var(--gh, 600px);
+  background-position: 0 calc(-1 * var(--gy, 0px));
+  background-repeat: no-repeat;
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border-radius: 6px 22px 22px 6px;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.phone[data-bubble="thread"] .op-msg--me:not(.is-emoji) {
+  background-image: linear-gradient(180deg, var(--mt-a) 0%, var(--mt-b) 25%, var(--mt-c) 50%, var(--mt-d) 75%, var(--mt-e) 100%);
+  background-image: linear-gradient(in oklab 180deg, var(--mt-a) 0%, var(--mt-b) 25%, var(--mt-c) 50%, var(--mt-d) 75%, var(--mt-e) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border-radius: 22px 6px 6px 22px;
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--me-c) 40%, rgba(255, 255, 255, 0.14)), 0 6px 18px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+}
+.phone[data-bubble="thread"] .op-msg--me.is-loud { font-size: 16px; }
+.phone[data-bubble="thread"] .op-msg[data-group="first"]:not(.op-msg--me)  { border-top-left-radius: 22px; }
+.phone[data-bubble="thread"] .op-msg[data-group="last"]:not(.op-msg--me)   { border-bottom-left-radius: 22px; }
+.phone[data-bubble="thread"] .op-msg[data-group="solo"]:not(.op-msg--me)   { border-radius: 22px; }
+.phone[data-bubble="thread"] .op-msg--me[data-group="first"] { border-top-right-radius: 22px; }
+.phone[data-bubble="thread"] .op-msg--me[data-group="last"]  { border-bottom-right-radius: 22px; }
+.phone[data-bubble="thread"] .op-msg--me[data-group="solo"]  { border-radius: 22px; }
+/* no key-word highlighting inside the bubbles: words read as plain text */
+.phone[data-bubble="thread"] .op-msg:not(.is-emoji) .kw,
+.phone[data-bubble="thread"] .cb-text em {
+  background: none;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
+  text-shadow: inherit;
+  font-weight: inherit;
+  padding: 0;
+  animation: none;
+}
+/* in bubbles, a line typed in a temper sits straight like the rest */
+.phone[data-bubble="thread"] .op-msg--me.is-tilted:not(.is-emoji) { transform: none; }
+/* dark text on the light agent glass */
+.phone[data-bubble="thread"] .cb[data-from="lava"],
+.phone[data-bubble="thread"] .op-msg:not(.op-msg--me):not(.is-emoji) { color: #2a0c10; text-shadow: none; }
+.phone[data-bubble="thread"] .cb[data-from="lava"] .cb-text { text-shadow: none; }
+
+/* Edge glare (its own option in the Chat bubble picker): the agent's replies are a faint white glass
+   (about 10%) with white text; every bubble gets a small corner glow: the agent's on its right edge, mine in my bottom-left corner. With plain Thread gradient they stay light, with no glare. */
+.phone[data-glare="on"],
+.phone[data-glare="on"] .op-thread {
+  --ab-a: rgba(255, 255, 255, 0.1);
+  --ab-b: rgba(255, 255, 255, 0.1);
+  --ab-c: rgba(255, 255, 255, 0.1);
+}
+.phone[data-glare="on"][data-bubble="thread"] .cb[data-from="lava"],
+.phone[data-glare="on"][data-bubble="thread"] .op-msg:not(.op-msg--me):not(.is-emoji) {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.phone[data-glare="on"][data-bubble="thread"] .cb,
+.phone[data-glare="on"][data-bubble="thread"] .op-msg:not(.is-emoji) { overflow: hidden; }
+.phone[data-glare="on"][data-bubble="thread"] .op-msg:not(.is-emoji)::after,
+.phone[data-glare="on"][data-bubble="thread"] .cb .cb-fx::before {
+  --glare: var(--me-d);
+  --glare-hot: color-mix(in oklab, var(--me-e) 60%, #fff6b0);
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  /* kept tight to the corner: a small pool of light, not a wash */
+  background: radial-gradient(28px 22px at 100% 100%,
+    color-mix(in oklab, var(--glare) 60%, transparent) 0%,
+    color-mix(in oklab, var(--glare) 20%, transparent) 50%,
+    transparent 100%);
+  box-shadow:
+    inset -2px -2px 3px -1px var(--glare-hot),
+    inset -5px -4px 8px -4px var(--glare);
+  -webkit-mask-image: radial-gradient(44px 34px at 100% 100%, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  mask-image: radial-gradient(44px 34px at 100% 100%, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  opacity: 0.9;
+}
+.phone[data-bubble="thread"] .op-msg:not(.is-emoji) > span { position: relative; z-index: 1; }
+
+/* the agent's glare: a small, faint spot of its colour in the bottom-right corner, low on the right edge */
+.phone[data-glare="on"][data-bubble="thread"] .op-msg:not(.op-msg--me):not(.is-emoji)::after,
+.phone[data-glare="on"][data-bubble="thread"] .cb[data-from="lava"] .cb-fx::before {
+  background: radial-gradient(17px 13px at 100% 92%,
+    color-mix(in oklab, var(--glare) 85%, transparent) 0%,
+    color-mix(in oklab, var(--glare) 35%, transparent) 50%,
+    transparent 100%);
+  box-shadow:
+    inset -2px -2px 2px -1px var(--glare-hot),
+    inset -4px -3px 6px -3px var(--glare);
+  -webkit-mask-image: radial-gradient(26px 20px at 100% 92%, #000 0%, rgba(0, 0, 0, 0.85) 45%, transparent 100%);
+  mask-image: radial-gradient(26px 20px at 100% 92%, #000 0%, rgba(0, 0, 0, 0.85) 45%, transparent 100%);
+  opacity: 0.1; /* a faint hint */
+}
+/* my bubbles: the glare sits in the bottom-left corner, a lighter tint of my own colour */
+.phone[data-glare="on"][data-bubble="thread"] .op-msg--me:not(.is-emoji)::after,
+.phone[data-glare="on"][data-bubble="thread"] .cb[data-from="me"] .cb-fx::before {
+  /* stays in my bubble's own hue (a pale mix read as aqua on the green theme) */
+  --glare: color-mix(in oklab, var(--me-d) 80%, #fff);
+  --glare-hot: color-mix(in oklab, var(--me-e) 70%, #fff);
+  background: radial-gradient(28px 22px at 0% 100%,
+    color-mix(in oklab, var(--glare) 60%, transparent) 0%,
+    color-mix(in oklab, var(--glare) 20%, transparent) 50%,
+    transparent 100%);
+  box-shadow:
+    inset 2px -2px 3px -1px var(--glare-hot),
+    inset 5px -4px 8px -4px var(--glare);
+  -webkit-mask-image: radial-gradient(44px 34px at 0% 100%, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  mask-image: radial-gradient(44px 34px at 0% 100%, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  opacity: 0.36; /* 60% under the agent-side strength it had */
+}
+
+/* Home + Chat: a dimmer outline on the agent's reply bubbles */
+.phone[data-bubble="thread"] .op-msg:not(.op-msg--me):not(.is-emoji),
+.phone[data-bubble="thread"] .cb[data-from="lava"] {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.045), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Home + Chat: agent replies sit 2px closer to their left edge */
+.phone[data-bubble="thread"] .op-msg:not(.op-msg--me):not(.is-emoji),
+.phone[data-bubble="thread"] .cb[data-from="lava"] { padding-left: 12px; }

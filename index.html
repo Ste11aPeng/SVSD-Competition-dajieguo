@@ -3,16 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=overlays-content" />
+  <meta charset="utf-8" />
   <meta name="theme-color" content="#000000" />
-  <title>Lava Composer</title>
+  <title>Home + Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Varela+Round&family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&family=Nunito:wght@900;1000&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@1,400..600&family=Shrikhand&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Varela+Round&family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&family=Nunito:wght@900;1000&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@1,400..600&family=Shrikhand&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="recap.css" />
+  <link rel="stylesheet" href="bubbles.css" />
 </head>
 <body>
-  <main class="phone" id="phone" data-keyboard="open" data-agent="1" data-bg="lava" data-name="original" data-screen="pre" data-pre="1" data-typing="off">
+<main class="phone" id="phone" data-keyboard="open" data-agent="1" data-bg="vent" data-name="original" data-screen="pre" data-pre="5" data-typing="off">
+
+    <!-- Vent: warm air venting up from the bottom (see vent.js) -->
+    <div class="bg bg--vent" data-set="vent" aria-hidden="true">
+      <canvas id="ventCanvas"></canvas>
+      <div class="bg-layer" data-for="0"></div>
+      <div class="bg-layer" data-for="1"></div>
+      <div class="bg-layer" data-for="2"></div>
+    </div>
 
     <!-- Backgrounds: three styles, each with one layer per agent hue (crossfaded on switch) -->
     <div class="bg bg--lava" data-set="lava" aria-hidden="true">
@@ -45,11 +55,37 @@
       <div class="bg-grain"></div>
     </div>
 
+    <!-- Page colour behind the keyboard for the Edge glow / Haze / Bottom gradient styles (Vent paints its own) -->
+    <div class="bg-kbtint" aria-hidden="true"></div>
+
     <!-- Memories -->
     <button class="memories pressable" type="button" aria-label="Memories">
       <span class="memories-button"></span>
       <img class="memories-ring" src="assets/mic-ring-2.png" alt="" width="45.419" height="45.419" />
-      <img class="memories-icon" src="assets/lava-bubble-foam.svg" alt="" width="24" height="24" />
+      <!-- the bubble-foam glyph, inline so its star can turn on its own -->
+      <svg class="memories-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+        <defs>
+          <!-- the bubbles are holes in one outline; as a mask they can each swell on their own -->
+          <mask id="foam-holes" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">
+            <rect x="-2" y="-2" width="28" height="28" fill="#fff"/>
+            <path class="foam-hole" data-bubble="big" d="M14.6175 2.79C17.6325 2.6625 20.3325 4.875 20.79 7.8525C21.0975 9.87 20.31 12.135 18.6525 13.3875C18.255 13.6875 17.7825 13.875 17.3175 14.0625C16.8825 14.235 16.41 14.4825 15.93 14.4975C15.4575 14.5125 15.135 14.2125 14.88 13.845C14.4225 13.1925 14.1375 12.4575 13.605 11.85C13.1175 11.28 12.1875 10.74 11.8725 10.1325C11.4825 9.39 11.85 8.31 11.7525 7.47C11.6325 6.5325 10.9725 5.4525 10.995 4.77C11.0175 4.215 11.4225 3.8625 11.865 3.6C12.6975 3.1125 13.6575 2.8275 14.6175 2.79Z" fill="#000"/>
+            <path class="foam-hole" data-bubble="top-left" d="M6.735 4.23C6.99 4.215 7.2375 4.2225 7.485 4.26C7.6575 4.2825 7.8225 4.32 7.98 4.395C9.135 4.9125 8.2725 6.345 8.0775 7.1925C7.9275 7.83 7.9875 8.5575 7.7025 9.1575C7.41 9.795 6.765 10.0125 6.165 10.29C5.76 10.4775 5.3475 10.68 4.89 10.7025C3.525 10.755 3.0675 8.79 3.1575 7.74C3.3075 5.865 4.8525 4.3425 6.735 4.23Z" fill="#000"/>
+            <path class="foam-hole" data-bubble="dot" d="M9.795 6.27C10.2075 6.1875 10.4775 6.6 10.605 6.93C10.8375 7.5675 10.995 9.15 10.08 9.3375C9.945 9.36 9.8175 9.36 9.69 9.345C8.64 9.2025 8.91 7.845 9.1275 7.14C9.2325 6.8175 9.42 6.345 9.795 6.27Z" fill="#000"/>
+            <path class="foam-hole" data-bubble="middle" d="M11.055 11.55C11.9775 11.3775 12.87 12.39 13.2825 13.1025C13.485 13.455 13.7175 14.1675 13.14 14.2875C12.855 14.3475 12.555 14.2575 12.3 14.145C11.685 13.8825 10.9725 13.4175 10.575 12.87C10.1925 12.345 10.38 11.6775 11.055 11.55Z" fill="#000"/>
+            <path class="foam-hole" data-bubble="bottom-left" d="M5.505 12.84C6.015 12.795 6.5325 12.87 7.05 12.8625C7.725 12.8475 8.4 12.72 9.045 13.02C9.51 13.2375 9.84 13.62 10.2075 13.95C10.5975 14.3025 11.0325 14.61 11.49 14.865C12.2025 15.2625 13.4175 15.4725 13.8525 16.1925C14.235 16.83 13.905 17.64 13.6125 18.2475C12.8175 19.89 11.1825 21.03 9.36 21.195C6.8025 21.42 4.3875 19.71 3.7725 17.2125C3.54 16.245 3.585 15.2175 3.9 14.2725C4.035 13.8825 4.2 13.4775 4.515 13.2C4.7925 12.9675 5.145 12.87 5.505 12.84Z" fill="#000"/>
+            <path class="foam-hole" data-bubble="tiny" d="M18.0675 15.87C19.26 15.8025 19.17 17.55 18.06 17.61C17.475 17.6475 16.9425 17.1075 17.1375 16.5225C17.265 16.125 17.6775 15.8925 18.0675 15.87Z" fill="#000"/>
+          </mask>
+          <!-- a slow liquid wobble on the outline, so the bubbles seem to flow into each other -->
+          <filter id="foam-liquid" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="1" seed="3" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+        <g class="memories-glyph" filter="url(#foam-liquid)">
+          <path d="M14.295 1.8C18.945 1.41 22.6875 5.6625 21.705 10.23C21.495 11.2275 21.06 12.1725 20.445 12.9825C20.1075 13.4325 19.4325 13.9275 19.275 14.46C19.1325 14.97 19.56 15.4275 19.7625 15.8625C20.0325 16.44 19.995 17.13 19.6725 17.6775C18.99 18.825 17.3625 18.915 16.5 17.925C16.245 17.6175 16.0725 17.2575 15.8325 16.9425C15.7275 16.8 15.6 16.68 15.4125 16.7475C15.1575 16.845 15.06 17.265 14.985 17.49C14.7675 18.1275 14.535 18.7425 14.1675 19.3125C13.1175 20.9775 11.295 22.0725 9.33 22.2075C5.685 22.4625 2.565 19.53 2.6175 15.87C2.625 15.135 2.7675 14.4075 3.03 13.725C3.24 13.17 3.5925 12.645 3.5475 12.03C3.5025 11.265 2.85 10.6725 2.55 10.005C1.9425 8.6325 2.01 7.0275 2.73 5.715C3.615 4.1025 5.3925 3.12 7.23 3.225C8.1 3.27 8.9475 3.7275 9.825 3.54C10.4925 3.3975 11.01 2.9025 11.6025 2.5875C12.435 2.1525 13.3575 1.8825 14.295 1.8Z" mask="url(#foam-holes)" fill="#FFD693" fill-opacity="0.85"/>
+        </g>
+        <path class="memories-star" d="M15.975 4.95C16.1025 4.8975 16.2525 4.935 16.305 5.0775C16.3575 5.22 16.3425 5.4075 16.38 5.565C16.4925 5.9775 16.7325 6.3525 17.0625 6.6225C17.3475 6.855 17.7 7.0125 18.06 7.065C18.21 7.0875 18.435 7.065 18.4725 7.26C18.4875 7.38 18.4425 7.5 18.3225 7.545C18.225 7.575 18.105 7.5675 18.0075 7.5825C17.6175 7.65 17.25 7.8375 16.965 8.1C16.6725 8.385 16.455 8.7525 16.365 9.15C16.3275 9.315 16.3725 9.645 16.1625 9.705C16.0425 9.735 15.9075 9.6975 15.855 9.5625C15.8175 9.4575 15.8325 9.33 15.81 9.225C15.7275 8.7675 15.48 8.3475 15.1275 8.0475C14.85 7.8075 14.4975 7.635 14.13 7.5825C13.98 7.56 13.725 7.5825 13.6875 7.38C13.6725 7.26 13.7175 7.14 13.8375 7.095C13.9275 7.065 14.0325 7.0725 14.13 7.0575C14.5125 7.005 14.8875 6.81 15.1725 6.555C15.48 6.2775 15.6975 5.91 15.7875 5.52C15.825 5.355 15.7875 5.0175 15.975 4.95Z" fill="#FFD693" fill-opacity="0.85"/>
+      </svg>
     </button>
 
     <!-- Agent switcher -->
@@ -97,6 +133,30 @@
     <!-- Pre-screen: what a first visit shows before anything is typed (no agent picked yet).
          Five explorations; the "First screen" picker switches between them. -->
     <section class="pre" id="pre" aria-label="Start a conversation">
+
+      <!-- 5 · Ready to vent? — Figma starter: greeting + recent chats as glass cards over the vent -->
+      <div class="pre-variant" data-v="5" data-placeholder="Keep chatting on…">
+        <div class="pre-center vent-center">
+          <h1 class="vent-title" style="--i:0">Ready to vent?</h1>
+        </div>
+        <div class="vent-cards pre-starters">
+          <button class="vent-card pre-hit" type="button" data-fill="so about Kevin’s coffee chat… " style="--i:2">
+            <span class="vent-avatar">K</span>
+            <span class="vent-card-title">Kevin’s coffee chat</span>
+            <span class="vent-card-meta">3h ago</span>
+          </button>
+          <button class="vent-card pre-hit" type="button" data-fill="ok so about that rejection email… " style="--i:3">
+            <span class="vent-avatar"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4.5" width="15" height="11" rx="2.5"/><path d="m3.5 6 6.5 5 6.5-5"/></svg></span>
+            <span class="vent-card-title">Rejection from Google</span>
+            <span class="vent-card-meta">1 day ago</span>
+          </button>
+          <button class="vent-card pre-hit" type="button" data-fill="ok so Hannah’s boyfriend… " style="--i:4">
+            <span class="vent-avatar">H</span>
+            <span class="vent-card-title">Hannah’s boyfriend</span>
+            <span class="vent-card-meta">1 day ago</span>
+          </button>
+        </div>
+      </div>
 
       <!-- 1 · Starters — ChatGPT-style: greeting + starter rows pulled from mail, chats, calendar -->
       <div class="pre-variant" data-v="1" data-placeholder="I’m bothered on...">
@@ -178,6 +238,20 @@
         </div>
       </div>
 
+      <!-- 6 · Chat bubbles — a short thread to compare the bubble styles in the "Chat bubble" picker -->
+      <div class="pre-variant pre-variant--bubbles" data-v="6" data-placeholder="Reply to Lava…">
+        <div class="chat" id="chat">
+          <p class="chat-stamp">Today 2:44 PM</p>
+          <div class="cb" data-from="lava"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">heyyy 👀 you made it</p></div>
+          <div class="cb" data-from="lava"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">so… did Kevin ever send the slides?</p></div>
+          <div class="cb" data-from="me"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">he did NOT</p></div>
+          <div class="cb" data-from="me"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">third time this week</p></div>
+          <div class="cb" data-from="lava"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">ok I’m officially <em>mad</em> on your behalf</p></div>
+          <div class="cb" data-from="me"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">should I say something or let it go?</p></div>
+          <div class="cb" data-from="lava"><span class="cb-fx" aria-hidden="true"></span><p class="cb-text">say it. <em>kindly.</em> but say it.</p></div>
+        </div>
+      </div>
+
     </section>
 
     <!-- Keyboard material: siblings (not children) so their blend modes reach the background -->
@@ -236,7 +310,7 @@
           <span class="field-icon field-icon--plus"></span>
         </button>
         <input class="field-input" id="message" type="text" inputmode="none" enterkeyhint="send"
-               placeholder="Keep chatting on..." aria-label="Message" />
+               placeholder="keep chatting on" aria-label="Message" />
         <button class="field-mic pressable" type="button" aria-label="Voice note">
           <span class="field-icon field-icon--mic"></span>
         </button>
@@ -249,51 +323,61 @@
           <img class="voice-glow" data-for="1" src="assets/mic-button-4.png" alt="" width="52" height="52" />
           <img class="voice-glow" data-for="2" src="assets/image33.png" alt="" width="52" height="52" />
         </span>
-        <span class="voice-icon" aria-hidden="true"></span>
+        <!-- the "fading pills" glyph, one path per pill so each can move on its own; centred on its own bounds -->
+        <svg class="voice-icon" viewBox="0.29 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
+          <path class="voice-pill" d="M5.13 13.44C5.58 13.28 5.75 14.19 5.8 14.48C6 15.5 6 16.63 5.78 17.64C5.72 17.88 5.61 18.51 5.31 18.57C4.86 18.68 4.71 17.77 4.65 17.48C4.46 16.48 4.47 15.39 4.68 14.39C4.73 14.14 4.84 13.54 5.13 13.44Z" />
+          <path class="voice-pill" d="M9.3 9.61C9.6 9.51 9.76 9.9 9.85 10.12C10.13 10.8 10.24 11.56 10.33 12.28C10.66 14.83 10.66 17.49 10.29 20.04C10.2 20.65 10.1 21.28 9.86 21.85C9.8 22.03 9.67 22.36 9.46 22.4C9.17 22.47 9.01 22.07 8.92 21.85C8.64 21.16 8.54 20.38 8.44 19.64C8.13 17.12 8.13 14.48 8.5 11.96C8.59 11.35 8.69 10.72 8.92 10.15C8.99 9.98 9.1 9.67 9.3 9.61Z" />
+          <path class="voice-pill" d="M14.13 7C14.52 6.93 14.74 7.52 14.85 7.8C15.23 8.76 15.38 9.82 15.5 10.84C15.95 14.44 15.95 18.1 15.43 21.7C15.31 22.56 15.16 23.45 14.83 24.26C14.73 24.51 14.56 24.94 14.25 25C13.86 25.07 13.64 24.48 13.53 24.2C13.15 23.24 13.01 22.18 12.88 21.16C12.44 17.59 12.44 13.86 12.95 10.3C13.08 9.44 13.22 8.55 13.55 7.74C13.65 7.49 13.83 7.06 14.13 7Z" />
+          <path class="voice-pill" d="M19.22 9.4C19.69 9.32 20.02 9.85 20.2 10.21C20.72 11.21 20.81 12.33 21.09 13.4C21.15 13.65 21.34 14.43 21.61 14.52C21.96 14.63 22.68 13.61 22.93 13.36C23.87 12.41 25.22 12.15 26.28 13.09C28.11 14.7 27.83 19.03 25.11 19.49C24.09 19.67 23.3 19.07 22.66 18.35C22.45 18.12 21.93 17.34 21.59 17.5C21.32 17.62 21.14 18.39 21.07 18.66C20.81 19.68 20.71 20.75 20.24 21.71C20.08 22.06 19.81 22.55 19.38 22.6C19.01 22.64 18.74 22.32 18.56 22.05C18.14 21.38 17.95 20.56 17.79 19.79C17.25 17.17 17.27 14.42 17.87 11.82C18.02 11.18 18.43 9.54 19.22 9.4Z" />
+        </svg>
+        <!-- swaps in for the voice glyph once there's something typed -->
+        <svg class="voice-send" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     </form>
   </main>
 
   <!-- Design exploration: the after-chat sequence on the agent switcher (desktop only, left of the phone) -->
-  <div class="seq-panel" id="seqPanel">
+  <div class="seq-panel" id="seqPanel" hidden>
     <div class="seq-head">
       <span class="style-picker-title">After-chat sequence</span>
       <button type="button" class="seq-replay" id="seqReplay">Replay</button>
     </div>
-    <div class="seq-group" data-key="recap">
-      <span class="seq-title">1 · Recap text</span>
-      <div class="seq-chips"><button type="button" data-v="crawl">Ember crawl</button><button type="button" data-v="rise">Ember rise</button><button type="button" data-v="whisper">Whisper</button></div>
-    </div>
-    <div class="seq-group" data-key="travel">
-      <span class="seq-title">2 · Blob travel</span>
-      <div class="seq-chips"><button type="button" data-v="arc">Arc</button><button type="button" data-v="drops">Droplets</button><button type="button" data-v="float">Float</button></div>
+    <div class="seq-group" data-key="chat">
+      <span class="seq-title">Chat text · spacing and key-word flare</span>
+      <div class="seq-chips"><button type="button" data-chat="1">1 · Airy · Sweep</button><button type="button" data-chat="2">2 · Roomy · Bloom</button><button type="button" data-chat="3">3 · Grouped · Heat</button><button type="button" data-chat="4">4 · Editorial · Underline</button><button type="button" data-chat="5">5 · Calm · Ember</button></div>
     </div>
     <div class="seq-group" data-key="store">
-      <span class="seq-title">3 · Stored in insights</span>
-      <div class="seq-chips"><button type="button" data-v="gulp">Gulp</button><button type="button" data-v="fill">Fill</button><button type="button" data-v="spark">Spark</button></div>
+      <span class="seq-title-row"><span class="seq-title">1 · Stored in insights</span><button type="button" class="seq-mini" data-preview="store">Preview</button></span>
+      <div class="seq-chips"><button type="button" data-store="glass">Glass+</button><button type="button" data-store="caustic">Caustics</button><button type="button" data-store="lamp">Lava lamp</button><button type="button" data-store="swirl">Swirl</button><button type="button" data-store="starlight">Starlight</button></div>
     </div>
     <div class="seq-group" data-key="cue">
-      <span class="seq-title">4 · Other agents light up</span>
-      <div class="seq-chips"><button type="button" data-v="glow">Glow</button><button type="button" data-v="breathe">Breathe</button><button type="button" data-v="liquid">Liquid</button></div>
-    </div>
-    <div class="seq-group" data-key="opener">
-      <span class="seq-title">5 · Their opener (tap them)</span>
-      <div class="seq-chips"><button type="button" data-v="bubbles">Bubbles</button><button type="button" data-v="voice">Voice</button><button type="button" data-v="card">Card</button></div>
+      <span class="seq-title">2 · Other agents light up</span>
+      <p class="seq-note">Glow + 10% zoom</p>
     </div>
     <p class="seq-hint">Plays on “Agent switcher · after chat”. Then tap Roaster or Calm Sibling.</p>
   </div>
 
   <!-- Design exploration: compare styles (desktop only, outside the phone) -->
-  <div class="style-pickers">
+  <div class="style-pickers" hidden>
     <div class="style-picker" id="screenPicker" role="radiogroup" aria-label="First screen">
       <span class="style-picker-title">First screen</span>
+      <button type="button" role="radio" data-screen="5">Ready to vent?</button>
       <button type="button" role="radio" data-screen="1">1 · Starters</button>
       <button type="button" role="radio" data-screen="2">2 · Remember…</button>
       <button type="button" role="radio" data-screen="4">4 · Lava texts first</button>
+      <button type="button" role="radio" data-screen="6">6 · Chat bubbles</button>
       <button type="button" role="radio" data-screen="agents">Agent switcher · after chat</button>
+    </div>
+    <div class="style-picker" id="bubblePicker" role="radiogroup" aria-label="Chat bubble style">
+      <span class="style-picker-title">Chat bubble</span>
+      <button type="button" role="radio" data-bubble="thread">Thread gradient</button>
+      <button type="button" role="radio" data-bubble="glare">Edge glare</button>
     </div>
     <div class="style-picker" id="bgPicker" role="radiogroup" aria-label="Background style">
       <span class="style-picker-title">Background</span>
+      <button type="button" role="radio" data-bg="vent">Vent</button>
       <button type="button" role="radio" data-bg="lava">Bottom gradient</button>
       <button type="button" role="radio" data-bg="edge">Edge glow</button>
       <button type="button" role="radio" data-bg="haze">Haze</button>
@@ -310,8 +394,39 @@
     </div>
   </div>
 
+  <script>
+    // fixed choices, seeded before the prototype's scripts read them
+    try {
+      localStorage.setItem('lava.nameStyle', 'vibe');
+      localStorage.setItem('lava.chat', '1');
+      localStorage.setItem('lava.store', 'glass');
+      localStorage.setItem('lava.bubbleStyle.v3', 'glare');
+      if (localStorage.getItem('hc.stage') !== 'chat') {
+        localStorage.setItem('lava.firstScreen.v2', '5');
+        localStorage.setItem('lava.bgStyle.v2', 'vent');
+      } else {
+        localStorage.setItem('lava.firstScreen.v2', 'agents');
+        localStorage.setItem('lava.bgStyle.v2', 'haze');
+      }
+    } catch {}
+  </script>
+  <!-- Home + Chat: two stages of the app. Everything else is fixed:
+       Ready to vent? = Vent background + Vibe title; Agent switcher = Haze background, Edge glare
+       bubbles, Vibe names, Airy · Sweep chat text, Glass+ insights -->
+  <div class="style-pickers hc-stages">
+    <div class="style-picker" id="stagePicker" role="radiogroup" aria-label="Stage">
+      <span class="style-picker-title">Home + Chat</span>
+      <button type="button" role="radio" data-stage="home">Ready to vent?</button>
+      <button type="button" role="radio" data-stage="chat">Agent switcher</button>
+    </div>
+  </div>
+
+  <script src="vent.js"></script>
   <script src="name-effects.js"></script>
   <script src="script.js"></script>
   <script src="recap.js"></script>
+  <script src="bubbles.js"></script>
+  <script src="home-chat.js"></script>
+
 </body>
 </html>
