@@ -1,0 +1,8 @@
+/* Shared frame for the screens built from the design canvas (insights.html, call.html) */
+html, body { margin: 0; height: 100%; background: #0b0b0b; -webkit-text-size-adjust: 100%; }
+body.flow-page { display: grid; place-items: center; min-height: 100dvh; overflow: hidden; }
+.flow-frame > main { border-radius: 0; }
+@media (max-width: 500px), (max-height: 874px) and (pointer: coarse) {
+  body.flow-page { display: block; }
+  .flow-frame { width: 402px; height: 874px; transform-origin: 0 0; transform: scale(var(--fit, 1)); }
+}
