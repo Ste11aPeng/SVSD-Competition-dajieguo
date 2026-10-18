@@ -1,0 +1,29 @@
+/* The agent switcher from the chat screen (style.css › Agents), packaged so other pages can mount it.
+   Keep in step with style.css if the ring changes there. */
+.ring-host { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); position: absolute; left: 0; right: 0; top: 0; height: 140px; pointer-events: none; }
+.ring-host .agents { position: absolute; top: 60px; left: 50%; width: 140px; height: 44px; transform: translateX(-50%); touch-action: none; cursor: grab; pointer-events: auto; }
+.ring-host .agents.is-dragging { cursor: grabbing; }
+.ring-host .agent { position: absolute; left: 48px; top: 0; width: 44px; height: 44px; padding: 0; border: 0; background: none; transform-origin: 50% 50%; will-change: transform; cursor: inherit; -webkit-tap-highlight-color: transparent; }
+.ring-host .agent-press { position: relative; display: block; width: 100%; height: 100%; transition: transform 160ms var(--ease-out); }
+.ring-host .agent:active .agent-press, .ring-host .agent.is-down .agent-press { transform: scale(0.92); }
+.ring-host .agent-photo { position: absolute; inset: 0; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; opacity: 0.2; display: block; }
+.ring-host .agent-chrome { position: absolute; inset: 0; opacity: 0.4; }
+.ring-host .agent-button { position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle 51px at 50% 50%, rgba(58, 42, 34, 0.1) 0%, rgba(23, 15, 11, 0) 45%, rgba(6, 3, 2, 0.1) 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05), inset 0 0.71px 0 rgba(255, 255, 255, 0.22), inset 0 -8.516px 14.194px 5.677px rgba(255, 106, 31, 0.5); }
+.ring-host .agent-ring { position: absolute; left: -0.71px; top: -0.71px; width: 45.419px; height: 45.419px; display: block; }
+.ring-host .agent-glow { position: absolute; left: 0; top: 0; width: 44px; height: 44px; object-fit: cover; mix-blend-mode: plus-lighter; opacity: 0.4; pointer-events: none; display: block; }
+.ring-host .agent-glow--wide { width: 45px; }
+.ring-host .agent-glow--round { border-radius: 9999px; }
+.ring-host .agent-labels { position: absolute; left: 0; right: 0; top: 113.75px; height: 13.5px; display: grid; place-items: center;
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); pointer-events: none; }
+.ring-host .agent-label { grid-area: 1 / 1; overflow: visible; opacity: 0; filter: blur(2px); transform: translateY(3px);
+  transition: opacity 180ms ease, filter 180ms ease, transform 180ms var(--ease-out); }
+.ring-host .agent-label.is-active { opacity: 0.9; filter: blur(0); transform: translateY(0); }
+.ring-host .ne-breathe { animation: ring-breathe 5.5s ease-in-out infinite; }
+@keyframes ring-breathe { 0%, 100% { opacity: 0.28; } 50% { opacity: 0.62; } }
+@media (prefers-reduced-motion: reduce) {
+  .ring-host .agent-press { transition-duration: 0ms; }
+  .ring-host .agent-label { transform: none !important; filter: none !important; }
+  .ring-host .ne-breathe { animation: none; opacity: 0.45; }
+}

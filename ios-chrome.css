@@ -1,0 +1,10 @@
+/* iPhone 16 Pro / iOS 26 chrome drawn over every screen: status bar, Dynamic Island, home indicator */
+.ios-status { position: absolute; left: 0; right: 0; top: 0; height: 54px; z-index: 1000; pointer-events: none;
+  display: grid; grid-template-columns: 1fr 126px 1fr; align-items: center; padding-top: 4px;
+  color: #fff; font-family: -apple-system, "SF Pro Text", "SF Pro", system-ui, sans-serif; }
+.ios-time { justify-self: center; transform: translateX(6px); font-size: 17px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ios-island { width: 126px; height: 37px; border-radius: 20px; background: #000; transform: translateY(1px); }
+.ios-icons { justify-self: center; transform: translateX(-6px); display: flex; align-items: center; gap: 7px; }
+.ios-icons svg { display: block; }
+.ios-home { position: absolute; left: 50%; bottom: 8px; width: 139px; height: 5px; margin-left: -69.5px; border-radius: 3px;
+  background: #fff; opacity: .92; z-index: 1000; pointer-events: none; }
