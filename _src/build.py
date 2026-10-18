@@ -32,7 +32,7 @@ SHELL = '''<!doctype html>
 RING_SLOT = '<div class="ring-slot" style="opacity: {{agO}}; transform: translateY({{agY}}px)"></div>'
 RING_HEAD = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&display=swap">\n'
              '<link rel="stylesheet" href="agent-ring.css?v=3">\n'
-             '<style>.ring-slot{position:absolute;left:0;right:0;top:0;height:140px;z-index:5;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}</style>')
+             '<style>.status{top:68px!important}.ring-slot{position:absolute;left:0;right:0;top:14px;height:140px;z-index:5;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}</style>')
 RING_BOOT = ('<script src="name-effects.js?v=3"></script>\n<script src="agent-ring.js?v=3"></script>\n'
              '<script>AgentRing.mount(document.querySelector(".ring-slot"), { active: 1 });</script>')
 
