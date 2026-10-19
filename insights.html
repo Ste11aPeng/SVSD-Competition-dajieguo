@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>Insights, living card</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Geist+Mono:wght@400..600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Geist+Mono:wght@400..600&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&amp;display=swap">
 <style>
 
 body{margin:0;background:#08070C}
@@ -166,7 +166,7 @@ p.disp{color:var(--t1)}
 
 /* X10: pinned header, today stands out */
 .sticky{position:absolute;left:0;right:0;top:0;height:108px;padding:50px 22px 0;box-sizing:border-box;z-index:16;pointer-events:none;
-  background:linear-gradient(180deg,rgba(8,7,12,.96) 0%,rgba(8,7,12,.85) 55%,rgba(8,7,12,0) 100%);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  background:linear-gradient(180deg,rgba(6,5,9,.96) 0%,rgba(6,5,9,.85) 55%,rgba(6,5,9,0) 100%);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   -webkit-mask:linear-gradient(180deg,#000 70%,transparent);mask:linear-gradient(180deg,#000 70%,transparent)}
 .seg{z-index:17!important}
 .todaylbl{position:absolute;margin:0;transform:translateX(-50%);font-family:'Geist',sans-serif;font-size:10.5px;font-weight:500;color:rgba(236,232,242,.85);letter-spacing:.02em;pointer-events:none}
@@ -611,7 +611,246 @@ p.disp{color:var(--t1)}
 
 /* Let it go as tinted glass: see-through topic colour, white rim and inner glow */
 .ob1b{background:linear-gradient(180deg,color-mix(in srgb,var(--oc) 62%,rgba(255,255,255,.25)) 0%,color-mix(in srgb,var(--oc) 70%,transparent) 100%)!important;-webkit-backdrop-filter:blur(14px) saturate(1.5)!important;backdrop-filter:blur(14px) saturate(1.5)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 .5px rgba(255,255,255,.4),inset 0 0 16px rgba(255,255,255,.32),0 8px 22px -10px color-mix(in srgb,var(--oc) 60%,transparent)!important;text-shadow:0 1px 6px rgba(0,0,0,.15)}
+
+/* open card: soft light-blur gradient fill, glass icon circle, no outer glow */
+.open2{height:230px!important;background:radial-gradient(75% 95% at 12% 0%,color-mix(in srgb,var(--oc) 40%,#fff) 0%,transparent 68%),radial-gradient(80% 90% at 100% 100%,color-mix(in srgb,var(--oc) 55%,#1a0a10) 0%,transparent 72%),linear-gradient(140deg,color-mix(in srgb,var(--oc) 78%,#fff) 0%,var(--oc) 55%,color-mix(in srgb,var(--oc) 70%,#2a0f14) 100%)!important;box-shadow:none!important}
+.open2 .aur,.open2 .pat,.open2 .pimg,.open2 .ofade,.open2 .oflow{display:none!important}
+.open2 .ograin{opacity:.3!important}
+.oic{position:absolute;left:16px;top:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);z-index:1}
+.oic::after{content:'';position:absolute;inset:0;background:#fff;-webkit-mask:var(--ico) center/22px 22px no-repeat;mask:var(--ico) center/22px 22px no-repeat}
+.k-work{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='11' rx='2'/%3E%3Cpath d='M2 19h20'/%3E%3C/svg%3E")}
+.k-home{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z'/%3E%3C/svg%3E")}
+.k-friends{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='8' r='3'/%3E%3Cpath d='M3 19c0-3.3 2.7-5.5 6-5.5s6 2.200 6 5.500'/%3E%3Ccircle cx='17' cy='9' r='2.200'/%3E%3Cpath d='M17 14c2.200 0 4 1.600 4 4'/%3E%3C/svg%3E")}
+.k-money{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20s-7-4.400-7-10a4 4 0 0 1 7-2.500A4 4 0 0 1 19 10c0 5.600-7 10-7 10z'/%3E%3C/svg%3E")}
+.k-self{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='3.500'/%3E%3Cpath d='M5 20c0-4 3-6 7-6s7 2 7 6'/%3E%3C/svg%3E")}
+.open2 .ot2{margin:0 0 4px!important;font-size:19px!important;color:#fff!important}
+.open2 .owhen{margin:0 0 14px!important;padding:0 6px!important;font-size:13px!important;color:rgba(255,255,255,.78)!important}
+.open2 .otp{color:#fff!important}
+.open2 .ob2b{color:rgba(255,255,255,.92)!important;background:rgba(255,255,255,.16)!important}
+.calopen .open2,.dpage .open2{margin-left:0!important;margin-right:0!important}
+
+/* calendar insight cards: editorial card (date top, serif title bottom, glyph right), buttons below */
+.calopen .open2.ocal:not(.gone){height:auto!important;background:none!important;box-shadow:none!important;overflow:visible!important;border-radius:0!important;margin:0 0 22px!important}
+.calopen .open2.ocal > .aur,.calopen .open2.ocal > .pat,.calopen .open2.ocal > .pimg,.calopen .open2.ocal > .ofade,.calopen .open2.ocal > .ograin,.calopen .open2.ocal > .oic{display:none!important}
+.ocard{position:relative;height:210px;box-sizing:border-box;padding:20px 22px;border-radius:26px;overflow:hidden;isolation:isolate;background:radial-gradient(120% 75% at 15% 0%,color-mix(in srgb,var(--oc) 40%,#1d1c21) 0%,transparent 72%),linear-gradient(180deg,color-mix(in srgb,var(--oc) 20%,#1d1c21) 0%,#1c1c20 55%,#18181c 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.odt{margin:0;font-size:13px;line-height:1.35;color:rgba(255,255,255,.78)}
+.ot3{position:absolute;left:22px;right:88px;bottom:20px;margin:0;font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.14;letter-spacing:-.015em;color:#fff}
+.ot3 em{display:block;font-style:italic;color:color-mix(in srgb,var(--oc) 55%,#fff)}
+.oglyph{position:absolute;right:22px;bottom:20px;width:60px;height:60px;background:linear-gradient(180deg,color-mix(in srgb,var(--oc) 45%,#fff) 0%,var(--oc) 100%);-webkit-mask:var(--ico) center/60px 60px no-repeat;mask:var(--ico) center/60px 60px no-repeat}
+.ocal .obtns{margin-top:10px;padding:0}
+
+/* calendar card v3: glass icon top-left, Geist title, ago under title, buttons inside */
+.ocard{height:auto!important;display:flex;flex-direction:column;padding:16px!important}
+.ocard .oic{position:relative;left:auto;top:auto;flex:none;width:44px;height:44px;margin-bottom:34px}
+.ocard .ot3{position:static!important;margin:0!important;padding:0 6px;font-family:'Geist',-apple-system,sans-serif!important;font-style:normal!important;font-weight:500!important;font-size:19px!important;line-height:1.28!important;letter-spacing:-.01em!important}
+.ocard .ot3 em{font-style:normal!important;color:color-mix(in srgb,var(--oc) 40%,#fff)!important}
+.ocard .owhen2{margin:6px 0 16px;padding:0 6px;font-size:13px;color:rgba(255,255,255,.6)}
+.ocard .obtns{margin:0!important}
+.ocard .obtns button{height:42px!important}
+
+/* calendar card v4: suggestion row, single button, lighter stamp + icon */
+.ocard .oic{background:rgba(255,255,255,.4)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),inset 0 1px 0 rgba(255,255,255,.35)!important}
+.ocard .owhen2{color:rgba(255,255,255,.8)!important;margin-bottom:14px!important}
+.osug{margin:0 0 12px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.osug b{display:block;margin-bottom:3px;font-size:11.5px;font-weight:500;letter-spacing:.02em;color:color-mix(in srgb,var(--oc) 40%,#fff)}
+.osug span{display:block;font-size:14px;line-height:1.38;color:rgba(255,255,255,.88)}
+
+/* irregular colour blobs instead of dots */
+.mk{border-radius:62% 38% 45% 55% / 48% 62% 38% 52%!important}
+.ins:nth-of-type(2n) .mk,.di:nth-child(2n) .mk{border-radius:40% 60% 58% 42% / 60% 42% 58% 40%!important}
+.ins:nth-of-type(3n) .mk{border-radius:55% 45% 36% 64% / 42% 56% 44% 58%!important}
+.mk{width:10px;height:9px}.ins .m .mk{width:8px!important;height:7px!important}
+.ds .dots i{border-radius:62% 38% 45% 55% / 48% 62% 38% 52%!important}
+.ocard .ot3{font-size:15px!important}
+
+/* calendar card v5 (Figma 247:4690): anger blob + date, title, inner suggestion box; colour = how angry */
+.calopen{padding-bottom:24px}
+.ocard{height:auto!important;display:block!important;padding:12px!important;border-radius:16px!important;background:linear-gradient(90deg,#1b1a1e 0%,#1d1b1f 40%,color-mix(in srgb,var(--oc) 24%,#1c1a1e) 100%)!important;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06)!important}
+.ocard .ohd{display:flex;align-items:center;gap:8px;padding:0 6px;margin-bottom:22px;font-size:12px;line-height:15px;color:rgba(255,255,255,.62)}
+.ocard .oblob{flex:none;width:12px;height:12px;border-radius:40% 60% 55% 45% / 55% 42% 58% 45%;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--oc) 45%,#fff),var(--oc) 70%);box-shadow:0 0 8px color-mix(in srgb,var(--oc) 60%,transparent)}
+.ocard .ot3{padding:0 6px!important;margin:0 0 14px!important;font-size:16px!important;line-height:1.28!important;font-weight:500!important;letter-spacing:-.01em!important}
+.ocard .ot3 em{display:inline!important;font-style:normal!important;color:color-mix(in srgb,var(--oc) 55%,#fff)!important}
+.ocard .osug{margin:0!important;padding:12px 14px!important;border-radius:12px!important;background:rgba(0,0,0,.22)!important;box-shadow:none!important}
+.ocard .osug b{display:block;margin:0 0 3px;font-size:11px;font-weight:500;letter-spacing:.03em;color:color-mix(in srgb,var(--oc) 55%,#fff)}
+.ocard .osug span{display:block;font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.82)}
+
+/* v6: light from the bottom-right corner, dimmer thin 'Next time' */
+.ocard{background:radial-gradient(95% 130% at 100% 100%,color-mix(in srgb,var(--oc) 42%,#1c1a1e) 0%,color-mix(in srgb,var(--oc) 16%,#1c1a1e) 45%,transparent 78%),#1b1a1e!important}
+.ocard .osug b{font-weight:300!important;color:rgba(255,255,255,.42)!important}
+
+/* detail sheet card = calendar card */
+.dpage .open2.ocal2{height:auto!important;background:none!important;box-shadow:none!important;overflow:visible!important;border-radius:0!important;margin:0 0 22px!important;width:auto!important}
+
+/* anger groups under the calendar */
+.grp .trow{cursor:default}
+.grp .dcount{flex:none;font-size:13px;color:var(--t3);white-space:nowrap}
+
+/* anger groups: blob markers, fill like empty calendar cells, no stroke */
+.fc.grp{background:#1b1a1d!important;box-shadow:none!important}
+.grp .gbw{flex:none;width:40px;height:40px;display:grid;place-items:center}
+.grp .gb{display:block;border-radius:62% 38% 45% 55% / 48% 62% 38% 52%}
+.grp .trow:nth-of-type(2) .gb{border-radius:40% 60% 58% 42% / 60% 42% 58% 40%}
+.grp .trow:nth-of-type(3) .gb{border-radius:55% 45% 36% 64% / 42% 56% 44% 58%}
+.grp .trow:nth-of-type(4) .gb{border-radius:48% 52% 62% 38% / 56% 44% 56% 44%}
+
+.fc.grp{margin-left:8px!important;margin-right:8px!important}
+
+.fc.grp{padding-top:4px!important;padding-bottom:4px!important}
+
+/* dreamy blobs */
+.grp .gb{position:relative;filter:blur(.6px) saturate(1.1);background-blend-mode:screen;box-shadow:inset 0 0 8px rgba(255,255,255,.55),inset -3px -4px 8px color-mix(in srgb,currentColor 0%,transparent),0 0 14px 2px var(--gc)!important;animation:gbf 7s ease-in-out infinite alternate}
+.grp .gb::after{content:'';position:absolute;inset:-9px;border-radius:inherit;background:radial-gradient(closest-side,var(--gc),transparent 72%);opacity:.55;filter:blur(6px);z-index:-1}
+.grp .trow:nth-of-type(2) .gb{animation-delay:-2s}.grp .trow:nth-of-type(3) .gb{animation-delay:-4s}.grp .trow:nth-of-type(4) .gb{animation-delay:-6s}
+@keyframes gbf{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-1.5px) scale(1.07)}}
+@media (prefers-reduced-motion: reduce){.grp .gb{animation:none}}
+
+.fc{box-shadow:none!important}
+
+/* softer glow */
+.grp .gb{filter:blur(.3px) saturate(1.05);box-shadow:inset 0 0 6px rgba(255,255,255,.45),0 0 6px 0 color-mix(in srgb,var(--gc) 35%,transparent)!important}
+.grp .gb::after{opacity:.2!important;inset:-6px!important;filter:blur(5px)!important}
+
+.fc.grp{border-radius:14px!important}
+
+.grp .trow{gap:10px!important}
+.grp .gbw{margin-left:-4px}
+
+/* brighter, bolder blob labels */
+.bl b{font-weight:700!important;color:#FFFFFF!important;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.bl span{font-weight:600!important;color:rgba(255,255,255,.95)!important;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+
+/* day detail cards (reference): coloured title, summary, draft-log row, Let go */
+.dcs{display:flex;flex-direction:column;gap:12px;padding:0 8px}
+.dcard{position:relative;padding:24px 24px 24px;border-radius:14px;background:#1b1a1d;overflow:hidden}
+.dcard .dparcel{position:absolute;right:-2px;top:-2px;width:110px;height:92px;background:rgba(255,255,255,.1);-webkit-mask:var(--ico) center/76px 76px no-repeat;mask:var(--ico) center/76px 76px no-repeat}
+.dcard.k-home{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2.500l8.500 4.500v10L12 21.500 3.500 17V7z'/%3E%3Cpath d='M3.500 7L12 11.500 20.500 7M12 11.500v10M7.800 4.800l8.400 4.600'/%3E%3C/svg%3E")}
+.dcard .dtl{position:relative;margin:0;padding-right:56px;font-size:20px;line-height:1.2;font-weight:500;letter-spacing:-.015em;color:#fff}
+.dcard .dtl em{font-style:normal;color:color-mix(in srgb,var(--oc) 55%,#fff)}
+.dcard .dsum{margin:12px 0 18px;font-size:14px;line-height:1.4;color:rgba(255,255,255,.55)}
+.dcard .dact{display:flex;align-items:center;gap:14px;padding:14px 14px 14px 16px;border-radius:14px;background:rgba(255,255,255,.06);font-size:13px;line-height:1.35;color:rgba(255,255,255,.85)}
+.dcard .dact span{flex:1}.dcard .dact svg{flex:none}
+.letgo{position:absolute;left:26px;right:26px;bottom:34px;height:52px;border:0;border-radius:26px;background:#0b0b0e;color:#fff;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;cursor:pointer;z-index:18;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+
+.grp .trow > svg:last-child{width:7px;height:11px}
+.dcs{padding-bottom:110px}
+
+/* topic panel: summary, when it happens, how to make it better */
+.dw{margin:0;padding:11px 0;border-top:1px solid rgba(255,255,255,.06)}
+.dp h4 + .dw{border-top:0;padding-top:0}
+.dw b{display:block;margin-bottom:2px;font-size:13px;font-weight:500;color:color-mix(in srgb,var(--pc) 45%,#fff)}
+.dw span{display:block;font-size:14.5px;line-height:1.42;color:var(--t1)}
+
+/* heat groups, in the style of Figma C2 'Recent': heading, divider, separate rows with big number */
+.rcnt{padding-top:2px}
+.rhd{margin:0 6px 14px;padding-top:18px;border-top:1px solid rgba(255,255,255,.08)}
+.rhd h3{margin:0;font-size:20px;line-height:25px;font-weight:600;letter-spacing:-.01em;color:#fff}
+.rhd p{margin:3px 0 0;font-size:12px;line-height:17px;color:rgba(255,255,255,.45)}
+.rrow{display:flex;align-items:center;gap:12px;height:60px;box-sizing:border-box;padding:0 16px 0 12px;margin:0 0 8px;border-radius:16px;background:#171717}
+.rrow .gbw{margin-left:0!important}
+.rtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.rtx small{font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;line-height:14px;letter-spacing:.02em;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rtx b{font-size:14px;line-height:18px;font-weight:500;color:#fff;white-space:nowrap}
+.rnum{flex:none;font-size:26px;line-height:29px;font-weight:300;letter-spacing:-.02em;color:rgba(255,255,255,.92)}
+.rrow:nth-of-type(2) .gb{border-radius:40% 60% 58% 42% / 60% 42% 58% 40%}
+.rrow:nth-of-type(3) .gb{border-radius:55% 45% 36% 64% / 42% 56% 44% 58%}
+.rrow:nth-of-type(4) .gb{border-radius:48% 52% 62% 38% / 56% 44% 56% 44%}
+
+.rhd h3{font-size:16px!important;line-height:20px!important;font-weight:500!important;letter-spacing:-.01em!important;color:rgba(236,232,242,.92)!important}
+.rhd{margin-bottom:12px!important}
+.rrow > svg:last-child{flex:none;width:7px;height:11px}
+.rtx b{order:-1}
+
+/* heat-group swatches: same squares as the calendar days */
+.rrow .gsq{position:relative;display:block;width:36px;height:36px;border-radius:11px;overflow:hidden;isolation:isolate}
+.rrow .gsq::before{content:'';position:absolute;inset:14%;border-radius:40%;background:var(--core);filter:blur(5px);z-index:-1}
+.rrow .gsq::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 0 8px 2px rgba(255,255,255,.28);pointer-events:none}
+
+.rrow{cursor:pointer}
+
+.rtx b{overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* topic panel as a stack of soft cards (reference), accent label + white text */
+.dpage{inset:auto 6px 6px 6px!important;height:800px!important;max-height:calc(100% - 60px)}
+.dscroll{padding:30px 10px 28px!important}
+.dhead{padding:0 14px 18px!important}
+.dscroll .dp{--pc:inherit;margin:0 0 12px!important;padding:22px 24px 24px!important;border-radius:28px!important;border-top:0!important;
+  background:radial-gradient(110% 85% at 0% 0%,color-mix(in srgb,var(--pc) 13%,rgba(255,255,255,.07)) 0%,transparent 66%),rgba(255,255,255,.045)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important}
+.dscroll .dp + .dp{margin-top:0!important}
+.dscroll .dp h4{margin:0 0 6px!important;display:block;font-size:17px;font-weight:400;letter-spacing:0;color:color-mix(in srgb,var(--pc) 55%,#fff)!important}
+.dscroll .dp .lead,.dscroll .dp .lead.up{margin:0;font-size:17px!important;line-height:1.28;font-weight:400;color:#fff!important}
+.dscroll .dw{border-top:1px solid rgba(255,255,255,.08)}
+.dscroll .dp h4 + .dw{border-top:0}
+.dscroll .di{font-size:16px;color:#fff}
+.dp.dreflect{display:flex;align-items:center;gap:16px}
+.dp.dreflect > div{flex:1;min-width:0}
+.dp.dreflect .lead{font-size:16px!important}
+.dplus{flex:none;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);background:transparent;display:grid;place-items:center;cursor:pointer;padding:0}
+.dplus:active{transform:scale(.95)}
+
+.rtx small{text-transform:none!important}
+
+/* smaller panel type, borderless plus */
+.dscroll .dp h4{font-size:11px!important}
+.dscroll .dp .lead,.dscroll .dp .lead.up{font-size:13px!important}
+.dp.dreflect .lead{font-size:12px!important}
+.dscroll .di{font-size:12px!important}
+.dw span{font-size:10.5px!important}
+.dw b{font-size:11px!important}
+.dplus{border:0!important}
+
+.rtx small{font-family:'Geist',-apple-system,sans-serif!important;letter-spacing:0!important;font-size:12px!important}
+
+.mcell.today{box-shadow:none!important;animation:none!important;filter:none!important}
+
+.dscroll .dp{border-radius:12px!important}
+.dscroll .dp .lead,.dscroll .dp .lead.up{font-size:15px!important}
+.dp.dreflect .lead{font-size:14px!important}
+.dscroll .di{font-size:14px!important}
+.dw span{font-size:12.5px!important}
+
+.rtx small{color:rgba(255,255,255,.22)!important}
+
+/* panel: 8px gaps, small plus on the left, centred */
+.dscroll .dp{margin:0 0 8px!important}
+.dp.dreflect{gap:12px}
+.dplus{order:-1;width:28px!important;height:28px!important;margin-left:-6px}
+.dplus svg{width:13px;height:13px}
+
+/* glare only on the top card */
+.dscroll .dp{background:rgba(255,255,255,.045)!important}
+.dscroll .dhead + .dp{background:radial-gradient(110% 85% at 0% 0%,color-mix(in srgb,var(--pc) 13%,rgba(255,255,255,.07)) 0%,transparent 66%),rgba(255,255,255,.045)!important}
+
+.dplus{order:0!important;margin-left:0!important;margin-right:-4px}
+.dp.dreflect{gap:16px}
+
+/* panel title blob, bigger when-it-happens text, tighter card padding */
+.dt .dblob{flex:none;width:16px;height:15px;margin-right:10px;border-radius:62% 38% 45% 55% / 48% 62% 38% 52%;box-shadow:0 0 10px -1px var(--bc)}
+.dscroll .dp{padding:18px 20px 20px!important}
+.dw b{font-size:13px!important;font-weight:500!important}
+.dw span{font-size:15px!important}
+
+.dpage .grab{display:none!important}
+
+.dpage{height:600px!important}
+
+/* next-time actions */
+.dacts{display:flex;gap:8px;margin-top:16px}
+.dacts button{flex:1;height:40px;border:0;border-radius:12px;font-family:'Geist',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:background .25s,color .25s,opacity .25s}
+.dacts .dact1{background:color-mix(in srgb,var(--pc) 70%,#fff);color:#0B0B0E}
+.dacts .dact1.on{background:color-mix(in srgb,var(--pc) 22%,transparent);color:color-mix(in srgb,var(--pc) 55%,#fff)}
+.dacts .dact2{background:rgba(255,255,255,.09);color:#fff}
+.dacts button:active{opacity:.8}
+
+.dpage{height:668px!important}
+
+/* sheet fits its content */
+.dpage{height:auto!important;max-height:calc(100% - 60px)!important;display:flex;flex-direction:column}
+.dpage .dscroll{position:relative!important;inset:auto!important;flex:1 1 auto;min-height:0;overflow-y:auto}
 </style>
+<style>html.pt-hold #dc-root main > .scroller, html.pt-hold #dc-root main > .sticky, html.pt-hold #dc-root main > .seg2, html.pt-hold #dc-root main > .sb, html.pt-hold .chatbtn svg { opacity: 0 !important; } html.pt-hold { background: #0a090e; }</style>
+<script>try { var r = JSON.parse(sessionStorage.getItem("pt.dir") || "null"); if ((r && r.dir === "toMemories" && Date.now() - r.at < 5000)) document.documentElement.classList.add("pt-hold"); } catch (e) {}
+addEventListener("pagereveal", function (e) { if (document.documentElement.classList.contains("pt-hold") && e.viewTransition) e.viewTransition.skipTransition(); });</script>
+<link rel="prefetch" href="index.html"><link rel="prefetch" href="style.css"><link rel="prefetch" href="recap.css"><link rel="prefetch" href="bubbles.css"><link rel="prefetch" href="script.js"><link rel="prefetch" href="recap.js"><link rel="prefetch" href="bubbles.js"><link rel="prefetch" href="home-chat.js"><link rel="prefetch" href="name-effects.js"><link rel="prefetch" href="vent.js"><link rel="prefetch" href="input-grow.js"><link rel="prefetch" href="memory-tip.js"><link rel="prefetch" href="voice-transition.js"><link rel="prefetch" href="assets/vent.jpg">
 <link rel="stylesheet" href="flow.css?v=3">
 <link rel="stylesheet" href="vt.css?v=3">
 <link rel="stylesheet" href="ios-chrome.css?v=3">
@@ -626,8 +865,8 @@ p.disp{color:var(--t1)}
   <section class="view" aria-hidden="{{isCal}}" style="opacity: {{blobO}}; pointer-events: {{blobPE}}">
     <canvas id="blobcv" width="804" height="940" style="position: absolute; left: 0; top: 172px; width: 402px; height: 470px; cursor: pointer" aria-label="Topics as drifting colors; tap one"></canvas>
     <sc-for list="{{labs}}" as="l" hint-placeholder-count="5"><span class="bl" id="{{l.id}}" aria-hidden="true" style="opacity: {{l.o}}"><b>{{l.t}}</b><span>{{l.p}}</span></span></sc-for>
-    <div role="group" aria-label="Topics" style="position: absolute; left: 40px; right: 40px; top: 124px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px">
-      <sc-for list="{{chips}}" as="c" hint-placeholder-count="5"><button type="button" aria-label="{{c.t}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height: 28px; padding: 0 9px 0 4px; border: 0; border-radius: 10px; background: {{c.tbg}}; box-shadow: {{c.ring}}; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: {{c.tcol}}; font-size: 13px; font-weight: 500; transition: background .35s, color .35s, box-shadow .35s"><i aria-hidden="true" style="width: 20px; height: 20px; border-radius: 7px; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), {{c.c}} 60%); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 20px -6px {{c.c}}; opacity: {{c.sOp}}"></i>{{c.t}}</button></sc-for>
+    <div role="group" aria-label="Topics" style="position: absolute; left: 8px; right: 8px; top: 124px; display: flex; flex-wrap: nowrap; justify-content: center; gap: 4px">
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="5"><button type="button" aria-label="{{c.t}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height: 28px; padding: 0 8px 0 4px; border: 0; border-radius: 10px; background: {{c.tbg}}; box-shadow: {{c.ring}}; cursor: pointer; display: inline-flex; flex: none; white-space: nowrap; align-items: center; gap: 5px; color: {{c.tcol}}; font-size: 12.5px; font-weight: 500; transition: background .35s, color .35s, box-shadow .35s"><i aria-hidden="true" style="width: 19px; height: 19px; border-radius: {{c.ib}}; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), {{c.c}} 60%); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 8px 20px -6px {{c.c}}; opacity: {{c.sOp}}"></i>{{c.t}}</button></sc-for>
     </div>
   </section>
 
@@ -642,16 +881,18 @@ p.disp{color:var(--t1)}
   </section>
 
   <div class="feed">
-    <sc-if value="{{showCalOpen}}" hint-placeholder-val="{{false}}"><div class="calopen"><sc-for list="{{calOpen}}" as="o" hint-placeholder-count="2"><section class="{{o.cls}}" style="--oc: {{o.c}}">
+    <sc-if value="{{showCalOpen}}" hint-placeholder-val="{{false}}"><div class="calopen"><sc-for list="{{calOpen}}" as="o" hint-placeholder-count="2"><section class="{{o.cls}} ocal" style="--oc: {{o.c}}">
         <div class="aur" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div><div class="pat pat-{{o.k}}" aria-hidden="true"><i></i><i></i></div><div class="pimg" aria-hidden="true"></div>
         <svg class="ograin" aria-hidden="true" width="100%" height="100%"><filter id="og2"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter><rect width="100%" height="100%" filter="url(#og2)"></rect></svg>
-        <i class="ofade" aria-hidden="true"></i>
-        <span class="otag">Still open</span>
-        <div class="obody"><p class="owhen"><span class="otp">{{o.topic}}</span><i class="odot"></i>{{o.ago}}</p><p class="ot2">{{o.q}}</p><div class="obtns"><button type="button" class="ob1b" onClick="{{o.go}}">Let it go</button><button type="button" class="ob2b">Back to chat</button></div></div>
+        <i class="ofade" aria-hidden="true"></i><i class="oic" aria-hidden="true"></i>
+        
+        <div class="ocard"><div class="ohd"><i class="oblob" aria-hidden="true"></i><span>{{o.md}}</span></div><p class="ot3">{{o.q1}} <em>{{o.q2}}</em></p><div class="osug"><b>Next time</b><span>{{o.sug}}</span></div></div>
       </section></sc-for></div></sc-if>
-        <section class="fc fswap" style="display: {{fcD}}; opacity: {{fcO}}; transform: translateY({{fcY}}px); filter: blur({{fcB}}px); transition: {{fcT}}">
+        <sc-if value="{{showDayCards}}" hint-placeholder-val="{{false}}"><div class="dcs"><sc-for list="{{dayCards}}" as="e" hint-placeholder-count="1"><section class="dcard k-{{e.k}}" style="--oc: {{e.ac}}"><i class="dparcel" aria-hidden="true"></i><h4 class="dtl"><em>{{e.t1}}</em> {{e.t2}}</h4><p class="dsum">{{e.sum}}</p><div class="dact"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.200 6.300L20.500 12l-6.300 2.700L12 21l-2.200-6.300L3.500 12l6.300-2.700z" fill="#FFB74D" stroke="#FFB74D" stroke-width="1.500" stroke-linejoin="round"/></svg><span>{{e.act}}</span><svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2l6 6-6 6" fill="none" stroke="rgba(236,232,242,.6)" stroke-width="1.600" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></section></sc-for></div></sc-if>
+    <sc-if value="{{showGroups}}" hint-placeholder-val="{{false}}"><section class="rcnt grp"><div class="rhd"><h3>Recent</h3></div><sc-for list="{{groups}}" as="g" hint-placeholder-count="14"><div class="rrow" onClick="{{g.pick}}"><span class="gbw" aria-hidden="true"><i class="gsq" style="background: {{g.bg}}; --core: {{g.core}}"></i></span><span class="rtx"><small>{{g.sub}}</small><b>{{g.t}}</b></span><svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2l6 6-6 6" fill="none" stroke="rgba(236,232,242,.35)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></sc-for></section></sc-if>
+    <section class="fc fswap" style="display: {{fcD}}; opacity: {{fcO}}; transform: translateY({{fcY}}px); filter: blur({{fcB}}px); transition: {{fcT}}">
       <h3><span style="color: {{fTc}}; transition: color .3s">{{fTitle}}<span class="cnt">{{fCnt}}</span></span><span class="hm">{{fMeta}}</span></h3>
-      <sc-if value="{{showSum}}" hint-placeholder-val="{{true}}"><p class="ult">You brought five things here. Most of them settled within a week. Work and money took the longest.</p></sc-if>
+      <sc-if value="{{showSum}}" hint-placeholder-val="{{true}}"><p class="ult">You brought five things here. Most of them settled within a week. Work and love took the longest.</p></sc-if>
       <sc-for list="{{feed}}" as="x" hint-placeholder-count="3"><div class="ins"><sc-if value="{{x.hasTopic}}" hint-placeholder-val="{{true}}"><p class="m"><i class="mk" style="--mc: {{x.c}}"></i><span>{{x.topic}}</span></p></sc-if><span class="d"><sc-if value="{{x.rtag}}" hint-placeholder-val="{{false}}"><i class="mk rt" style="--mc: {{x.c}}"></i></sc-if>{{x.date}}</span><p class="t">{{x.t}}</p></div></sc-for>
       <sc-if value="{{showDayEv}}" hint-placeholder-val="{{false}}"><sc-for list="{{dayEv}}" as="e" hint-placeholder-count="1"><div class="dev">
         <p class="devh" style="--ec: {{e.c}}"><span class="devtp">{{e.topic}}</span> · {{e.state}}</p>
@@ -672,22 +913,14 @@ p.disp{color:var(--t1)}
   <section class="dpage" role="dialog" aria-label="{{dName}}" aria-hidden="{{dHidden}}" style="transform: {{dTf}}">
     <i class="grab" aria-hidden="true"></i>
     <button type="button" class="xbtn" aria-label="Close" onClick="{{closeD}}"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="rgba(236,232,242,.8)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"></path></svg></button>
-    <div class="dscroll">
-      <div class="dhead"><p class="dt" style="color: {{dTc}}">{{dName}}<span class="cnt"> ({{dTalks}})</span><svg class="tring" width="30" height="30" viewBox="0 0 40 40" aria-label="{{dStatus}}" onClick="{{unsettle}}" style="cursor: pointer"><circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="3" stroke-dasharray="3 3"></circle><circle cx="20" cy="20" r="16" fill="none" stroke="{{dC}}" stroke-width="3" stroke-linecap="round" transform="rotate(-90 20 20)" style="stroke-dasharray: {{dDash}} 101; transition: stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1)"></circle></svg><span class="setl" style="opacity: {{dSetO}}">Settled</span></p></div>
-      <sc-if value="{{dShowOpen}}" hint-placeholder-val="{{true}}"><section class="open2 k-{{dK}}" style="--oc: {{dC}}">
-        <div class="aur" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div><div class="pat pat-{{dK}}" aria-hidden="true"><i></i><i></i></div><div class="pimg" aria-hidden="true"></div>
-                <svg class="ograin" aria-hidden="true" width="100%" height="100%"><filter id="og"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"></feTurbulence></filter><rect width="100%" height="100%" filter="url(#og)"></rect></svg>
-        <i class="ofade" aria-hidden="true"></i>
-                <span class="otag">Still open</span>
-        <div class="obody"><p class="owhen">{{dOago}}</p><p class="ot2">{{dOq}}</p><div class="obtns"><button type="button" class="ob1b" onClick="{{letGo}}">Let it go</button><button type="button" class="ob2b">Back to chat</button></div></div>
-      </section></sc-if>
-      <section class="dp"><h4><span>How it helped</span></h4>
-        
-        <p class="quote">{{dQuote}}</p><p class="note">{{dHelped}}</p>
-        <div class="dins"><sc-for list="{{dIns}}" as="r" hint-placeholder-count="2"><p class="di"><i class="mk" style="--mc: {{r.c}}"></i><span>{{r.t}}</span></p></sc-for></div>
+    <div class="dscroll" style="--pc: {{dC}}">
+      <div class="dhead"><p class="dt" style="color: {{dTc}}"><i class="dblob" aria-hidden="true" style="--bc: {{dC}}; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.85), {{dC}} 68%)"></i>{{dName}}</p></div>
+            <section class="dp"><h4><span>Summary</span></h4><p class="lead">{{dSum}}</p></section>
+                        <section class="dp"><h4><span>Next time</span></h4>
+        <div class="dins"><sc-for list="{{dFix}}" as="r" hint-placeholder-count="3"><p class="di"><i class="mk" style="--mc: {{r.c}}"></i><span>{{r.t}}</span></p></sc-for></div>
+        <div class="dacts"><button type="button" class="dact1 {{todoCls}}" onClick="{{setTodo}}">{{todoLbl}}</button><button type="button" class="dact2" onClick="{{copyFix}}">{{copyLbl}}</button></div>
       </section>
-      
-      <section class="dp"><h4><span>What came up</span></h4><p class="lead up">{{dUpText}}</p></section>
+      <section class="dp dreflect"><div><h4><span>Add more</span></h4><p class="lead">Add related topics to go deeper on this event and how you felt</p></div><button type="button" class="dplus" aria-label="Add more"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2.500v13M2.500 9h13" stroke="#fff" stroke-width="1.700" stroke-linecap="round" fill="none"/></svg></button></section>
     </div>
     <i class="dfade" aria-hidden="true" style="opacity: {{dFadeO}}"></i>
   </section>
@@ -697,6 +930,7 @@ p.disp{color:var(--t1)}
     <button type="button" aria-pressed="{{tabBlob}}" onClick="{{toBlob}}" style="width: {{bw1}}px"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><defs><filter id="tgGoo" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.1"></feGaussianBlur><feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"></feColorMatrix></filter><mask id="tgHole" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"></rect><circle cx="15" cy="8.6" r="4.5" fill="#000"></circle><circle cx="8" cy="15.7" r="2.8" fill="#000"></circle></mask></defs><g mask="url(#tgHole)"><g filter="url(#tgGoo)" fill="#ECE8F2"><circle cx="15" cy="8.6" r="6.4"></circle><circle cx="8" cy="15.7" r="4.4"></circle></g></g><circle cx="4.3" cy="8.8" r="1.05" fill="#ECE8F2"></circle><circle cx="13.4" cy="20" r=".85" fill="#ECE8F2"></circle><path d="M15 5.7C15.3 7.7 15.9 8.3 17.9 8.6C15.9 8.9 15.3 9.5 15 11.5C14.7 9.5 14.1 8.9 12.1 8.6C14.1 8.3 14.7 7.7 15 5.7Z" fill="#ECE8F2"></path></svg><span class="lb">Insights</span></button>
     <button type="button" aria-pressed="{{tabCal}}" onClick="{{toCal}}" style="width: {{bw2}}px"><svg width="19" height="19" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M10 7H22C24.7614 7 27 9.23858 27 12V22C27 24.7614 24.7614 27 22 27H10C7.23858 27 5 24.7614 5 22V12C5 9.23858 7.23858 7 10 7Z" stroke-width="1.75" stroke="#ECE8F2"></path><path d="M11 4.5V9.5M21 4.5V9.5M5 13H27" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" stroke="#ECE8F2"></path><path d="M15.9996 15.5996C16.4663 18.0663 17.9329 19.5329 20.3996 19.9996C17.9329 20.4663 16.4663 21.9329 15.9996 24.3996C15.5329 21.9329 14.0663 20.4663 11.5996 19.9996C14.0663 19.5329 15.5329 18.0663 15.9996 15.5996Z" fill="#ECE8F2" stroke-width="0.6" stroke-linejoin="round" stroke="#ECE8F2"></path></svg><span class="lb">Calendar</span></button>
   </div>
+  <sc-if value="{{showDayCards}}" hint-placeholder-val="{{false}}"><button type="button" class="letgo" onClick="{{clearDay}}">Let go</button></sc-if>
   <div class="grain" aria-hidden="true"></div>
 </main></template>
 <script src="vendor/react.production.min.js"></script>
@@ -705,26 +939,26 @@ p.disp{color:var(--t1)}
 const MODE = 'bonds', CAL = 'liquid', INIT = {};
 
 const THEMES = [
-  { k: 'work', name: 'Work', c: [88, 140, 255], n: 5, feel: 'unseen', reflect: 'Feeling unseen is what stings.', up: 'Slides taken, a curt rejection', coped: 'Said what stung, then applied elsewhere', helped: 'Listened first, then asked what you wanted' },
-  { k: 'home', name: 'Home', c: [255, 158, 84], n: 1, feel: 'ignored', reflect: 'One fair ask, said once.', up: 'Dishes left in the sink again', coped: 'Planned one clear ask', helped: 'Helped you phrase the ask' },
-  { k: 'friends', name: 'Friends', c: [255, 120, 180], n: 2, feel: 'left out', reflect: 'Silence feels louder late at night.', up: 'A quiet group chat, a distant friend', coped: 'Waited till morning, then texted Jess', helped: 'Separated the late hour from the friendship' },
-  { k: 'money', name: 'Money', c: [84, 206, 150], n: 5, feel: 'cheated', reflect: 'Anger with a plan cools down.', up: 'The deposit he kept', coped: 'Found photos, sent a letter', helped: 'One next step at a time' },
-  { k: 'self', name: 'Self', c: [170, 140, 255], n: 1, feel: 'worn out', reflect: 'Some nights you need rest, not a plan.', up: 'Calling yourself useless after a long day', coped: 'Went to bed early', helped: 'Just listened' }
+  { k: 'work', name: 'Work', c: [88, 140, 255], n: 4, feel: 'overloaded', reflect: 'Too much work and moving deadlines is what wears you down.', up: 'Extra projects, deadlines that keep moving', coped: 'Asked your boss for a priority list', helped: 'Helped you ask for clarity instead of absorbing it' },
+  { k: 'home', name: 'Home', c: [255, 158, 84], n: 1, feel: 'robbed', reflect: 'A record beats a guess.', up: 'A package taken from the lobby', coped: 'Emailed the building office', helped: 'Helped you ask for the camera footage' },
+  { k: 'friends', name: 'Team', c: [84, 206, 150], n: 2, feel: 'carrying it', reflect: 'Doing someone else’s share adds up quietly.', up: 'A teammate who skips their part', coped: 'Asked for a clear split', helped: 'Helped you name what you needed' },
+  { k: 'money', name: 'Love', c: [255, 120, 180], n: 5, feel: 'betrayed', reflect: 'Hurt first, then one step at a time.', up: 'Finding out he cheated', coped: 'Blocked him, told someone you trust', helped: 'Listened first, then one next step' },
+  { k: 'self', name: 'Self', c: [170, 140, 255], n: 1, feel: 'worn out', reflect: 'Some nights you need rest, not a plan.', up: 'Blaming yourself for not seeing it', coped: 'Went to bed early', helped: 'Just listened' }
 ];
 const DAYS = {
-  1: [['work', 'Your manager presented your slides as her own.', ['Said what stung'], 'Listened first, then asked what you wanted her to know.', 'It wasn’t about the slides. It was about not being seen.']],
-  2: [['work', 'She thanked you by name in a follow-up email.', ['Let it go'], 'Pointed out the credit was now in writing.', 'A late thank-you still counts.']],
-  3: [['money', 'Your landlord kept your whole deposit.', ['Waited a night'], 'Suggested writing the angry version first, just for you.', 'Waiting a night kept your best argument intact.']],
-  5: [['money', 'Your landlord stopped answering.', ['Called it what it was'], 'Agreed his silence was a choice.', 'Being ignored hurt more than the money.']],
-  7: [['self', 'You called yourself useless after a long day.', ['Went to bed early'], 'Just listened, and didn’t try to fix it.', 'That night you needed rest, not a plan.']],
-  8: [['money', 'You found your move-in photos.', ['Gathered proof'], 'Helped you list what to include.', 'Having proof calmed you more than venting.']],
-  9: [['friends', 'Nobody replied to your birthday plan.', ['Put the phone down till morning'], 'Pointed out it was late and people were probably asleep.', 'Late at night, silence feels bigger than it is.']],
-  10: [['friends', 'Two friends said yes. Jess stayed quiet.', ['Texted Jess directly'], 'Helped you write a message that didn’t sound like an accusation.', 'One direct message beat waiting on the group.']],
-  11: [['money', 'You sent your landlord a formal letter.', ['Sent the letter'], 'Asked how it felt to finally hit send.', 'Doing the hard thing settled you.']],
-  12: [['work', 'Rejected in two lines after three interview rounds.', ['Vented', 'Wrote a reply you didn’t send'], 'Agreed it was a careless way to say no.', 'Effort that goes unacknowledged gets to you most.']],
-  14: [['work', 'You reread the rejection, looking for a reason.', ['Asked yourself what hurt most'], 'Asked which part hurt more: the no, or how they said it.', 'How they said no hurt more than the no.']],
-  15: [['money', 'Half the deposit came back.', ['Filed a claim for the rest'], 'Pointed out you had your evenings back.', 'Half back can still feel like a win.']],
-  16: [['work', 'You applied for a new role.', ['Applied elsewhere'], 'Noticed you were already moving on.', 'You were calmer about work than you thought.'], ['home', 'The dishes were left in the sink again.', ['Planned what to say'], 'Helped you phrase the ask without sounding bitter.', 'What you want is small and fair: dishes done the same day.']]
+  1: [['work', 'Your boss piled another project on top of your plate.', ['Said it was too much'], 'Listened first, then asked what could actually wait.', 'It wasn’t one project. It was never getting a clear no.']],
+  2: [['work', 'The deadline moved up again, with an apology.', ['Asked for the new date in writing'], 'Pointed out an apology doesn’t move the date back.', 'Getting it in writing gave you something to hold onto.']],
+  3: [['money', 'You found out your boyfriend cheated.', ['Waited a night'], 'Suggested writing the angry version first, just for you.', 'Waiting a night kept you from saying things you couldn’t take back.']],
+  5: [['money', 'He said sorry, then said it wasn’t that serious.', ['Called it what it was'], 'Agreed an apology that shrinks it isn’t an apology.', 'Being told it was small hurt more than the secret.']],
+  7: [['self', 'You told yourself you should have seen it coming.', ['Went to bed early'], 'Just listened, and didn’t try to fix it.', 'That night you needed rest, not a plan.']],
+  8: [['money', 'You blocked his number.', ['Blocked him'], 'Asked what you wanted your phone to feel like again.', 'Blocking him gave you your mornings back.']],
+  9: [['friends', 'Your teammate skipped the sync and left you the slides.', ['Vented first'], 'Pointed out it was the second time in two weeks.', 'Doing their part quietly was costing you more than the work.']],
+  10: [['friends', 'You asked your teammate directly for their half.', ['Asked for a clear split'], 'Helped you write a message that didn’t sound like an accusation.', 'One direct ask beat hoping they’d notice.']],
+  11: [['money', 'You told your best friend everything.', ['Told a friend'], 'Asked how it felt to finally say it out loud.', 'Saying it to someone who loves you made it smaller.']],
+  12: [['work', 'The deadline moved overnight, for the third time this week.', ['Vented', 'Drafted a message you didn’t send'], 'Agreed that three changes in a week isn’t planning.', 'Not knowing what’s due is what gets to you most.']],
+  14: [['work', 'You stayed until 10pm to hit the new date.', ['Asked yourself what could wait'], 'Asked which part was truly yours to carry tonight.', 'Doing it all by tonight was your choice, not the job’s.']],
+  15: [['money', 'You slept through the night without checking his Instagram.', ['Put the phone down'], 'Pointed out it was your first full night.', 'One quiet night can still feel like a win.']],
+  16: [['home', 'Your package was marked delivered, then vanished from the lobby.', ['Emailed the building'], 'Found the office and drafted a note asking for the camera footage.', 'Third time this month is a pattern, not bad luck.']]
 };
 
 const MINS = { 1: 2, 2: 1, 3: 6, 5: 4, 7: 2, 8: 3, 9: 2, 10: 1, 11: 2, 12: 4, 14: 3, 15: 1, 16: 3 };
@@ -743,49 +977,53 @@ const hrgb = v => { v = Math.max(15, Math.min(95, v)); for (let i = 1; i < HRAMP
 const tnt = (c, k) => c.map(x => Math.round(x + (255 - x) * k));
 const hrim = v => { const c = hrgb(v); return 'radial-gradient(130% 110% at 50% 0%, ' + rgb(tnt(c, .7)) + ', ' + rgb(tnt(c, .2)) + ' 55%, ' + rgb(tnt(c, .45)) + ')'; };
 const hcore = v => { const c = hrgb(v), d = hrgb(Math.min(95, v + 12)); return 'radial-gradient(closest-side, ' + rgb(d) + ', ' + rgb(c) + ' 60%, ' + rgb(c, 0) + ')'; };
-const HEAT = { 1: [48], 2: [30], 3: [90], 5: [78], 7: [35], 8: [55], 9: [55], 10: [18], 11: [40], 12: [88], 14: [61], 15: [22], 16: [27, 74] };
+const HEAT = { 1: [48], 2: [30], 3: [90], 5: [78], 7: [35], 8: [55], 9: [55], 10: [18], 11: [40], 12: [88], 14: [61], 15: [22], 16: [90] };
 const MWD = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 const DETAIL = {
-  work: { learned: 'Across five talks, the hardest moments were when your effort went unnoticed: the slides, the case study. You felt better each time you said plainly what you wanted.', up: ['Oct 1 · Your manager presented your slides as her own', 'Oct 12 · Rejected in two lines after three rounds', 'Oct 16 · You applied for a new role'], coped: 'Saying what stung helped in three of five talks. Writing the reply you wished you could send helped too, as long as you didn’t send it.', helped: 'It agreed it was unfair first, then asked what you actually wanted. Your next talk was half as long.' },
-  home: { learned: 'This one is still open. What you want is small and fair, dishes done the same day, and saying it once, clearly, is the whole plan.', up: ['Oct 16 · Dishes in the sink, third time this week'], coped: 'You turned the frustration into one clear ask for Sunday’s flat meeting.', helped: 'It helped you find the words without the edge.' },
-  friends: { learned: 'The quiet group chat felt like rejection at midnight. By morning two friends had said yes. The real issue is Jess, and that one is still open.', up: ['Oct 9 · Nobody replied to your birthday plan', 'Oct 10 · Two said yes, Jess stayed quiet'], coped: 'You waited until morning, then texted Jess directly instead of the group.', helped: 'It pointed out the late hour was doing a lot of the talking.' },
-  money: { learned: 'Your anger turned useful once it had a plan: photos, a letter, a claim. Half the money came back, and so did your evenings.', up: ['Oct 3 · Your landlord kept the deposit', 'Oct 8 · You found the move-in photos', 'Oct 15 · Half of it came back'], coped: 'You didn’t send the angry email. You gathered proof and sent a formal letter instead.', helped: 'It kept you on one next step at a time, not the whole fight at once.' },
-  self: { learned: 'After a long day, you were harder on yourself than on anyone else. What helped wasn’t advice, just being heard and getting some sleep.', up: ['Oct 7 · You called yourself useless after a long day'], coped: 'You went to bed early instead of replaying the day.', helped: 'It just listened, and didn’t try to fix anything.' }
+  work: { learned: 'Across four talks, the hardest moments were when the ground kept moving: more work, then a new deadline. You felt better once you asked for one clear priority.', up: ['Oct 1 · Your boss piled on another project', 'Oct 2 · The deadline moved up again', 'Oct 12 · The deadline moved overnight, third time this week', 'Oct 14 · You stayed until 10pm to hit the new date'], coped: 'Asking for dates in writing helped in three of four talks. Drafting the message you wished you could send helped too, as long as you didn’t send it.', helped: 'It agreed it was unfair first, then asked what could wait. Your next talk was half as long.' },
+  home: { learned: 'This one is still open. A package marked delivered, then gone, is the third time this month. A record from the building is the whole plan.', up: ['Oct 16 · Package taken from the lobby, third time this month'], coped: 'You emailed the building office and asked for the camera footage.', helped: 'It found the office and drafted the note, and you checked it before sending.' },
+  friends: { learned: 'Your teammate’s missing work kept landing on you. Once you asked directly for their half, the resentment had somewhere to go. Whether they follow through is still open.', up: ['Oct 9 · Your teammate skipped the sync', 'Oct 10 · You asked them for their half'], coped: 'You asked for a clear split instead of quietly covering again.', helped: 'It pointed out you’d already done their part twice.' },
+  money: { learned: 'The hurt got easier to carry once you stopped carrying it alone: a blocked number, a friend who knew, a quiet night. You didn’t do anything wrong here.', up: ['Oct 3 · You found out he cheated', 'Oct 8 · You blocked his number', 'Oct 15 · You slept through the night'], coped: 'You didn’t send the angry messages. You blocked him and told your best friend instead.', helped: 'It kept you on one next step at a time, not the whole breakup at once.' },
+  self: { learned: 'After the news, you were harder on yourself than on him. What helped wasn’t advice, just being heard and getting some sleep.', up: ['Oct 7 · You told yourself you should have seen it coming'], coped: 'You went to bed early instead of replaying it.', helped: 'It just listened, and didn’t try to fix anything.' }
 };
-const SERIES = { work: [48, 30, 88, 61, 27], home: [74], friends: [55, 18], money: [90, 78, 55, 40, 22], self: [35] };
+const SERIES = { work: [48, 30, 88, 61], home: [90], friends: [55, 18], money: [90, 78, 55, 40, 22], self: [35] };
 const SETTLED = { work: true, home: false, friends: false, money: true, self: false };
-const COPES = { work: [['Named it', 3], ['Wrote it out', 2], ['Applied elsewhere', 1]], home: [['Named the ask', 1]], friends: [['Waited till morning', 1], ['Messaged one friend', 1]], money: [['Gathered proof', 2], ['Sent a letter', 1], ['Waited a night', 1]], self: [['Rested', 1]] };
-const QUOTE = { work: '“After three rounds, two lines isn’t an answer.”', home: '“Third time this week isn’t forgetting.”', friends: '“It’s midnight. Nobody’s reading the group chat right now.”', money: '“It’s your money. You’re allowed to ask for it back.”', self: '“You fixed someone else’s mistake. That’s not useless.”' };
+const COPES = { work: [['Asked for clarity', 1], ['Named it', 2], ['Vented first', 1]], home: [['Emailed the office', 1]], friends: [['Asked for a split', 1], ['Vented first', 1]], money: [['Blocked him', 1], ['Told a friend', 2], ['Waited it out', 2]], self: [['Rested', 1]] };
+const QUOTE = { work: '“Three deadline changes in a week isn’t planning.”', home: '“Third time this month isn’t bad luck.”', friends: '“I shouldn’t have to do your part too.”', money: '“You didn’t do this. He did.”', self: '“You trusted him. That’s not stupid.”' };
 const spark = hs => { const n = hs.length, X = j => n === 1 ? 130 : 6 + j / (n - 1) * 248, Y = h => 36 - (h - 15) / 80 * 32; const pts = hs.map((h, j) => [X(j), Y(h)]); if (n === 1) pts.unshift([6, Y(hs[0])]); return { d: pts.map((p, j) => (j ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' '), ex: pts[pts.length - 1][0].toFixed(1), ey: pts[pts.length - 1][1].toFixed(1) }; };
 const INS = {
-  work: [['Feeling unseen is your trigger. The slides and the rejection hurt for the same reason.', 12], ['You calmed down faster once you said out loud what you wanted.', 14], ['You were already moving on before you said so.', 16]],
-  home: [['What you want is small and fair: dishes done the same day.', 16]],
-  friends: [['Late at night, silence felt like rejection. In the morning it was just a delay.', 10], ['Texting one person directly worked better than waiting on the group.', 10]],
-  money: [['Your anger got useful once it had a plan.', 8], ['Not sending the angry email kept your best argument intact.', 3], ['Getting half back was enough to give you your evenings back.', 15]],
+  work: [['Not knowing what’s due is your trigger. The extra work and the moving deadlines hurt for the same reason.', 12], ['You calmed down faster once you asked for one clear priority.', 14]],
+  home: [['Third time this month is a pattern, not bad luck.', 16]],
+  friends: [['Quietly covering for them cost you more than the work itself.', 9], ['Asking directly worked better than hoping they’d notice.', 10]],
+  money: [['Your anger got useful once it had a plan.', 8], ['Not sending the angry message kept your dignity intact.', 3], ['One quiet night was enough to remind you what calm feels like.', 15]],
   self: [['Some nights you need to be heard, not helped.', 7]]
 };
-const UPS = { work: 'Your manager presented your slides as her own. A week later, a company you interviewed with turned you down in two lines.', home: 'Your flatmate left the dishes in the sink for the third time this week.', friends: 'Nobody replied to your birthday plan in the group chat. Two said yes the next morning, but Jess still hasn’t.', money: 'Your landlord kept your deposit for a stain that was already there, then stopped answering.', self: 'You stayed late fixing someone else’s mistake, then spent the walk home calling yourself useless.' };
+const UPS = { work: 'Your boss piled another project on you, then kept moving the deadline, including once overnight.', home: 'A package of yours was marked delivered, with a photo of it in the lobby, but it was gone when you went down.', friends: 'Your teammate skipped the sync and left you the slides. When you asked for their half, they hadn’t answered yet.', money: 'You found out your boyfriend cheated, and he told you it wasn’t that serious.', self: 'You spent the night telling yourself you should have seen it coming.' };
 const CTX = {
-  1: ['In Monday’s team review, your manager walked through the slides you spent the weekend on and never mentioned your name. You said exactly what stung before deciding what to tell her.'],
-  2: ['The next day she sent a follow-up email to the team and thanked you by name. You decided that was enough and let it go.'],
-  3: ['Your landlord kept your whole deposit, blaming you for a wall stain that was there when you moved in. You wanted to send an angry email, and waited a night instead.'],
-  5: ['Your landlord stopped answering your calls and texts. You called it what it was: being ignored.'],
-  7: ['You stayed late fixing a mistake that wasn’t yours, then spent the walk home calling yourself useless. You went to bed early instead of replaying it.'],
-  8: ['You found the photos you took on move-in day, and the stain is right there. You started a folder of proof.'],
-  9: ['You suggested a birthday dinner in the group chat. Everyone saw it and nobody replied, and by midnight you were wondering if they’d all drifted away.'],
-  10: ['Two friends replied in the morning and said yes. Jess still hasn’t, and things have felt off since she skipped your last two plans. You texted her directly.'],
-  11: ['You sent your landlord a formal letter asking for the deposit back by the end of the month.'],
-  12: ['After three interview rounds and a weekend on the case study, the company turned you down in a two-line email from a no-reply address. You vented, then wrote the reply you wished you could send.'],
-  14: ['You reread the rejection twice, looking for a reason. There wasn’t one, and you noticed how they said no hurt more than the no.'],
-  15: ['Half the deposit came back. You filed a claim for the rest and stopped checking your email every hour.'],
-  16: ['You applied for a role at a company you actually admire, before telling anyone you were ready to move on.', 'Your flatmate left the dishes in the sink for the third time this week. Instead of another passive note, you planned one clear ask for Sunday’s flat meeting.']
+  1: ['In Monday’s check-in, your boss added another project to a plate that was already full. You said it was too much before deciding what to ask for.'],
+  2: ['The next day the deadline moved up again. He apologised, and you asked for the new date in writing.'],
+  3: ['You found out your boyfriend cheated. You wanted to send everything you were feeling right then, and waited a night instead.'],
+  5: ['He said sorry, then added that it wasn’t that serious. You called it what it was: a betrayal.'],
+  7: ['You spent the night telling yourself you should have seen it coming. You went to bed early instead of replaying it.'],
+  8: ['You blocked his number. Your phone stopped lighting up with his name.'],
+  9: ['Your teammate skipped the sync and left you the slides again. By the end of the day you’d done their half and yours.'],
+  10: ['You asked your teammate directly for their half, with a message that didn’t sound like an accusation.'],
+  11: ['You told your best friend everything, start to finish. It was the first time you’d said it out loud.'],
+  12: ['The deadline moved overnight, the third time this week. You vented, then drafted the message you wished you could send.'],
+  14: ['You stayed until 10pm to hit the new date, and noticed how much of it wasn’t yours to carry.'],
+  15: ['You slept through the night without checking his Instagram, the first time since you found out.'],
+  16: ['Marked delivered, with a photo of it in the lobby, but gone when you went down. Third time this month. You emailed the office for the camera footage.']
 };
-const OPEN = { work: { q: 'You never told them how that rejection landed.', m: 'OCT', dn: 12, wd: 'Mon', d: 'Oct 12', t: 'The two-line rejection', s: 'You wrote the reply, but never sent it.' }, self: { q: 'You called yourself useless that night and never took it back.', m: 'OCT', dn: 7, wd: 'Wed', d: 'Oct 7', t: 'A long day', s: 'You slept on it, but the words are still there.' }, friends: { q: 'You haven’t talked to Jess about the plans she keeps skipping.', m: 'OCT', dn: 10, wd: 'Sat', d: 'Oct 10', t: 'Jess', s: 'She hasn’t replied to your text yet.' }, home: { q: 'You haven’t brought up the dishes with your flatmate yet.', m: 'OCT', dn: 16, wd: 'Fri', d: 'Oct 16', t: 'The dishes, again', s: 'Your ask is ready for Sunday’s flat meeting.' } };
+const DAYTITLE = { 1: ['Too much work', 'from my boss.'], 2: ['Deadline moved up', 'again, with an apology.'], 3: ['Found out', 'he cheated.'], 5: ['Said sorry,', 'then said it wasn’t that serious.'], 7: ['Blamed yourself', 'for not seeing it coming.'], 8: ['Blocked', 'his number.'], 9: ['Skipped the sync,', 'left you the slides.'], 10: ['Asked directly', 'for their half.'], 11: ['Told your best friend', 'everything.'], 12: ['Deadline moved overnight,', 'third time this week.'], 14: ['Stayed until 10pm', 'to hit the new date.'], 15: ['Slept through the night', 'without checking his Instagram.'], 16: ['Missing delivery', 'from apartment.'] };
+const SUMMARY = { work: 'Work got heavy when plans kept changing. Extra projects landed on you, then the deadline moved three times, once overnight. Your anger peaked at 88 on Oct 12.', home: 'A package marked delivered went missing from the lobby, for the third time this month. Your anger hit its peak (90) on Oct 16 and the building hasn’t answered yet.', friends: 'Your teammate skipped their part and you quietly covered it. Your anger dropped from 55 to 18 once you asked for their half directly.', money: 'You found out your boyfriend cheated, and your anger was highest right then (90). It eased to 22 by Oct 15 as you blocked him and told a friend.', self: 'After the news you blamed yourself for not seeing it coming. It’s a quieter anger, and it shows up at the end of a long day.' };
+const WHEN = { work: [['Early in the week', 'It starts at hand-offs: Thu Oct 1, when the extra project landed, and Mon Oct 12.'], ['Overnight changes', 'Your worst day, Oct 12, followed a deadline that moved overnight, before you could plan your day.'], ['Evenings', 'On Oct 14 you stayed until 10pm to hit the new date, so it carried into your night.']], home: [['Right after delivery', 'It happens in the gap between the “delivered” photo and you getting home.'], ['Third time this month', 'That makes it a pattern, not bad luck. The problem is the lobby, not you.'], ['While you wait', 'Your anger stays high until the building answers, so the open request is what to move.']], friends: [['After a missed sync', 'Oct 9, when they skipped the sync and left you the slides.'], ['Close to a deadline', 'When time is short it feels easier to do their part than to ask.'], ['The morning after', 'On Oct 10 you asked directly and your anger dropped 37 points.']], money: [['The first night', 'Oct 3 was the peak. Waiting a night kept you from sending things you couldn’t take back.'], ['After his apology', 'On Oct 5 (78), being told it wasn’t that serious hurt more than the secret.'], ['Late at night', 'Checking his Instagram was the pull. Oct 15 was your first full night without it.']], self: [['End of a long day', 'It showed up on Oct 7, when you had no energy left.'], ['When you replay it', 'It starts when you go over what you missed.'], ['Before sleep', 'It faded when you went to bed early instead of replaying it.']] };
+const FIX = { work: ['Ask “Which date is final?” in writing the moment a deadline moves.', 'Agree one priority list on Mondays, so extra work has to trade against something.', 'Set a stop time. If it’s not done by 7pm, say what slips instead of staying late.'], home: ['Follow up with the office tomorrow and ask for a date for the footage.', 'Ask them to log deliveries, so you have a record to point to.', 'Use a locker or a held delivery for anything valuable.'], friends: ['Split the work by section at the start.', 'Ask for their part by a date, before you need it.', 'Say once, plainly, when you’re covering for them.'], money: ['Keep him blocked until you decide otherwise.', 'Tell one person each time it comes back, like you did on Oct 11.', 'Put the phone away before bed, so the nights stay quiet.'], self: ['Name one thing you handled well before you sleep.', 'Swap “I should have seen it” for “I trusted him”.', 'Go to bed instead of replaying it.'] };
+const OPEN = { work: { h: 88, sug: 'Ask “Which date is final?” in writing the moment a deadline moves, before you start.', q1: 'You never told your boss', q2: 'the deadlines keep moving.', q: 'You never told your boss the deadlines keep moving.', m: 'OCT', dn: 12, wd: 'Mon', d: 'Oct 12', t: 'The moving deadline', s: 'You wrote the message, but never sent it.' }, self: { h: 35, sug: 'When you start to spiral, name one thing you handled well before you sleep.', q1: 'You blamed yourself', q2: 'and never took it back.', q: 'You told yourself you should have seen it coming and never took it back.', m: 'OCT', dn: 7, wd: 'Wed', d: 'Oct 7', t: 'A long night', s: 'You slept on it, but the words are still there.' }, friends: { h: 18, sug: 'Split the work by section at the start, so it doesn’t quietly pile on you.', q1: 'You haven’t told your teammate', q2: 'you’re covering their part.', q: 'You haven’t told your teammate you’re covering their part.', m: 'OCT', dn: 10, wd: 'Sat', d: 'Oct 10', t: 'The shared deck', s: 'They haven’t replied to your message yet.' }, home: { h: 90, sug: 'Ask the office to log deliveries, so you have a record to point to.', q1: 'Your package vanished from the lobby', q2: 'and the building hasn’t answered.', q: 'Your package vanished from the lobby and the building hasn’t answered.', m: 'OCT', dn: 16, wd: 'Fri', d: 'Oct 16', t: 'The missing package', s: 'You emailed the office for the camera footage.' } };
 const KINDS = [['learned', 'What you learned'], ['up', 'What came up'], ['coped', 'How you coped'], ['helped', 'How it helped']];
 const R = 192, AT = 172, AH = 470;
 const baseR = t => .19 + .12 * Math.sqrt(t.n / 5);
-const LINKS = [['work', 'money', 3], ['friends', 'self', 2], ['work', 'home', 1], ['home', 'friends', 1]];
+const LINKS = [['work', 'friends', 3], ['money', 'self', 2], ['work', 'home', 1], ['home', 'money', 1]];
 const linked = (a, b) => LINKS.some(l => (l[0] === a && l[1] === b) || (l[1] === a && l[0] === b));
 function targets(sel, t) {
   return THEMES.map((th, i) => {
@@ -796,7 +1034,7 @@ function targets(sel, t) {
       x = -.72 + i * .36 + Math.sin(t * .17 * sp + ph) * .1; y = Math.sin(t * .2 * sp + ph) * .62;
       if (on) { x = Math.sin(t * .3) * .06; y = -.08 + Math.cos(t * .27) * .05; r *= 1.45; } else if (any) { r *= .85; cool = .55; }
     } else {
-      const P = { work: [-.47, -.1], money: [-.21, .32], friends: [.31, -.3], self: [.51, .04], home: [-.05, -.64] }[th.k];
+      const P = { work: [-.47, -.1], friends: [-.21, .32], money: [.31, -.3], self: [.51, .04], home: [-.05, -.64] }[th.k];
       x = P[0] + Math.sin(t * .22 + i * 1.7) * .05 + Math.sin(t * .13 + i) * .02; y = P[1] + Math.cos(t * .19 + i * 2.3) * .05; r *= on ? 1.25 : 1;
       if (any && !on && !linked(THEMES[sel].k, th.k)) cool = .85; else if (any && !on) r *= 1.05;
     }
@@ -920,26 +1158,27 @@ class Component extends DCLogic {
         else if (fs == null || !isBlob) items = [].concat(...THEMES.map(t => INS[t.k].map(x => ({ t: x[0], date: 'Oct ' + x[1], topic: t.name, tc: rgb(mix(t.c, [236, 232, 242], .45)), c: rgb(t.c), d: x[1] })))).sort((a, b) => b.d - a.d).slice(0, (st.all ? 99 : 3));
         else items = INS[fth.k].map(x => ({ t: x[0], date: 'Oct ' + x[1], topic: '', c: rgb(fth.c), d: x[1] }));
         items.forEach(x => { x.rtag = false; if (!isBlob && st.day != null) x.date = ''; x.hasTopic = !!x.topic; });
-        const done = { work: 4, home: 0, friends: 1, money: 5, self: 0 };
+        const done = { work: 3, home: 0, friends: 1, money: 5, self: 0 };
         Object.keys(st.gone || {}).forEach(k => { const t = THEMES.find(x => x.k === k); if (t) done[k] = t.n; });
         const di = st.dLast, dt = THEMES[di], DTd = DETAIL[dt.k];
         const detail = {
           dHidden: st.detail == null, dTf: st.detail != null ? 'none' : 'translateY(105%)', dScO: st.detail != null ? 1 : 0, dScPE: st.detail != null ? 'auto' : 'none', closeD: () => this.setState({ detail: null }), dFadeO: st.dScr ? 1 : 0,
-          dName: dt.name, dSub: dt.n + (dt.n === 1 ? ' talk' : ' talks') + ' in October', dStatus: done[dt.k] === dt.n ? 'All settled' : done[dt.k] ? done[dt.k] + ' of ' + dt.n + ' settled' : 'Still warm',
+          dName: dt.name, dSub: dt.n + (dt.n === 1 ? ' talk' : ' talks') + ' in October', dStatus: done[dt.k] === dt.n ? 'All settled' : done[dt.k] ? done[dt.k] + ' of ' + dt.n + ' settled' : 'In progress',
           dLearned: DTd.learned, dUpN: DTd.up.length + (DTd.up.length === 1 ? ' moment' : ' moments'),
           dUp: DTd.up.map(x => { const p = x.split(' · '); return { t: p[1], d: p[0] }; }),
           dCopes: COPES[dt.k].map(c => ({ t: c[0], n: '×' + c[1], d: c[1] + (c[1] === 1 ? ' time' : ' times') })), dTalks: dt.n, dSettled: done[dt.k], dReflect: dt.reflect, dSpan: (() => { const ds = INS[dt.k].map(x => x[1]).concat(DTd.up.map(x => +x.split(' · ')[0].replace('Oct ', ''))); return Math.max(1, Math.max(...ds) - Math.min(...ds)); })(), dCopedNote: DTd.coped,
           dQuote: QUOTE[dt.k], dQd: DTd.up[DTd.up.length - 1].split(' · ')[0], dHelped: DTd.helped,
-          dIns: INS[dt.k].slice(0, 2).map(x => ({ t: x[0], c: rgb(dt.c) })), dC: rgb(dt.c), dTc: rgb(mix(dt.c, WHITE, .15)), dUpText: UPS[dt.k],
+          dIns: INS[dt.k].slice(0, 2).map(x => ({ t: x[0], c: rgb(dt.c) })), dC: rgb(dt.c), dTc: rgb(mix(dt.c, WHITE, .15)), dUpText: UPS[dt.k], dSum: SUMMARY[dt.k], dWhen: WHEN[dt.k].map(x => ({ l: x[0], t: x[1] })), dFix: FIX[dt.k].map(t => ({ t: t, c: rgb(dt.c) })), todoCls: (st.todo || {})[dt.k] ? 'on' : '', todoLbl: (st.todo || {})[dt.k] ? '✓ Added to to-do' : 'Set as to-do', setTodo: () => { const t = Object.assign({}, st.todo); t[dt.k] = !t[dt.k]; this.setState({ todo: t }); },
+          copyLbl: st.copied === dt.k ? 'Copied' : 'Copy text', copyFix: () => { const txt = 'Next time (' + dt.name + ')\n' + FIX[dt.k].map((x, i) => (i + 1) + '. ' + x).join('\n'); try { navigator.clipboard.writeText(txt); } catch (e) {} this.setState({ copied: dt.k }); clearTimeout(this.cpT); this.cpT = setTimeout(() => this.setState({ copied: null }), 1600); },
           dDash: (done[dt.k] / dt.n * 100.5).toFixed(1), dPie: (() => { const f = done[dt.k] / dt.n, r = 7.5; if (f <= 0) return ''; if (f >= 1) return 'M11 3.5 A7.5 7.5 0 1 1 10.99 3.5 Z'; const a = -Math.PI / 2 + f * 2 * Math.PI; return 'M11 11 L11 3.5 A7.5 7.5 0 ' + (f > .5 ? 1 : 0) + ' 1 ' + (11 + r * Math.cos(a)).toFixed(2) + ' ' + (11 + r * Math.sin(a)).toFixed(2) + ' Z'; })(), dDots: Array.from({ length: dt.n }, (_, j) => ({ c: j < done[dt.k] ? rgb(dt.c) : 'rgba(255,255,255,.16)' })),
-          dK: dt.k, dSetO: done[dt.k] === dt.n ? 1 : 0, unsettle: () => { const g = Object.assign({}, st.gone); delete g[dt.k]; this.setState({ gone: g }); }, dHasOpen: !!OPEN[dt.k], dShowOpen: !!OPEN[dt.k] && !(st.gone || {})[dt.k], letGo: e => this.dissolve(dt.k, e), dOd: (OPEN[dt.k] || {}).d, dOq: (OPEN[dt.k] || {}).q, dOago: (() => { const o = OPEN[dt.k]; if (!o) return ''; const n = 16 - o.dn; return n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago'; })(), dOm: (OPEN[dt.k] || {}).m, dOdn: (OPEN[dt.k] || {}).dn, dOwd: (OPEN[dt.k] || {}).wd, dOt: (OPEN[dt.k] || {}).t, dOs: (OPEN[dt.k] || {}).s,
+          dK: dt.k, dSetO: done[dt.k] === dt.n ? 1 : 0, unsettle: () => { const g = Object.assign({}, st.gone); delete g[dt.k]; this.setState({ gone: g }); }, dHasOpen: !!OPEN[dt.k], dShowOpen: !!OPEN[dt.k] && !(st.gone || {})[dt.k], letGo: e => this.dissolve(dt.k, e), dOd: (OPEN[dt.k] || {}).d, dOq: (OPEN[dt.k] || {}).q, dAc: OPEN[dt.k] ? rgb(hrgb(OPEN[dt.k].h)) : 'rgb(255,255,255)', dOmd: ((OPEN[dt.k] || {}).d || '').replace('Oct ', '10.'), dOq1: (OPEN[dt.k] || {}).q1, dOq2: (OPEN[dt.k] || {}).q2, dOsug: (OPEN[dt.k] || {}).sug, dOago: (() => { const o = OPEN[dt.k]; if (!o) return ''; const n = 16 - o.dn; return n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago'; })(), dOm: (OPEN[dt.k] || {}).m, dOdn: (OPEN[dt.k] || {}).dn, dOwd: (OPEN[dt.k] || {}).wd, dOt: (OPEN[dt.k] || {}).t, dOs: (OPEN[dt.k] || {}).s,
           ...(() => { const se = SERIES[dt.k], n = se.length, W = 338, H = 64, X = j => 6 + j / Math.max(1, n - 1) * (W - 12), Y = h => 6 + (1 - (h - 15) / 80) * (H - 12); const pts = se.map((h, j) => [X(j), Y(h)]); const L = pts.map((q, j) => (j ? 'L' : 'M') + q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join(' '); return { dHasSp: n > 1, dSpL: L, dSpA: L + ' L' + pts[n - 1][0].toFixed(1) + ' ' + H + ' L' + pts[0][0].toFixed(1) + ' ' + H + ' Z', dSx: pts[n - 1][0].toFixed(1), dSy: pts[n - 1][1].toFixed(1) }; })()
         };
         return Object.assign(detail, {
           feed: items, fc: !isBlob ? '#FFFFFF' : fs == null ? '#FFFFFF' : rgb(fth.c),
           showSum: (isBlob && fs == null) || (!isBlob && st.day == null), fTitle: !isBlob ? (st.day != null ? 'October ' + st.day : 'This month') : fs == null ? 'This month' : fth.name, fMeta: !isBlob ? (st.day != null ? '' : 'October') : fs == null ? 'October' : '', fCnt: isBlob && fs != null ? '(' + fth.n + ')' : '', fTc: isBlob && fs != null ? rgb(mix(fth.c, WHITE, .15)) : 'rgba(236,232,242,.92)', fcO: st.fFade ? 0 : 1, fcY: st.fFade ? 6 : 0, fcB: st.fFade ? 10 : 0, fcT: st.fFade ? 'opacity .2s ease-in, filter .2s ease-in, transform .2s ease-in' : 'opacity .42s ease-out, filter .55s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1)',
           showVa: !(!isBlob && st.day != null), vaLabel: fs != null && isBlob ? 'See analysis' : st.all ? 'Show less' : 'Show all', showAll: () => this.setState(fs != null && isBlob ? { detail: fs, dLast: fs } : { all: !st.all }), _old: () => this.setState({ fs: null, view: 'blob', all: true }),
-          rows: THEMES.map((t, i) => ({ t: t.name, n: t.n, c: rgb(t.c), on: false, dash: (done[t.k] / t.n * 100).toFixed(1), sub: done[t.k] === t.n ? 'Settled' : done[t.k] ? done[t.k] + ' of ' + t.n + ' settled' : 'Still warm', pick: () => this.setState({ detail: i, dLast: i }) }))
+          rows: THEMES.map((t, i) => ({ t: t.name, n: t.n, c: rgb(t.c), on: false, dash: (done[t.k] / t.n * 100).toFixed(1), sub: done[t.k] === t.n ? 'Settled' : done[t.k] ? done[t.k] + ' of ' + t.n + ' settled' : 'In progress', pick: () => this.setState({ detail: i, dLast: i }) }))
         });
       })(),
       close: () => this.setState({ open: null }), scO: st.open != null ? 1 : 0, scPE: st.open != null ? 'auto' : 'none', shTf: st.open != null ? 'none' : 'translateY(110%)',
@@ -947,13 +1186,20 @@ class Component extends DCLogic {
     };
     return Object.assign({
       sub: isBlob ? (MODE === 'lamp' ? 'October · tap a color' : 'October · topics that came up together') : 'October · how much you let out',
-      isBlob: isBlob, isCal: !isBlob, ...(() => { const tb = (st.tab || st.view) === 'blob', A1 = 104, A2 = 110, I = 42; return { tabBlob: tb, tabCal: !tb, bw1: tb ? A1 : I, bw2: tb ? I : A2, indX: tb ? 0 : I + 2, indW: tb ? A1 : A2 }; })(), toBlob: () => this.swap('blob'), innerO: st.fading ? 0 : 1, showDayEv: !isBlob && st.day != null, lgO: !isBlob && st.day != null ? 1 : 0, lgY: !isBlob && st.day != null ? 0 : 6, lgDots: (st.day != null && HEAT[st.day] ? HEAT[st.day] : []).map(v => ({ x: ((95 - Math.max(15, Math.min(95, v))) / 80 * 100).toFixed(1), c: rgb(hrgb(v)) })), dayEv: (!isBlob && st.day != null ? (DAYS[st.day] || []) : []).map((e, ei) => { const t = TH[e[0]], open = OPEN[e[0]] && OPEN[e[0]].dn === st.day && !(st.gone || {})[e[0]]; return { c: rgb(t.c), tc: rgb(mix(t.c, WHITE, .25)), topic: t.name, state: open ? 'still open' : 'settled', sc: open ? rgb(mix(t.c, WHITE, .45)) : 'rgba(236,232,242,.45)', sbg: open ? rgb(t.c, .18) : 'rgba(255,255,255,.06)', what: (CTX[st.day] || [])[ei] || e[1], helped: e[3], ins: e[4], coped: e[2].map((x, i) => i ? x.charAt(0).toLowerCase() + x.slice(1) : x).join(', ') + '.' }; }), showCalOpen: !isBlob && st.day == null, calOpen: Object.keys(OPEN).map(k => { const n = 16 - OPEN[k].dn; return { k: k, cls: 'open2 k-' + k + ((st.gone || {})[k] ? ' gone' : ''), c: rgb(TH[k].c), topic: TH[k].name, q: OPEN[k].q, ago: n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago', go: e => this.dissolve(k, e) }; }), fcD: !isBlob && st.day == null ? 'none' : 'block', innerTop: isBlob ? 588 : st.day != null ? 524 : 488, toCal: () => this.swap('cal'), clearDay: () => this.setState({ day: null }),
+      isBlob: isBlob, isCal: !isBlob, ...(() => { const tb = (st.tab || st.view) === 'blob', A1 = 104, A2 = 110, I = 42; return { tabBlob: tb, tabCal: !tb, bw1: tb ? A1 : I, bw2: tb ? I : A2, indX: tb ? 0 : I + 2, indW: tb ? A1 : A2 }; })(), toBlob: () => this.swap('blob'), innerO: st.fading ? 0 : 1, showDayEv: !isBlob && st.day != null, lgO: !isBlob && st.day != null ? 1 : 0, lgY: !isBlob && st.day != null ? 0 : 6, lgDots: (st.day != null && HEAT[st.day] ? HEAT[st.day] : []).map(v => ({ x: ((95 - Math.max(15, Math.min(95, v))) / 80 * 100).toFixed(1), c: rgb(hrgb(v)) })), dayEv: (!isBlob && st.day != null ? (DAYS[st.day] || []) : []).map((e, ei) => { const t = TH[e[0]], open = OPEN[e[0]] && OPEN[e[0]].dn === st.day && !(st.gone || {})[e[0]]; return { c: rgb(t.c), tc: rgb(mix(t.c, WHITE, .25)), topic: t.name, state: open ? 'still open' : 'settled', sc: open ? rgb(mix(t.c, WHITE, .45)) : 'rgba(236,232,242,.45)', sbg: open ? rgb(t.c, .18) : 'rgba(255,255,255,.06)', what: (CTX[st.day] || [])[ei] || e[1], helped: e[3], ins: e[4], coped: e[2].map((x, i) => i ? x.charAt(0).toLowerCase() + x.slice(1) : x).join(', ') + '.' }; }), showCalOpen: false, showDayCards: !isBlob && st.day != null, dayCards: (!isBlob && st.day != null ? (DAYS[st.day] || []) : []).map((e, ei) => { const dt = DAYTITLE[st.day] || ['', e[1]], open = OPEN[e[0]] && OPEN[e[0]].dn === st.day && !(st.gone || {})[e[0]]; return { k: e[0], ac: rgb(hrgb(Math.max.apply(null, HEAT[st.day] || [50]))), t1: dt[0], t2: dt[1], sum: (CTX[st.day] || [])[ei] || e[1], act: open ? 'Draft log and update every time the event changes and sync information.' : e[4] }; }), showGroups: !isBlob && st.day == null, groups: (() => {
+        const MWDN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], out = [];
+        Object.keys(DAYS).map(Number).sort((x, y) => y - x).forEach(d => {
+          const pk = Math.max.apply(null, HEAT[d] || [50]);
+          DAYS[d].forEach((e, ei) => { const dt = DAYTITLE[d]; out.push({ t: dt ? dt[0] + ' ' + dt[1] : e[1], sub: 'Oct ' + d, bg: hrim(pk), core: hcore(pk), pick: () => this.setState({ day: d }) }); });
+        });
+        return out;
+      })(), calOpen: Object.keys(OPEN).filter(k => k !== 'pkg' && k !== 'home').sort((x, y) => OPEN[y].dn - OPEN[x].dn).map(k => { const n = 16 - OPEN[k].dn, tk = OPEN[k].tk || k; return { k: tk, cls: 'open2 k-' + tk + ((st.gone || {})[k] ? ' gone' : ''), c: rgb(hrgb(OPEN[k].h)), md: OPEN[k].d.replace('Oct ', '10.'), topic: TH[tk].name, q: OPEN[k].q, sug: OPEN[k].sug, q1: OPEN[k].q1, q2: OPEN[k].q2, date: OPEN[k].wd + ' ' + OPEN[k].d + ', 2026', ago: n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago', go: e => this.dissolve(k, e) }; }), fcD: isBlob ? 'block' : 'none', innerTop: isBlob ? 588 : st.day != null ? 524 : 488, toCal: () => this.swap('cal'), clearDay: () => this.setState({ day: null }),
       blobO: isBlob ? 1 : 0, blobPE: isBlob ? 'auto' : 'none', calO: isBlob ? 0 : 1, calPE: isBlob ? 'none' : 'auto',
       labs: THEMES.map((t, i) => ({ id: 'bl' + i, t: t.name, p: Math.round(t.n / TOTAL * 100) + '%', o: sel == null || i === sel ? 1 : (MODE === 'bonds' && linked(th.k, t.k) ? .85 : .45) })),
-      chips: THEMES.map((t, i) => ({ k: i, lit: sel == null || i === sel, sOp: sel == null || i === sel ? 1 : .4, sCol: sel == null || i === sel ? 'rgba(236,232,242,.9)' : 'rgba(236,232,242,.4)', arc: [18, 6, 0, 6, 18][i], sz: Math.round(26 + t.n / TOTAL * 70), ov: i ? -10 : 0, zi: i === sel ? 9 : 5 - i, lift: i === sel ? -6 : 0, blob: ['46% 54% 52% 48% / 55% 45% 55% 45%', '58% 42% 40% 60% / 45% 58% 42% 55%', '40% 60% 55% 45% / 50% 40% 60% 50%', '52% 48% 60% 40% / 40% 55% 45% 60%', '45% 55% 42% 58% / 58% 46% 54% 42%'][i], cx: Math.round(60 + i * 70), t: t.name, c: rgb(t.c), on: i === sel, pick: pick(i), w: (t.n / TOTAL * 100).toFixed(2), h: i === sel ? 14 : 6, lo: i === sel ? 1 : 0, dw: i === sel ? 'auto' : '14px', pad: i === sel ? '0 14px 0 8px' : '0', bg: i === sel ? 'rgba(255,255,255,.12)' : 'transparent', sw: rgb(t.c), swS: i === sel ? 1.15 : 1, swO: i === sel ? 1 : .55, col: i === sel ? '#FFFFFF' : 'rgba(255,255,255,.4)', mw: i === sel ? '90px' : '0px', ul: i === sel ? 1 : 0, tbg: i === sel ? rgb(t.c, .24) : sel == null ? rgb(t.c, .13) : 'rgba(255,255,255,.05)', tcol: i === sel ? rgb(mix(t.c, WHITE, .3)) : sel == null ? rgb(mix(t.c, WHITE, .3), .92) : 'rgba(236,232,242,.4)', ring: i === sel ? 'inset 0 0 0 1px ' + rgb(t.c, .34) : sel == null ? 'inset 0 0 0 1px ' + rgb(t.c, .16) : 'inset 0 0 0 1px rgba(255,255,255,.07)' })),
+      chips: THEMES.map((t, i) => ({ k: i, lit: sel == null || i === sel, sOp: sel == null || i === sel ? 1 : .4, sCol: sel == null || i === sel ? 'rgba(236,232,242,.9)' : 'rgba(236,232,242,.4)', arc: [18, 6, 0, 6, 18][i], sz: Math.round(26 + t.n / TOTAL * 70), ov: i ? -10 : 0, zi: i === sel ? 9 : 5 - i, lift: i === sel ? -6 : 0, blob: ['46% 54% 52% 48% / 55% 45% 55% 45%', '58% 42% 40% 60% / 45% 58% 42% 55%', '40% 60% 55% 45% / 50% 40% 60% 50%', '52% 48% 60% 40% / 40% 55% 45% 60%', '45% 55% 42% 58% / 58% 46% 54% 42%'][i], ib: ['62% 38% 45% 55% / 48% 62% 38% 52%', '40% 60% 58% 42% / 60% 42% 58% 40%', '55% 45% 36% 64% / 42% 56% 44% 58%', '36% 64% 52% 48% / 56% 38% 62% 44%', '58% 42% 62% 38% / 38% 60% 40% 62%'][i], cx: Math.round(60 + i * 70), t: t.name, c: rgb(t.c), on: i === sel, pick: pick(i), w: (t.n / TOTAL * 100).toFixed(2), h: i === sel ? 14 : 6, lo: i === sel ? 1 : 0, dw: i === sel ? 'auto' : '14px', pad: i === sel ? '0 14px 0 8px' : '0', bg: i === sel ? 'rgba(255,255,255,.12)' : 'transparent', sw: rgb(t.c), swS: i === sel ? 1.15 : 1, swO: i === sel ? 1 : .55, col: i === sel ? '#FFFFFF' : 'rgba(255,255,255,.4)', mw: i === sel ? '90px' : '0px', ul: i === sel ? 1 : 0, tbg: i === sel ? rgb(t.c, .24) : sel == null ? rgb(t.c, .13) : 'rgba(255,255,255,.05)', tcol: i === sel ? rgb(mix(t.c, WHITE, .3)) : sel == null ? rgb(mix(t.c, WHITE, .3), .92) : 'rgba(236,232,242,.4)', ring: 'inset 0 0 0 1px ' + rgb(t.c, .05) })),
       selName: th.name, selPct: Math.round(th.n / TOTAL * 100) + '%', prev: () => this.setState({ sel: (sel + 4) % 5 }), next: () => this.setState({ sel: (sel + 1) % 5 }), pages: THEMES.map((t, i) => ({ w: i === sel ? 18 : 6, c: i === sel ? '#FFFFFF' : 'rgba(255,255,255,.3)' })),
       rk: 'Under ' + th.name, rc: rgb(mix(th.c, WHITE, .3)), rw: 'feeling ' + th.feel,
-      mpills: MWD.map((t, i) => ({ t: t, bg: i === (16 - 1 + 3) % 7 ? 'rgba(255,255,255,.9)' : '#262428', fg: i === (16 - 1 + 3) % 7 ? '#000000' : 'rgba(255,255,255,.55)' })),
+      mpills: MWD.map((t, i) => ({ t: t, bg: 'transparent', fg: i === (16 - 1 + 3) % 7 ? '#FFFFFF' : 'rgba(255,255,255,.45)' })),
       todayX: 22 + ((16 - 1 + 3) % 7) * 52 + 23, todayY: 170 + Math.floor((16 - 1 + 3) / 7) * 52 - 15,
       mcells: Array.from({ length: 31 }, (_, k) => {
         const d = k + 1, i = d - 1 + 3, hs = HEAT[d], top = hs ? Math.max(...hs) : 0, on = d === st.day;
@@ -975,7 +1221,7 @@ class Component extends DCLogic {
 }
 </script>
 <script src="dc-lite.js?v=3"></script>
-
+<script src="page-transition.js?v=1"></script>
 <script src="flow.js?v=3"></script>
 <i id="dc-painted" hidden></i>
 </body>

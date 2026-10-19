@@ -13,13 +13,13 @@
   left: 0;
   right: 0;
   top: 136px;
-  bottom: calc(var(--kb-h) + var(--composer-gap) + 52px + 14px);
+  bottom: calc(var(--kb-h) + var(--composer-gap) + 52px + var(--field-extra, 0px) + 14px);
   display: none;
   pointer-events: none;
   font-family: "Inter", var(--font-ui);
   transition: bottom var(--kb-dur) var(--ease-drawer);
 }
-.phone[data-keyboard="closed"] .recap-stage { bottom: calc(var(--composer-rest) + 52px + 18px); }
+.phone[data-keyboard="closed"] .recap-stage { bottom: calc(var(--composer-rest) + 52px + var(--field-extra, 0px) + 18px); }
 .phone[data-screen="agents"] .recap-stage { display: block; }
 
 /* ───────────────────────── Insights bubble ───────────────────────── */
@@ -392,12 +392,12 @@
 /* quick replies are yours, so they sit on the right */
 .op-chips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; align-self: flex-end; }
 .op-chip {
-  height: 34px;
-  padding: 0 14px;
-  border-radius: 17px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
   border: 0.839px solid rgba(var(--agent-rgb), 0.45);
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--agent-ink);
   transition: transform 160ms var(--ease-out), background-color 150ms ease;
 }
@@ -499,7 +499,7 @@
 }
 .op-draft-label {
   margin: 0 0 8px;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   opacity: 0.6;
@@ -515,17 +515,17 @@
   display: flex;
   gap: 8px;
   margin: 0;
-  font-size: 12.5px;
+  font-size: 14.5px;
   line-height: 1.35;
   min-width: 0;
 }
-.op-draft-key { flex: none; width: 52px; opacity: 0.55; }
+.op-draft-key { flex: none; width: 60px; opacity: 0.55; }
 .op-draft-val { min-width: 0; overflow-wrap: anywhere; }
 .op-draft-row:last-child .op-draft-val { font-weight: 600; }
 .op-draft-body {
   display: grid;
   gap: 8px;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.42;
   opacity: 0.92;
   border-radius: 8px;
@@ -545,11 +545,11 @@
   margin-top: 12px;
 }
 .op-draft-btn {
-  height: 32px;
-  padding: 0 16px;
-  border-radius: 16px;
+  height: 34px;
+  padding: 0 18px;
+  border-radius: 17px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
@@ -586,3 +586,12 @@
   mask: var(--fade);
 }
 .op-list { padding-top: 64px; padding-bottom: 40px; } /* the newest message rests clear of the bottom fade */
+
+/* a place the agent found (recap.js placeCard): sits like the email draft; hours and aisle are plain text */
+.op-place-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.op-place-name { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.op-place-dist { flex: none; font-size: 13px; opacity: 0.6; }
+.op-place-addr { margin: 3px 0 0; font-size: 14.5px; opacity: 0.72; }
+.op-place-meta { margin: 8px 0 0; font-size: 14.5px; opacity: 0.92; }
+.op-place .op-draft-actions { margin-top: 12px; }
+a.op-draft-btn { display: inline-grid; place-items: center; text-decoration: none; }

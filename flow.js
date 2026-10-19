@@ -4,18 +4,26 @@
 (function () {
   // [selector, page, when (optional), before leaving (optional)]
   const ROUTES = [
-    ['.memories', 'insights.html'],
+    // each plays its leaving choreography (page-transition.js) and returns how long to wait before changing page
+    ['.memories', 'insights.html', null, () => (window.PageTransition ? window.PageTransition.exit() : 0)],
     // the orb is Talk only while the field is empty; with text in it, it sends
-    ['.voice', 'call.html', () => { const i = document.getElementById('message'); return !(i && i.value.trim()); }],
-    ['.chatbtn', 'index.html'],
+    // ... and its before-hook plays the exit choreography (voice-transition.js) and returns how long to wait
+    ['.voice', 'call.html', () => { const i = document.getElementById('message'); return !(i && i.value.trim()); },
+      () => (window.VoiceTransition ? window.VoiceTransition.exit() : 0)],
+    ['.chatbtn', 'index.html', null, () => (window.PageTransition ? window.PageTransition.exit() : 0)],
     // hanging up lands on the chat stage, where the after-call conversation picks up
-    ['[aria-label="End call"]', 'index.html', null, () => { try { localStorage.setItem('hc.stage', 'chat'); } catch (e) {} }]
+    // (a call preloaded inside the vent page hands back to it instead; -1 means "don't navigate")
+    ['[aria-label="End call"]', 'index.html', null, () => {
+      if (window.__standby && parent !== window) { parent.postMessage('call-ended', '*'); return -1; }
+      try { localStorage.setItem('hc.stage', 'chat'); } catch (e) {}
+    }]
   ];
   let leaving = false;
   const crossfades = 'onpagereveal' in window;
-  function go(href) {
-    if (leaving) return;
+  function go(href, wait) {
+    if (leaving || wait < 0) return;
     leaving = true;
+    if (wait) { setTimeout(() => { location.href = href; }, wait); return; }
     if (crossfades) { location.href = href; return; }
     document.body.style.transition = 'opacity .12s ease';
     document.body.style.opacity = '0';
@@ -25,10 +33,11 @@
     for (const [sel, href, when, before] of ROUTES) {
       if (!e.target.closest(sel) || (when && !when())) continue;
       e.preventDefault(); e.stopPropagation();
-      if (before) before();
-      go(href); return;
+      go(href, before ? before() : 0); return;
     }
   }, true);
+  // The voice move has its own choreography, so the browser's page crossfade steps aside
+  addEventListener('pageswap', e => { if (window.__skipVT && e.viewTransition) e.viewTransition.skipTransition(); });
   // Records whether the browser crossfaded into this page (handy when checking the flow)
   addEventListener('pagereveal', e => { window.__crossfaded = !!e.viewTransition; });
   // Coming back with the browser's back button should not leave the page faded out
@@ -59,6 +68,7 @@
     const home = document.createElement('i');
     home.className = 'ios-home';
     home.setAttribute('aria-hidden', 'true');
-    frame.append(bar, home);
+    // no status bar and no home indicator on any screen
+    void bar; void home;
   })();
 })();

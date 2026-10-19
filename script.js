@@ -264,10 +264,15 @@
     }
   });
 
-  // Tap on empty space dismisses the keyboard
+  // Tap on empty space dismisses the keyboard (not a chat bubble, not a card, not Send)
   phone.addEventListener('pointerdown', (e) => {
     if (phone.dataset.keyboard !== 'open') return;
-    if (e.target.closest('.keyboard, .composer, .agents, .memories, .pre-hit')) return;
+    // the keyboard, the field, and anything in the conversation (bubbles, the email draft and its buttons, the
+    // quick replies, the place card) leave it up; only empty space puts it away
+    if (e.target.closest('.keyboard, .composer, .agents, .memories, .pre-hit, .op-msg, .op-chips, .op-draft, .cb')) {
+      if (e.target.closest('.op-draft-btn, .op-chip')) e.preventDefault(); // pressing a button keeps focus in the field
+      return;
+    }
     e.preventDefault();
     setKeyboard(false);
   });
@@ -725,13 +730,21 @@
   renderRing();
   input.focus({ preventScroll: true });
 
-  // The voice glyph listens for 2 seconds on first load. Then each pill finishes its current
+  // The voice glyph listens for 2 seconds when the screen is shown. Then each pill finishes its current
   // cycle (keyframes end at rest), so the glyph eases back into its default shape with no jump.
+  // Restartable: lockscreen.html reveals this page later than it loads, so it calls Lava.listen() on reveal.
   const voiceBtn = document.querySelector('.voice');
-  if (voiceBtn && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const reduceListen = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let listenTimer = 0;
+  function listen() {
+    if (!voiceBtn || reduceListen) return;
     const pills = [...voiceBtn.querySelectorAll('.voice-pill')];
+    clearTimeout(listenTimer);
+    pills.forEach((pill) => pill.classList.remove('is-settled'));
+    voiceBtn.classList.remove('is-listening');
+    void voiceBtn.offsetWidth; // restart the pills' animations from their first frame
     voiceBtn.classList.add('is-listening');
-    setTimeout(() => {
+    listenTimer = setTimeout(() => {
       let left = pills.length;
       pills.forEach((pill) => {
         pill.addEventListener('animationiteration', () => {
@@ -741,6 +754,8 @@
       });
     }, 2000);
   }
+  // held dark behind the lock screen (?hold): wait to be revealed instead of playing unseen
+  if (!document.documentElement.classList.contains('lock-hold')) listen();
 
   // Small surface for recap.js (the after-chat sequence on the agent switcher)
   window.Lava = {
@@ -748,6 +763,7 @@
     input,
     setKeyboard,
     selectAgent,
+    listen,
     get active() { return active; },
     // agent i's name treatment for other text (its status): an SVG in the current name style,
     // or null for the plain "Original" labels, whose colour is nameColor(i)

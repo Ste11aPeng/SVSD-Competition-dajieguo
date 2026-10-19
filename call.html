@@ -38,6 +38,11 @@ button:focus-visible{outline:2px solid #FFB36B;outline-offset:3px}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&display=swap">
 <link rel="stylesheet" href="agent-ring.css?v=3">
 <style>.status{top:68px!important}.ring-slot{position:absolute;left:0;right:0;top:14px;height:140px;z-index:5;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}</style>
+<style>html.cv-hold #dc-root main > * { opacity: 0 !important; } html.cv-hold { background: #050304; }</style>
+<script>try { if (sessionStorage.getItem("vt.voice") || /[?&]standby\b/.test(location.search)) { document.documentElement.classList.add("cv-hold"); window.__fromVoice = true; window.__standby = /[?&]standby\b/.test(location.search); } } catch (e) {}
+window.__auto = /[?&]auto\b/.test(location.search);
+addEventListener("pagereveal", e => { if (document.documentElement.classList.contains("cv-hold") && e.viewTransition) e.viewTransition.skipTransition(); });</script>
+<style>.floor.has-cloud{filter:none!important}.floor.has-cloud i{display:none}.floor-cloud{position:absolute;inset:0;width:100%;height:100%;display:block}.has-status-fx .status{color:transparent!important}svg.name-effect{overflow:visible}.captions{position:absolute;left:24px;right:24px;top:300px;height:230px;pointer-events:none;z-index:4}.cap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);margin:0;text-align:center;font-weight:300;text-wrap:balance}.mur-fx{position:absolute;top:492px;z-index:4;white-space:nowrap;font-size:19px;font-weight:400;color:#FFF8EE;pointer-events:none;will-change:transform,opacity}.mur-fx[data-side=l]{left:44px;transform-origin:left center}.mur-fx[data-side=r]{right:44px;transform-origin:right center}.mur-em{font-weight:500;color:#fff;line-height:1}.mur-fx[data-lv=in]{opacity:0;transform:translateY(12px) scale(.96)}.mur-fx[data-lv="0"]{opacity:.92;transform:none;transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .25s cubic-bezier(.23,1,.32,1)}.mur-fx[data-lv="1"]{opacity:.36;transform:translateY(-48px);transition:transform .4s cubic-bezier(.32,.72,0,1),opacity .32s cubic-bezier(.23,1,.32,1)}.mur-fx[data-lv="2"]{opacity:0;transform:translateY(-108px);transition:transform .8s cubic-bezier(.25,.46,.45,.94),opacity .4s cubic-bezier(.25,.46,.45,.94)}@media (prefers-reduced-motion:reduce){.mur-fx,.mur-fx[data-lv]{transform:none!important}}.cap--a{font-size:34px;line-height:1.16;letter-spacing:-.85px;color:#FFF8EE}.cap .cw{display:inline-block}.cap .em{color:#fff;font-weight:420}.status-fx{position:absolute;left:0;right:0;display:flex;justify-content:center;transform:translateY(-50%);pointer-events:none;z-index:6}</style>
 <link rel="stylesheet" href="flow.css?v=3">
 <link rel="stylesheet" href="vt.css?v=3">
 <link rel="stylesheet" href="ios-chrome.css?v=3">
@@ -83,19 +88,32 @@ button:focus-visible{outline:2px solid #FFB36B;outline-offset:3px}
 <script type="text/x-dc">
 // The call. With a microphone it listens for real: your loudness drives the heat floor, pauses get a
 // murmur, and when you stop for a moment the listener answers with a line matched to what you said.
-// Without a microphone it plays the scripted loop below.
-const TURNS = [
-  { k: 'u', d: 5.2, h: .62, m: [['mm.', 80, 500, 1.0], ['wait, what?', 220, 470, 2.4]] },
-  { k: 'u', d: 3.8, h: .95, m: [['no way.', 120, 478, .6], ['seriously?', 230, 450, 1.8]] },
-  { k: 'a', w: 'Two lines, after three rounds of you? That’s not a decision. That’s a', em: 'shrug' },
-  { k: 'u', d: 4.0, h: .9, m: [['no way.', 120, 478, .6], ['seriously?', 230, 450, 1.8]] },
-  { k: 'a', w: 'Which part stings more: the two lines, or the no-reply?' }
+// Without a microphone it plays the scripted call below, then keeps listening until you end the call.
+// The scripted call: you tell Ride-or-Die about your package in short spoken chunks; they react to each part.
+// After your last line the call keeps listening; when you end it, the chat picks the story up. call-fx.js draws the chunks as captions.
+// *word* marks the word leaned on (yours set a touch larger, theirs brighter).
+const SCRIPT = [
+  { k: 'u', h: .7, c: ['Okay so… my package got *stolen.*', 'Like, it says *delivered.*', 'There’s literally a *photo* of it sitting in my lobby.'] },
+  { k: 'a', c: ['Wait.', 'They took a photo of it in *your* lobby…', 'and it’s not there?'] },
+  { k: 'u', h: .95, c: ['*No!*', 'I went down like *ten* minutes later', 'and it was just *gone.*'] },
+  { k: 'a', c: ['What???', 'You already tried your *best* going downstairs!'] },
+  { k: 'u', h: .85, c: ['And this is the *third* time this month.', 'I’m so *done.*'] },
+  { k: 'a', c: ['Third time?', 'Then it’s probably not a mistake,', 'there might be *theft* happening.'] },
+  { k: 'u', h: .8, c: ['The seller’s not gonna do *anything.*', 'I just want to know *who* did this.'] }
 ];
+// Timed to the recording (assets/audio/call.mp3): [start, end] seconds of each spoken chunk, in script order.
+// Cut from the silences in the audio, so the captions land as each phrase is said.
+const AUDIO_SRC = 'assets/audio/call.mp3';
+const TIMES = [[.06, 3.73], [4.12, 5.93], [6.15, 9.15], [9.38, 9.76], [10.10, 12.17], [12.43, 13.41], [13.61, 14.28], [14.55, 16.41], [16.45, 18.46],
+  [18.81, 19.39], [19.54, 21.52], [21.69, 23.76], [24.03, 25.11], [25.29, 26.18], [26.55, 28.39], [28.68, 30.15], [30.37, 32.27], [32.60, 34.30]];
+const CHUNKS = (() => { const out = []; let n = 0; SCRIPT.forEach((turn, ti) => turn.c.forEach(text => { const tm = TIMES[n++]; out.push({ k: turn.k, text: text, s: tm[0], e: tm[1], turn: ti }); })); return out; })();
+const SCHED = SCRIPT.map((turn, ti) => { const cs = CHUNKS.filter(c => c.turn === ti); return { k: turn.k, h: turn.h, s: cs[0].s, e: cs[cs.length - 1].e }; });
+const FIRST_A = SCHED.find(x => x.k === 'a').s;
+const TOTAL = SCHED[SCHED.length - 1].e + 1.2; // then the call stays open, listening, until you end it
+window.__callScript = CHUNKS;
+// live-mode reply timing
 const WS = .26, LEAD = .6, HOLD = 2.6, OUT = .8, GAP = .4;
 const replyLen = r => LEAD + (r.w.split(' ').length + (r.em ? 1 : 0)) * WS + HOLD + OUT;
-const SCHED = (() => { let t = 0; return TURNS.map(x => { const d = x.k === 'a' ? replyLen(x) : x.d; const s = Object.assign({}, x, { s: t, e: t + d }); t += d + GAP; return s; }); })();
-const TOTAL = SCHED[SCHED.length - 1].e + .8;
-const FIRST_A = SCHED.find(x => x.k === 'a').s;
 const clamp = v => Math.max(0, Math.min(1, v)), sm = v => { v = clamp(v); return v * v * (3 - 2 * v); };
 
 // What the listener picks up on, in English and Chinese
@@ -134,28 +152,55 @@ function wordsFor(r, age) {
 }
 function murmurView(text, x, y, k, show) {
   const live = k >= 0 && k <= 1 && show;
-  const inA = clamp(k / .18), outA = k > .7 ? clamp((1 - k) / .3) : 1, e = 1 - Math.pow(1 - clamp(k), 2);
-  return { t: text, x: x, y: y, o: live ? (inA * outA).toFixed(2) : 0, dy: live ? (14 * (1 - inA) - 40 * Math.max(0, k - .2) / .8 * e).toFixed(1) : 0, b: live ? ((1 - inA) * 6 + (k > .7 ? (k - .7) * 13 : 0)).toFixed(1) : 0 };
+  // opacity falls away faster than the blur grows, so a fading word never melts into a grey block
+  const inA = clamp(k / .18), outA = k > .7 ? Math.pow(clamp((1 - k) / .3), 2) : 1, e = 1 - Math.pow(1 - clamp(k), 2);
+  return { t: text, x: x, y: y, o: live ? (inA * outA).toFixed(2) : 0, dy: live ? (14 * (1 - inA) - 40 * Math.max(0, k - .2) / .8 * e).toFixed(1) : 0, b: live ? ((1 - inA) * 2.5 + (k > .7 ? (k - .7) * 6 : 0)).toFixed(1) : 0 };
 }
 
 class Component extends DCLogic {
-  constructor(props) { super(props); this.state = { t: 0, L: .3, A: 0, muted: false, live: false }; }
+  constructor(props) { super(props); this.state = { t: 0, L: window.__fromVoice ? .62 : .3, A: 0, muted: false, live: false }; /* arriving from the voice button: glow already up */ }
   componentDidMount() {
     this.mic = 0;
     // conversation state in live mode
     this.lv = { phase: 'u', joined: false, heard: '', voiced: 0, lastVoice: -9, lastMur: -9, segStart: -1, murs: [], slot: 0, reply: null, aStart: 0, aEnd: 0, n: {} };
+    // preloaded behind the vent page (?standby): fully rendered, waiting for the voice button
+    this.prepAudio();
+    document.addEventListener('click', e => { if (this.audio && e.target.closest('[aria-label="End call"]')) this.audio.pause(); }, true);
+    if (window.__standby) {
+      window.addEventListener('message', e => { if (e.data === 'call-start' && !this.started) this.begin(); });
+      parent.postMessage('call-ready', '*');
+      return;
+    }
+    this.begin();
+  }
+  // The recording of the scripted call: the captions and the glow follow its clock, so it is loaded while standing by
+  prepAudio() {
+    if (this.audio) return;
+    const au = this.audio = new Audio(AUDIO_SRC);
+    au.preload = 'auto';
+    // when sound actually starts, line the captions' clock up with it
+    au.addEventListener('playing', () => { if (!this.state.live) this.t0 = window.__callT0 = performance.now() - au.currentTime * 1000; });
+  }
+  begin() {
+    this.started = true;
+    this.prepAudio();
+    this.audio.currentTime = 0;
+    this.audio.play().catch(() => {}); // blocked or missing: the call still runs on the clock, silently
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }).then(stream => {
         const AC = window.AudioContext || window.webkitAudioContext, ctx = new AC();
         const an = ctx.createAnalyser(); an.fftSize = 1024; an.smoothingTimeConstant = .2;
         ctx.createMediaStreamSource(stream).connect(an);
+        if (this.audio) this.audio.pause();
         this.stream = stream; this.actx = ctx; this.an = an; this.buf = new Float32Array(an.fftSize);
         this.wake = () => { if (ctx.state === 'suspended') ctx.resume(); };
         document.addEventListener('pointerdown', this.wake); this.wake();
         this.listen();
+        window.__callLive = true;
         this.setState({ live: true, t: 0 });
       }).catch(() => this.setState({ live: false }));
     }
+    this.t0 = window.__callT0 = performance.now(); // the scripted call's clock, shared with call-fx.js
     this.iv = setInterval(() => this.tick(), 50);
   }
   // Speech-to-text, built into Chrome and Safari; only used to pick the right murmur and reply
@@ -170,7 +215,9 @@ class Component extends DCLogic {
     try { rec.start(); this.rec = rec; } catch (err) {}
   }
   tick() {
-    const s = this.state, t = s.t + .05;
+    const au = this.audio;
+    if (au && !au.paused && !au.ended && !this.state.live) { const d = au.currentTime - (performance.now() - this.t0) / 1000; if (Math.abs(d) > .12) this.t0 = window.__callT0 = performance.now() - au.currentTime * 1000; }
+    const s = this.state, t = s.live ? s.t + .05 : (performance.now() - this.t0) / 1000;
     if (this.an) {
       this.an.getFloatTimeDomainData(this.buf);
       let sum = 0; for (let i = 0; i < this.buf.length; i++) sum += this.buf[i] * this.buf[i];
@@ -203,13 +250,16 @@ class Component extends DCLogic {
       }
       v.murs = v.murs.filter(m => t - m.at < 2.8);
     } else {
-      const T = t % TOTAL, cur = SCHED.find(x => T >= x.s && T < x.e);
+      const T = Math.min(t, TOTAL), cur = SCHED.find(x => T >= x.s && T < x.e);
+      // autoplay (?auto): when the scripted call has finished, end it, as a person tapping the end button would
+      if (t >= TOTAL && window.__auto && !this.ended) { this.ended = true; const end = document.querySelector('[aria-label="End call"]'); if (end) end.click(); }
       if (cur && cur.k === 'u' && !s.muted) tl = cur.h * (.62 + .38 * Math.abs(Math.sin(T * 4.1) * Math.sin(T * 1.6 + 1)));
       if (cur && cur.k === 'a') ta = .85 + .2 * Math.abs(Math.sin(T * 5.3) * Math.sin(T * 2.1 + .4));
     }
-    this.setState({ t: t, L: s.L + (tl - s.L) * .16, A: s.A + (ta - s.A) * .12 });
+    // the agent's glow blooms quickly when they cut in (ahead of their words) and settles back more slowly
+    this.setState({ t: t, L: s.L + (tl - s.L) * .16, A: s.A + (ta - s.A) * (ta > s.A ? .22 : .12) });
   }
-  componentWillUnmount() { this.stopped = true; clearInterval(this.iv); if (this.rec) try { this.rec.stop(); } catch (e) {} if (this.stream) this.stream.getTracks().forEach(t => t.stop()); if (this.actx) this.actx.close(); if (this.wake) document.removeEventListener('pointerdown', this.wake); }
+  componentWillUnmount() { this.stopped = true; if (this.audio) this.audio.pause(); clearInterval(this.iv); if (this.rec) try { this.rec.stop(); } catch (e) {} if (this.stream) this.stream.getTracks().forEach(t => t.stop()); if (this.actx) this.actx.close(); if (this.wake) document.removeEventListener('pointerdown', this.wake); }
   renderVals() {
     const s = this.state;
     let murmurs = [], words = [], rO = 0, rB = 0, rY = 0, joined, agentNow, stO, agO;
@@ -220,24 +270,20 @@ class Component extends DCLogic {
       if (v.reply && t < v.aEnd + .2 && agentNow) {
         words = wordsFor(v.reply, t - v.aStart - LEAD);
         const out = clamp((t - (v.aEnd - OUT)) / OUT);
-        rO = (1 - out * .85).toFixed(2); rB = (out * 9).toFixed(1); rY = (-out * 10).toFixed(1);
+        rO = (1 - out * .85).toFixed(2); rB = (out * 5).toFixed(1); rY = (-out * 10).toFixed(1);
       }
       joined = v.joined; stO = joined ? 0 : 1; agO = joined && t - v.aStart > .5 ? 1 : 0;
     } else {
-      const T = s.t % TOTAL, cur = SCHED.find(x => T >= x.s && T < x.e);
-      SCHED.forEach(x => { if (x.m) x.m.forEach(m => murmurs.push(murmurView(m[0], m[1], m[2], (T - x.s - m[3]) / 2.6, !s.muted))); });
-      const lastA = SCHED.filter(x => x.k === 'a' && T >= x.s && T < x.e + .2).pop();
-      if (lastA) {
-        words = wordsFor(lastA, T - lastA.s - LEAD);
-        const out = clamp((T - (lastA.e - OUT)) / OUT);
-        rO = (1 - out * .85).toFixed(2); rB = (out * 9).toFixed(1); rY = (-out * 10).toFixed(1);
-        if (T >= lastA.e) rO = 0;
-      }
-      agentNow = cur && cur.k === 'a'; stO = T >= FIRST_A - .9 ? 0 : 1; agO = T >= FIRST_A + .5 ? 1 : 0;
+      // captions are drawn by call-fx.js; here: what holds the line on top
+      const T = Math.min(s.t, TOTAL), cur = SCHED.find(x => T >= x.s && T < x.e);
+      // LISTENING until Ride-or-Die first speaks; from then on the name stays for the rest of the call
+      const joinedA = T >= FIRST_A - .3;
+      agentNow = cur && cur.k === 'a';
+      stO = joinedA ? 0 : 1; agO = joinedA ? 1 : 0;
     }
     return {
       status: s.muted ? 'MUTED' : 'LISTENING', stO: stO,
-      agO: agO, agY: agO ? 0 : -6, nmO: agO ? .9 : 0,
+      agO: agO, agY: 0, /* no nudge: the name lands exactly where LISTENING was */ nmO: agO ? .9 : 0,
       hs: agentNow ? (1 + (s.A - .85) * .9).toFixed(3) : 1, ho: agentNow ? .9 : .25,
       fs: (1 + (s.L - .6) * .885).toFixed(3), fo: s.muted ? .1 : clamp((s.L - .22) * 2.2).toFixed(2),
       as: (.8 + s.A * .3).toFixed(3), ao: clamp(s.A * 1.4).toFixed(2),
@@ -251,7 +297,9 @@ class Component extends DCLogic {
 <script src="dc-lite.js?v=3"></script>
 <script src="name-effects.js?v=3"></script>
 <script src="agent-ring.js?v=3"></script>
-<script>AgentRing.mount(document.querySelector(".ring-slot"), { active: 1 });</script>
+<script>AgentRing.mount(document.querySelector(".ring-slot"), { active: 0 });</script>
+<script src="call-fx.js?v=2"></script>
+<script src="voice-transition.js?v=1"></script>
 <script src="flow.js?v=3"></script>
 <i id="dc-painted" hidden></i>
 </body>

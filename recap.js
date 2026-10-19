@@ -16,7 +16,7 @@
 
   const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
   const EASE_IN_OUT = 'cubic-bezier(0.77, 0, 0.175, 1)';
-  const DEFAULT_PLACEHOLDER = 'keep chatting on';
+  const DEFAULT_PLACEHOLDER = 'Reply to Ride-or-Die…';
 
   const VENTED_WITH = 1; // Ride-or-Die
   // What you already said about it, in the voice chat you just left. Every agent's conversation
@@ -92,7 +92,7 @@
     1: {
       name: 'Ride-or-Die',
       voice: 'ride',
-      placeholder: 'keep chatting on',
+      placeholder: 'Reply to Ride-or-Die…',
       script: [
         { react: 1, emoji: '🫂' }, // a hug on "I'm so MADDDD"
         { say: 'nooo, *not again* 😩' },
@@ -117,6 +117,48 @@
         } },
         { act: 'Sending…', ms: 1400 },
         { say: 'sent ✉️ I’ll tell you the second they reply.' },
+        { say: 'want me to go after the *seller* too?' },
+        { chips: ['Contact the seller'] },
+        // only once you ask for the seller does the second email come up
+        { wait: 'reply' },
+        { say: 'I located the *seller’s email,* drafting an email right now' },
+        { act: 'Drafting…', ms: 2400 },
+        { say: 'here’s what I’d send, *check it first* 👇' },
+        { draft: {
+          to: 'Northline Home Support <support@northlinehome.com>',
+          subject: 'Order marked delivered but never arrived: resend or refund?',
+          body: [
+            'Hi,',
+            'My order was marked delivered today, with a photo of it in my building lobby, but it was gone when I went down to get it. This is the third time this month.',
+            'Could you open a delivery claim and either resend the order or refund it? I’m happy to share the delivery photo and time.',
+            'Thanks,\nCherry, Unit 4B',
+          ],
+        } },
+        { act: 'Sending…', ms: 1400 },
+        { say: 'sent ✉️ I’ll *let you know* the second they respond.' },
+        { say: 'and if you need it *today,* the nearest CVS has the same item in stock 👇' },
+        { place: {
+          name: 'CVS Pharmacy',
+          dist: '0.4 mi · 8 min walk',
+          address: '212 Maple Ave',
+          hours: 'Open until 10 PM',
+          aisle: 'Aisle 17',
+          stock: 'In stock',
+        } },
+        // then, whatever you say next: if it is about letting your friend know (any wording), a text for her
+        { wait: 'reply' },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'good call, she should know. here’s a *text* you can send her 👇' },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', act: 'Drafting…', ms: 2000 },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', draft: {
+          to: 'Maya (text message)',
+          body: [
+            'hey! heads up: packages keep disappearing from our lobby. mine was gone within 10 min of the “delivered” photo, 3rd time this month. I’ve asked the building for the camera footage.',
+            'can you grab yours the minute it shows delivered? don’t let it sit 🙏',
+          ],
+        } },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', act: 'Sending…', ms: 1100 },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'sent 💬 she’ll see it right away.' },
+        { unlessReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'got it. I’ll keep watching for the building and the seller, and tell you the second either one replies.' },
       ],
     },
     0: {
@@ -446,10 +488,16 @@
   /* ───────────── 2 · The other agents light up ───────────── */
 
   function cueAgents() {
-    agents.forEach((a, i) => {
+    const light = () => agents.forEach((a, i) => {
       if (i === VENTED_WITH) return;
       later(() => a.classList.add('has-news'), 120 + (i === 2 ? 160 : 0));
     });
+    // after a call, the "Saved to memories" tooltip has the stage first; the glow and zoom follow a beat after it's gone
+    const tip = window.MemoryTip;
+    if (tip && tip.pending) {
+      const id = run;
+      window.addEventListener('memorytip:done', () => { if (alive(id)) later(light, 350); }, { once: true });
+    } else light();
   }
 
   /* ───────────── 3 · Each agent replies, in its own voice ───────────── */
@@ -506,13 +554,54 @@
     });
   }
 
+  // A place the agent found: where it is, how far, when it closes and which aisle, with two actions
+  function copyText(text) {
+    const done = () => true;
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(done, () => legacyCopy(text));
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    const t = document.createElement('textarea');
+    t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(t); t.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    t.remove();
+    return ok;
+  }
+  function placeCard(p) {
+    const card = el('div', 'op-draft op-place');
+    const label = el('p', 'op-draft-label', 'Nearby · ' + p.stock);
+    const top = el('div', 'op-place-top');
+    top.append(el('span', 'op-place-name', p.name), el('span', 'op-place-dist', p.dist));
+    const addr = el('p', 'op-place-addr', p.address);
+    const meta = el('p', 'op-place-meta', p.hours + ' · ' + p.aisle);
+    const actions = el('div', 'op-draft-actions');
+    const copy = el('button', 'op-draft-btn', 'Copy address');
+    copy.type = 'button';
+    copy.addEventListener('click', () => {
+      Promise.resolve(copyText(p.name + ', ' + p.address)).then((ok) => {
+        if (!ok) return;
+        copy.textContent = 'Copied ✓';
+        setTimeout(() => { copy.textContent = 'Copy address'; }, 1600);
+      });
+    });
+    const go = el('a', 'op-draft-btn op-draft-btn--send', 'Navigate');
+    go.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.name + ' ' + p.address);
+    go.target = '_blank';
+    go.rel = 'noopener';
+    actions.append(copy, go);
+    card.append(label, top, addr, meta, actions);
+    return card;
+  }
+
   // An email the agent drafted for you, shown in the chat before anything is sent.
   // Edit makes the message editable in place; Send is the only way it goes out.
   function draftCard(d) {
     const card = el('div', 'op-draft');
     const label = el('p', 'op-draft-label', 'Draft · not sent');
     const head = el('div', 'op-draft-head');
-    [['To', d.to], ['Subject', d.subject]].forEach(([k, v]) => {
+    [['To', d.to], ['Subject', d.subject]].filter(([, v]) => v).forEach(([k, v]) => { // a text message has no subject
       const row = el('p', 'op-draft-row');
       row.append(el('span', 'op-draft-key', k), el('span', 'op-draft-val', v));
       head.append(row);
@@ -710,6 +799,13 @@
         if (!still()) return;
         continue;
       }
+      // { ifReply / unlessReply: pattern } on any step: only when your last reply does (or doesn't) match it
+      if (m.ifReply || m.unlessReply) {
+        const last = c.replies[c.replies.length - 1];
+        const said = last ? last.textContent.trim() : '';
+        if (m.ifReply && !new RegExp(m.ifReply, 'i').test(said)) continue;
+        if (m.unlessReply && new RegExp(m.unlessReply, 'i').test(said)) continue;
+      }
       if (m.act) {
         setStatus(agent, m.act);
         await pause(m.ms);
@@ -734,6 +830,16 @@
         if (!still()) return;
         continue;
       }
+      if (m.place) {
+        setStatus(agent, null);
+        const card = placeCard(m.place);
+        push(list, card);
+        land(card);
+        follow();
+        await pause(900);
+        if (!still()) return;
+        continue;
+      }
       if (m.chips) {
         const row = el('div', 'op-chips');
         m.chips.forEach((t) => {
@@ -744,6 +850,16 @@
             input.value = t;
             input.dispatchEvent(new Event('input', { bubbles: true }));
             window.Lava.setKeyboard(true);
+            // chosen: the quick replies have done their job, so the row steps aside (quick, soft, collapsing so the chat settles)
+            if (row.dataset.gone) return;
+            row.dataset.gone = '1';
+            row.style.pointerEvents = 'none';
+            const h = row.offsetHeight;
+            const out = row.animate(reduceMotion.matches
+              ? [{ opacity: 1 }, { opacity: 0 }]
+              : [{ opacity: 1, transform: 'translateY(0)', filter: 'blur(0px)', height: h + 'px' }, { opacity: 0, transform: 'translateY(6px)', filter: 'blur(3px)', height: '0px' }],
+              { duration: reduceMotion.matches ? 120 : 220, easing: EASE_OUT, fill: 'forwards' });
+            out.onfinish = () => row.remove();
           });
           row.append(b);
         });

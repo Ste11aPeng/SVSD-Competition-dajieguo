@@ -9,11 +9,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Varela+Round&family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&family=Nunito:wght@900;1000&family=Instrument+Serif:ital@0;1&family=EB+Garamond:ital,wght@1,400..600&family=Shrikhand&display=swap" rel="stylesheet" />
+  <link rel="prefetch" href="call.html" />
+  <link rel="prefetch" href="insights.html" />
+  <link rel="prefetch" href="vendor/react.production.min.js" />
+  <link rel="prefetch" href="vendor/react-dom.production.min.js" />
+  <link rel="prefetch" href="dc-lite.js?v=3" />
+  <link rel="prefetch" href="agent-ring.js?v=3" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="recap.css" />
   <link rel="stylesheet" href="bubbles.css" />
   <link rel="stylesheet" href="vt.css?v=3" />
   <link rel="stylesheet" href="ios-chrome.css?v=3" />
+  <script>
+    // Page transition (page-transition.js): coming back from Memories, hold the content dark until it is animated in
+    (function () {
+      try {
+        var r = JSON.parse(sessionStorage.getItem('pt.dir') || 'null');
+        if (r && r.dir === 'toChat' && Date.now() - r.at < 5000) document.documentElement.classList.add('pt-hold');
+      } catch (e) {}
+      addEventListener('pagereveal', function (e) { if (document.documentElement.classList.contains('pt-hold') && e.viewTransition) e.viewTransition.skipTransition(); });
+    })();
+  </script>
+  <script>
+    // Lock-screen handoff: held dark until lockscreen.html sends "lock-play" (see style.css)
+    (function () {
+      if (!/[?&]hold\b/.test(location.search)) return;
+      var root = document.documentElement;
+      root.classList.add('lock-hold');
+      addEventListener('message', function (e) {
+        if (e.data !== 'lock-play') return;
+        root.classList.remove('lock-hold'); root.classList.add('lock-play');
+        setTimeout(function () { if (window.Lava && Lava.listen) Lava.listen(); }, 350); // the voice glyph plays as the input bar arrives
+        var v = document.querySelector('.pre-variant.is-entering');
+        if (v) { v.classList.remove('is-entering'); v.offsetWidth; v.classList.add('is-entering'); } // restart title + cards
+      });
+      addEventListener('load', function () { parent.postMessage('lock-ready', '*'); });
+    })();
+  </script>
 </head>
 <body>
 <main class="phone" id="phone" data-keyboard="open" data-agent="1" data-bg="vent" data-name="original" data-screen="pre" data-pre="5" data-typing="off">
@@ -311,8 +343,8 @@
         <button class="field-plus pressable" type="button" aria-label="Add attachment">
           <span class="field-icon field-icon--plus"></span>
         </button>
-        <input class="field-input" id="message" type="text" inputmode="none" enterkeyhint="send"
-               placeholder="keep chatting on" aria-label="Message" />
+        <textarea class="field-input" id="message" rows="1" inputmode="none" enterkeyhint="send"
+                  placeholder="keep chatting on" aria-label="Message"></textarea>
         <button class="field-mic pressable" type="button" aria-label="Voice note">
           <span class="field-icon field-icon--mic"></span>
         </button>
@@ -426,9 +458,13 @@
   <script src="vent.js"></script>
   <script src="name-effects.js"></script>
   <script src="script.js"></script>
+  <script src="input-grow.js?v=1"></script>
   <script src="recap.js"></script>
   <script src="bubbles.js"></script>
   <script src="home-chat.js"></script>
+  <script src="memory-tip.js?v=1"></script>
+  <script src="page-transition.js?v=1"></script>
+  <script src="voice-transition.js?v=1"></script>
   <script src="flow.js?v=3"></script>
 
 </body>
