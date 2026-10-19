@@ -14,7 +14,7 @@ SHELL = '''<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Lava">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="mobile.css?v=4">
+<link rel="stylesheet" href="mobile.css?v=5">
 <title>{title}</title>
 {helmet}
 <link rel="stylesheet" href="flow.css?v=3">
