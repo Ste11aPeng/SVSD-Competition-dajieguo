@@ -10,9 +10,10 @@
   <meta name="apple-mobile-web-app-title" content="Lava" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <link rel="stylesheet" href="mobile.css?v=2" />
+  <link rel="stylesheet" href="mobile.css?v=3" />
   <title>V2 Prototype</title>
   <link rel="stylesheet" href="vt.css?v=3" />
+  <script src="fit-extra.js?v=1"></script>
   <style>
     /* Lock screen from Figma "Designing Shits" 237:5962 — designed at 532 × 1148, scaled to fit */
     html, body { margin: 0; height: 100%; background: #0d0d0d; overflow: hidden; }
@@ -50,8 +51,8 @@
     .lock-frame.is-vent .lock-wallpaper, .lock-frame.is-vent .lock-ui { display: none; }
 
     @media (pointer: coarse) {
-      .lock-frame { position: fixed; left: 0; top: 0; height: var(--lock-h, 1148.317px); height: calc((100dvh - var(--lock-y, 0px)) / var(--lock-fit, 1)); transform-origin: 0 0; transform: translateY(var(--lock-y, 0px)) scale(var(--lock-fit, 1)); }
-      .lock-vent { height: calc(var(--lock-h, 1148.317px) / 1.3234 + 4px); height: calc((100dvh - var(--lock-y, 0px)) / var(--lock-fit, 1) / 1.3234 + 4px); }
+      .lock-frame { position: fixed; left: 0; top: 0; height: var(--lock-h, 1148.317px); height: calc((100dvh + var(--fx, 0px) - var(--lock-y, 0px)) / var(--lock-fit, 1)); transform-origin: 0 0; transform: translateY(var(--lock-y, 0px)) scale(var(--lock-fit, 1)); }
+      .lock-vent { height: calc(var(--lock-h, 1148.317px) / 1.3234 + 4px); height: calc((100dvh + var(--fx, 0px) - var(--lock-y, 0px)) / var(--lock-fit, 1) / 1.3234 + 4px); }
     }
     @media (prefers-reduced-motion: reduce) { .lock-ui { transition: opacity .2s; transform: none !important; } .lock-frame.is-leaving .lock-ui { opacity: 0; } }
   </style>
