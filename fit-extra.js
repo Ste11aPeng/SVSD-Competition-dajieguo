@@ -1,11 +1,9 @@
-/* Home-screen app on iPhone: the app opens below an opaque status bar and runs to the bottom edge of
-   the screen, but iOS reports a layout height (100dvh / innerHeight) that stops short of that edge,
-   which left a black strip at the bottom. This works out how much is missing and exposes it as
+/* Home-screen app on iPhone: the app runs from the top edge to the bottom edge of the screen, but iOS
+   reports a layout height (100dvh / innerHeight) that stops short of the bottom, which left a black
+   strip there. This works out how much is missing and exposes it as
    --fx, so the frames can run all the way down. Elsewhere --fx stays 0.
    Triple-tap the top of the screen to show the numbers the phone reports (for tuning). */
 window.FitExtra = (() => {
-  // status bar height (pt) by iPhone screen height in portrait
-  const BAR = { 956: 62, 932: 54, 926: 47, 896: 48, 874: 62, 852: 54, 844: 47, 812: 47, 780: 50, 667: 20, 736: 20, 568: 20 };
   const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
   function safe(side) {
     const p = document.createElement('div');
@@ -19,11 +17,11 @@ window.FitExtra = (() => {
   }
   function extra() {
     if (window !== window.top || !standalone()) return 0;
+    // Measured on an iPhone 16 Pro home-screen app: screen 874pt tall, but dvh / innerHeight 798:
+    // iOS sizes the page as if the status bar (62) and home indicator area were cut off, while the app
+    // really runs from the top edge to the bottom edge. So the missing strip is screen minus dvh.
     const sh = Math.max(screen.height, screen.width);
-    if (safe('top') > 0) return 0;                       // the page runs behind the status bar: dvh is the full screen
-    const bar = BAR[sh] ?? 54;
-    const missing = sh - bar - cssHeight('dvh');
-    return Math.max(0, Math.min(60, Math.round(missing)));
+    return Math.max(0, Math.min(140, Math.round(sh - cssHeight('dvh'))));
   }
   function apply() {
     const fx = extra();
