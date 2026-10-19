@@ -31,7 +31,7 @@ SHELL = '''<!doctype html>
 <script type="text/x-dc">{code}</script>
 <script src="dc-lite.js?v=3"></script>
 {boot}
-<script src="flow.js?v=9"></script>
+<script src="flow.js?v=10"></script>
 <i id="dc-painted" hidden></i>
 </body>
 </html>
