@@ -50,25 +50,42 @@
     document.documentElement.appendChild(probe);
     const v = probe.offsetHeight; probe.remove(); return v;
   }
+  // The screen the page really gets. iOS can report a layout viewport shorter than the screen when the
+  // page runs under the status bar (home-screen app), so take the largest honest measure, never more than the screen.
+  function viewport() {
+    const de = document.documentElement, vv = window.visualViewport;
+    const vw = de.clientWidth;
+    let vh = Math.max(de.clientHeight, window.innerHeight || 0, vv ? vv.height : 0);
+    if (standalone() && screen.height > screen.width) vh = Math.max(vh, screen.height);
+    return [vw, Math.min(vh, Math.max(screen.height, screen.width))];
+  }
   function fit() {
-    // the layout viewport, not innerWidth, which a phone widens to fit an unscaled frame
-    const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+    const [vw, vh] = viewport();
     const root = document.documentElement.style;
     if (matchMedia('(pointer: coarse)').matches) {
       // phone: fill the width; the frame's height becomes whatever the screen has room for
       const s = vw / 402;
-      // Line the design's 54px status strip up with the phone's real one.
-      // From the home screen the page runs under the status bar: start the strip at the top and let it
-      // grow to the phone's safe area. In Safari the page already starts below the status bar: lift
-      // most of the strip off (keep a little air). Inside the lock screen's frame, leave it as is.
+      // Line the design's 54px status strip up with the phone's real status bar.
+      // Page under the status bar (home-screen app, safe-area inset > 0): grow the strip to the inset.
+      // Page below it (Safari): lift most of the strip off, keeping a little air. In the lock screen's frame: as is.
       let fy = 0;
-      if (window === window.top) fy = standalone() ? Math.max(0, safeTop() - 54 * s) : -44 * s;
+      if (window === window.top) {
+        const safe = safeTop();
+        fy = (safe > 0 || standalone()) ? Math.max(0, Math.max(safe, 47) - 54 * s) : -44 * s;
+      }
       root.setProperty('--fit', s); root.setProperty('--fh', ((vh - fy) / s) + 'px'); root.setProperty('--fy', fy + 'px');
+      // ?debug shows what the phone reported, for tuning on a real device
+      if (/[?&]debug\b/.test(location.search)) {
+        let tag = document.getElementById('fit-debug');
+        if (!tag) { tag = document.createElement('div'); tag.id = 'fit-debug'; tag.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99999;font:11px/1.3 monospace;color:#0f0;background:rgba(0,0,0,.7);padding:6px;border-radius:6px;pointer-events:none;white-space:pre'; document.body.appendChild(tag); }
+        tag.textContent = `client ${document.documentElement.clientWidth}x${document.documentElement.clientHeight}\ninner ${innerWidth}x${innerHeight}\nscreen ${screen.width}x${screen.height}\nsafeTop ${safeTop()} standalone ${standalone()}\nfit ${s.toFixed(3)} fy ${fy.toFixed(1)} vh ${vh}`;
+      }
     } else {
       root.setProperty('--fit', Math.min(1, vw / 402, vh / 874));
     }
   }
-  addEventListener('resize', fit); fit();
+  addEventListener('resize', fit); addEventListener('orientationchange', fit); addEventListener('pageshow', fit); fit();
+  if (window.visualViewport) visualViewport.addEventListener('resize', fit);
 
   // iOS status bar and home indicator, drawn inside the phone frame on every screen
   (function chrome() {
