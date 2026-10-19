@@ -4,6 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lava" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="mobile.css?v=1" />
   <title>V2 Prototype</title>
   <link rel="stylesheet" href="vt.css?v=3" />
   <style>
@@ -69,7 +76,7 @@
       const ui = document.getElementById('lockUi');
             let started = false;
 
-      function fit() { document.documentElement.style.setProperty('--lock-fit', Math.min((innerWidth - 32) / 532, (innerHeight - 56) / 1148.317)); }
+      function fit() { const phone = matchMedia('(pointer: coarse)').matches, pad = phone ? [0, 0] : [32, 56]; document.documentElement.style.setProperty('--lock-fit', Math.min((document.documentElement.clientWidth - pad[0]) / 532, (document.documentElement.clientHeight - pad[1]) / 1148.317)); }
       addEventListener('resize', fit); fit();
 
       // Critically damped spring (ω = 13.2 rad/s) sampled into a CSS linear() easing, so it runs as an ordinary

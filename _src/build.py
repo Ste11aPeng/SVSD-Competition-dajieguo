@@ -8,6 +8,13 @@ SHELL = '''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lava">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="mobile.css?v=2">
 <title>{title}</title>
 {helmet}
 <link rel="stylesheet" href="flow.css?v=3">
@@ -24,7 +31,7 @@ SHELL = '''<!doctype html>
 <script type="text/x-dc">{code}</script>
 <script src="dc-lite.js?v=3"></script>
 {boot}
-<script src="flow.js?v=3"></script>
+<script src="flow.js?v=4"></script>
 <i id="dc-painted" hidden></i>
 </body>
 </html>

@@ -44,9 +44,11 @@
   window.addEventListener('pageshow', () => { leaving = false; document.body.style.opacity = ''; });
   // Small phones: scale the fixed 402×874 frame to fit
   function fit() {
-    if (!document.body.classList.contains('flow-page')) return;
-    const s = Math.min(innerWidth / 402, innerHeight / 874);
-    document.documentElement.style.setProperty('--fit', s < 1 ? s : 1);
+    // the layout viewport, not innerWidth, which a phone widens to fit an unscaled frame
+    const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+    const s = Math.min(vw / 402, vh / 874);
+    const phone = matchMedia('(pointer: coarse)').matches;
+    document.documentElement.style.setProperty('--fit', phone ? s : Math.min(s, 1));
   }
   addEventListener('resize', fit); fit();
 
