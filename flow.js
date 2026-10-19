@@ -65,17 +65,13 @@
     if (matchMedia('(pointer: coarse)').matches) {
       // phone: fill the width; the frame's height becomes whatever the screen has room for
       const s = vw / 402;
-      // Both ways of opening put the content at the same place: just under the phone's status bar,
-      // with the design's 54px status strip trimmed to 10px of air.
-      // Safari: the page already starts under the status bar, so lift 44px of the strip off.
-      // Home-screen app: the page starts at the very top, behind the status bar, so first push it
-      // down by the status bar's height (the safe-area inset; 54 if the phone does not report one).
-      // Inside the lock screen's frame: as is.
+      // Put the content just under the phone's status bar, with the design's 54px status strip
+      // trimmed to 10px of air. Where the page starts depends on the phone, not on how it was opened:
+      // when it runs behind the status bar the phone reports the bar's height as the top safe area,
+      // so push down by exactly that; otherwise (Safari, and home-screen apps that start below the bar)
+      // the inset is 0. Inside the lock screen's frame: as is.
       let fy = 0;
-      if (window === window.top) {
-        const safe = safeTop(), underBar = safe > 0 || standalone();
-        fy = (underBar ? (safe > 0 ? safe : 54) : 0) - 44 * s;
-      }
+      if (window === window.top) fy = safeTop() - 44 * s;
       root.setProperty('--fit', s); root.setProperty('--fh', ((vh - fy) / s) + 'px'); root.setProperty('--fy', fy + 'px');
       // ?debug shows what the phone reported, for tuning on a real device
       if (/[?&]debug\b/.test(location.search)) {
