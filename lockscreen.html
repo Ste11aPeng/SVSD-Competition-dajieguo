@@ -49,6 +49,10 @@
     .lock-frame.is-vent .lock-vent { pointer-events: auto; }
     .lock-frame.is-vent .lock-wallpaper, .lock-frame.is-vent .lock-ui { display: none; }
 
+    @media (pointer: coarse) {
+      .lock-frame { height: var(--lock-h, 1148.317px); top: calc(50% + var(--lock-y, 0px)); }
+      .lock-vent { height: calc(var(--lock-h, 1148.317px) / 1.3234 + 4px); }
+    }
     @media (prefers-reduced-motion: reduce) { .lock-ui { transition: opacity .2s; transform: none !important; } .lock-frame.is-leaving .lock-ui { opacity: 0; } }
   </style>
 </head>
@@ -76,7 +80,18 @@
       const ui = document.getElementById('lockUi');
             let started = false;
 
-      function fit() { const phone = matchMedia('(pointer: coarse)').matches, pad = phone ? [0, 0] : [32, 56]; document.documentElement.style.setProperty('--lock-fit', Math.min((document.documentElement.clientWidth - pad[0]) / 532, (document.documentElement.clientHeight - pad[1]) / 1148.317)); }
+      function fit() {
+        const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight, root = document.documentElement.style;
+        if (matchMedia('(pointer: coarse)').matches) {
+          // phone: fill the width, let the frame (and the vent page under it) take the screen's height
+          const s = vw / 532;
+          // in Safari the page starts under the phone's status bar: drop the design's status strip (44 of its 54pt, = 58 here)
+          const lift = (matchMedia('(display-mode: standalone)').matches || navigator.standalone) ? 0 : 58;
+          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', (vh / s + lift) + 'px'); root.setProperty('--lock-y', (-lift * s / 2) + 'px');
+        } else {
+          root.setProperty('--lock-fit', Math.min((vw - 32) / 532, (vh - 56) / 1148.317));
+        }
+      }
       addEventListener('resize', fit); fit();
 
       // Critically damped spring (ω = 13.2 rad/s) sampled into a CSS linear() easing, so it runs as an ordinary

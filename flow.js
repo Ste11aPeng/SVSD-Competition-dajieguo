@@ -46,9 +46,16 @@
   function fit() {
     // the layout viewport, not innerWidth, which a phone widens to fit an unscaled frame
     const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
-    const s = Math.min(vw / 402, vh / 874);
-    const phone = matchMedia('(pointer: coarse)').matches;
-    document.documentElement.style.setProperty('--fit', phone ? s : Math.min(s, 1));
+    const root = document.documentElement.style;
+    if (matchMedia('(pointer: coarse)').matches) {
+      // phone: fill the width; the frame's height becomes whatever the screen has room for
+      const s = vw / 402;
+      // in Safari the page starts under the phone's status bar: drop most of the design's 54px status strip (keep a little air)
+      const lift = (matchMedia('(display-mode: standalone)').matches || navigator.standalone || window !== window.top) ? 0 : 44;
+      root.setProperty('--fit', s); root.setProperty('--fh', (vh / s + lift) + 'px'); root.setProperty('--fy', (-lift * s) + 'px');
+    } else {
+      root.setProperty('--fit', Math.min(1, vw / 402, vh / 874));
+    }
   }
   addEventListener('resize', fit); fit();
 
