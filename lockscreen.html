@@ -85,9 +85,14 @@
         if (matchMedia('(pointer: coarse)').matches) {
           // phone: fill the width, let the frame (and the vent page under it) take the screen's height
           const s = vw / 532;
-          // in Safari the page starts under the phone's status bar: drop the design's status strip (44 of its 54pt, = 58 here)
-          const lift = (matchMedia('(display-mode: standalone)').matches || navigator.standalone) ? 0 : 58;
-          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', (vh / s + lift) + 'px'); root.setProperty('--lock-y', (-lift * s / 2) + 'px');
+          // Line the design's status strip (54pt = 71.5 here) up with the phone's real one: from the home screen
+          // grow it to the safe area; in Safari lift most of it off, as the page starts below the status bar
+          const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+          const probe = document.createElement('div');
+          probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top)';
+          document.documentElement.appendChild(probe); const safe = probe.offsetHeight; probe.remove();
+          const fy = standalone ? Math.max(0, safe - 71.5 * s) : -58 * s;
+          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', ((vh - fy) / s) + 'px'); root.setProperty('--lock-y', (fy / 2) + 'px');
         } else {
           root.setProperty('--lock-fit', Math.min((vw - 32) / 532, (vh - 56) / 1148.317));
         }
