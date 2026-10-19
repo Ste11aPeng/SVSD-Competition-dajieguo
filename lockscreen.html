@@ -95,7 +95,7 @@
           const probe = document.createElement('div');
           probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top)';
           de.appendChild(probe); const safe = probe.offsetHeight; probe.remove();
-          const fy = ((safe > 0 || standalone) ? (safe > 0 ? safe : 54) : 0) - 58 * s;   // same spot as in Safari: under the status bar, strip trimmed
+          const fy = safe - 58 * s;   // under the status bar if the page runs behind it (safe > 0), strip trimmed
           root.setProperty('--lock-fit', s); root.setProperty('--lock-h', ((vh - fy) / s) + 'px'); root.setProperty('--lock-y', fy + 'px');
         } else {
           root.setProperty('--lock-fit', Math.min((vw - 32) / 532, (vh - 56) / 1148.317));
