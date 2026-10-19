@@ -1,13 +1,15 @@
 /* On a real phone: the 402px-wide design frame is scaled to the screen's full width, and its height
    follows the screen (bottom-anchored parts stay at the bottom), so there are no side bars.
-   The drawn iOS status bar / home indicator step aside for the phone's own. */
+   The drawn iOS status bar / home indicator step aside for the phone's own. Opened in Safari (not from
+   the home screen) the page already sits below the phone's status bar, so the design's own empty
+   status-bar strip is lifted off the top. */
 @media (pointer: coarse) {
   html, body { height: 100%; margin: 0; overflow: hidden !important; background: #000 !important; }
   body { display: block !important; }
   .phone, .flow-frame {
     position: fixed !important; left: 0 !important; top: 0 !important;
     width: 402px !important; height: var(--fh, 874px) !important;
-    transform-origin: 0 0 !important; transform: scale(var(--fit, 1)) !important;
+    transform-origin: 0 0 !important; transform: translateY(var(--fy, 0px)) scale(var(--fit, 1)) !important;
   }
   .flow-frame > main { height: 100% !important; }
   .ios-status, .ios-home { display: none !important; }

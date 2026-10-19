@@ -14,7 +14,7 @@ SHELL = '''<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Lava">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="mobile.css?v=3">
+<link rel="stylesheet" href="mobile.css?v=4">
 <title>{title}</title>
 {helmet}
 <link rel="stylesheet" href="flow.css?v=3">
@@ -31,7 +31,7 @@ SHELL = '''<!doctype html>
 <script type="text/x-dc">{code}</script>
 <script src="dc-lite.js?v=3"></script>
 {boot}
-<script src="flow.js?v=5"></script>
+<script src="flow.js?v=7"></script>
 <i id="dc-painted" hidden></i>
 </body>
 </html>

@@ -50,7 +50,7 @@
     .lock-frame.is-vent .lock-wallpaper, .lock-frame.is-vent .lock-ui { display: none; }
 
     @media (pointer: coarse) {
-      .lock-frame { height: var(--lock-h, 1148.317px); }
+      .lock-frame { height: var(--lock-h, 1148.317px); top: calc(50% + var(--lock-y, 0px)); }
       .lock-vent { height: calc(var(--lock-h, 1148.317px) / 1.3234 + 4px); }
     }
     @media (prefers-reduced-motion: reduce) { .lock-ui { transition: opacity .2s; transform: none !important; } .lock-frame.is-leaving .lock-ui { opacity: 0; } }
@@ -85,7 +85,9 @@
         if (matchMedia('(pointer: coarse)').matches) {
           // phone: fill the width, let the frame (and the vent page under it) take the screen's height
           const s = vw / 532;
-          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', (vh / s) + 'px');
+          // in Safari the page starts under the phone's status bar: drop the design's status strip (44 of its 54pt, = 58 here)
+          const lift = (matchMedia('(display-mode: standalone)').matches || navigator.standalone) ? 0 : 58;
+          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', (vh / s + lift) + 'px'); root.setProperty('--lock-y', (-lift * s / 2) + 'px');
         } else {
           root.setProperty('--lock-fit', Math.min((vw - 32) / 532, (vh - 56) / 1148.317));
         }
