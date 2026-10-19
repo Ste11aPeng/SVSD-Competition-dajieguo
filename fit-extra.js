@@ -16,12 +16,9 @@ window.FitExtra = (() => {
     document.documentElement.appendChild(p); const v = p.getBoundingClientRect().height; p.remove(); return v;
   }
   function extra() {
-    if (window !== window.top || !standalone()) return 0;
-    // Measured on an iPhone 16 Pro home-screen app: screen 874pt tall, but dvh / innerHeight 798:
-    // iOS sizes the page as if the status bar (62) and home indicator area were cut off, while the app
-    // really runs from the top edge to the bottom edge. So the missing strip is screen minus dvh.
-    const sh = Math.max(screen.height, screen.width);
-    return Math.max(0, Math.min(140, Math.round(sh - cssHeight('dvh'))));
+    // Not needed any more: with an opaque status bar ("black") iOS lays the home-screen app out from
+    // under the status bar to the bottom edge, and 100dvh covers it. Kept at 0; the overlay stays for tuning.
+    return 0;
   }
   function apply() {
     const fx = extra();
