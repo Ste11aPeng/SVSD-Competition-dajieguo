@@ -50,7 +50,7 @@
     .lock-frame.is-vent .lock-wallpaper, .lock-frame.is-vent .lock-ui { display: none; }
 
     @media (pointer: coarse) {
-      .lock-frame { height: var(--lock-h, 1148.317px); top: calc(50% + var(--lock-y, 0px)); }
+      .lock-frame { position: fixed; left: 0; top: 0; height: var(--lock-h, 1148.317px); transform-origin: 0 0; transform: translateY(var(--lock-y, 0px)) scale(var(--lock-fit, 1)); }
       .lock-vent { height: calc(var(--lock-h, 1148.317px) / 1.3234 + 4px); }
     }
     @media (prefers-reduced-motion: reduce) { .lock-ui { transition: opacity .2s; transform: none !important; } .lock-frame.is-leaving .lock-ui { opacity: 0; } }
@@ -81,23 +81,27 @@
             let started = false;
 
       function fit() {
-        const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight, root = document.documentElement.style;
+        const de = document.documentElement, root = de.style, vv = window.visualViewport;
+        const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+        const vw = de.clientWidth;
+        let vh = Math.max(de.clientHeight, window.innerHeight || 0, vv ? vv.height : 0);
+        if (standalone && screen.height > screen.width) vh = Math.max(vh, screen.height);
+        vh = Math.min(vh, Math.max(screen.height, screen.width));
         if (matchMedia('(pointer: coarse)').matches) {
           // phone: fill the width, let the frame (and the vent page under it) take the screen's height
           const s = vw / 532;
-          // Line the design's status strip (54pt = 71.5 here) up with the phone's real one: from the home screen
-          // grow it to the safe area; in Safari lift most of it off, as the page starts below the status bar
-          const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+          // the design's status strip (54pt = 71.5 here) is trimmed by 58, and from the home screen the
+          // frame first moves down by the status bar's height, so both ways look the same
           const probe = document.createElement('div');
           probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top)';
-          document.documentElement.appendChild(probe); const safe = probe.offsetHeight; probe.remove();
-          const fy = standalone ? Math.max(0, safe - 71.5 * s) : -58 * s;
-          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', ((vh - fy) / s) + 'px'); root.setProperty('--lock-y', (fy / 2) + 'px');
+          de.appendChild(probe); const safe = probe.offsetHeight; probe.remove();
+          const fy = ((safe > 0 || standalone) ? (safe > 0 ? safe : 54) : 0) - 58 * s;   // same spot as in Safari: under the status bar, strip trimmed
+          root.setProperty('--lock-fit', s); root.setProperty('--lock-h', ((vh - fy) / s) + 'px'); root.setProperty('--lock-y', fy + 'px');
         } else {
           root.setProperty('--lock-fit', Math.min((vw - 32) / 532, (vh - 56) / 1148.317));
         }
       }
-      addEventListener('resize', fit); fit();
+      addEventListener('resize', fit); addEventListener('pageshow', fit); if (window.visualViewport) visualViewport.addEventListener('resize', fit); fit();
 
       // Critically damped spring (ω = 13.2 rad/s) sampled into a CSS linear() easing, so it runs as an ordinary
       // off-main-thread animation: it covers ~99% of the distance in 500ms, with no bounce on exit.
