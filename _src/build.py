@@ -14,7 +14,7 @@ SHELL = '''<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Lava">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="mobile.css?v=2">
+<link rel="stylesheet" href="mobile.css?v=3">
 <title>{title}</title>
 {helmet}
 <link rel="stylesheet" href="flow.css?v=3">
@@ -31,7 +31,7 @@ SHELL = '''<!doctype html>
 <script type="text/x-dc">{code}</script>
 <script src="dc-lite.js?v=3"></script>
 {boot}
-<script src="flow.js?v=4"></script>
+<script src="flow.js?v=5"></script>
 <i id="dc-painted" hidden></i>
 </body>
 </html>
@@ -39,7 +39,7 @@ SHELL = '''<!doctype html>
 RING_SLOT = '<div class="ring-slot" style="opacity: {{agO}}; transform: translateY({{agY}}px)"></div>'
 RING_HEAD = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400..900&display=swap">\n'
              '<link rel="stylesheet" href="agent-ring.css?v=3">\n'
-             '<style>.status{top:68px!important}.ring-slot{position:absolute;left:0;right:0;top:14px;height:140px;z-index:5;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}</style>')
+             '<style>@media (pointer: coarse){[aria-label="Call controls"]{top:auto!important;bottom:52px!important}}.status{top:68px!important}.ring-slot{position:absolute;left:0;right:0;top:14px;height:140px;z-index:5;transition:opacity 1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}</style>')
 HOLD = ('<style>html.cv-hold #dc-root main > * { opacity: 0 !important; } html.cv-hold { background: #050304; }</style>\n'
         '<script>try { if (sessionStorage.getItem("vt.voice") || /[?&]standby\\b/.test(location.search)) { document.documentElement.classList.add("cv-hold"); window.__fromVoice = true; window.__standby = /[?&]standby\\b/.test(location.search); } } catch (e) {}\n'
         'window.__auto = /[?&]auto\\b/.test(location.search);\n'
