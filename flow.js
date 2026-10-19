@@ -43,6 +43,13 @@
   // Coming back with the browser's back button should not leave the page faded out
   window.addEventListener('pageshow', () => { leaving = false; document.body.style.opacity = ''; });
   // Small phones: scale the fixed 402×874 frame to fit
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  function safeTop() {
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top)';
+    document.documentElement.appendChild(probe);
+    const v = probe.offsetHeight; probe.remove(); return v;
+  }
   function fit() {
     // the layout viewport, not innerWidth, which a phone widens to fit an unscaled frame
     const vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
@@ -50,9 +57,13 @@
     if (matchMedia('(pointer: coarse)').matches) {
       // phone: fill the width; the frame's height becomes whatever the screen has room for
       const s = vw / 402;
-      // in Safari the page starts under the phone's status bar: drop most of the design's 54px status strip (keep a little air)
-      const lift = (matchMedia('(display-mode: standalone)').matches || navigator.standalone || window !== window.top) ? 0 : 44;
-      root.setProperty('--fit', s); root.setProperty('--fh', (vh / s + lift) + 'px'); root.setProperty('--fy', (-lift * s) + 'px');
+      // Line the design's 54px status strip up with the phone's real one.
+      // From the home screen the page runs under the status bar: start the strip at the top and let it
+      // grow to the phone's safe area. In Safari the page already starts below the status bar: lift
+      // most of the strip off (keep a little air). Inside the lock screen's frame, leave it as is.
+      let fy = 0;
+      if (window === window.top) fy = standalone() ? Math.max(0, safeTop() - 54 * s) : -44 * s;
+      root.setProperty('--fit', s); root.setProperty('--fh', ((vh - fy) / s) + 'px'); root.setProperty('--fy', fy + 'px');
     } else {
       root.setProperty('--fit', Math.min(1, vw / 402, vh / 874));
     }
