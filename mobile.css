@@ -1,0 +1,12 @@
+/* On a real phone: the 402 × 874 design frame is scaled to fill the screen and centred,
+   and the drawn iOS status bar / home indicator step aside for the phone's own. */
+@media (pointer: coarse) {
+  html, body { height: 100%; margin: 0; overflow: hidden !important; background: #000 !important; }
+  body { display: block !important; }
+  .phone, .flow-frame {
+    position: fixed !important; left: 50% !important; top: 50% !important;
+    width: 402px !important; height: 874px !important;
+    transform-origin: center !important; transform: translate(-50%, -50%) scale(var(--fit, 1)) !important;
+  }
+  .ios-status, .ios-home { display: none !important; }
+}
