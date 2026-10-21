@@ -4,14 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Lava">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="stylesheet" href="mobile.css?v=6">
-<script src="fit-extra.js?v=3"></script>
 <title>Insights, living card</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Geist+Mono:wght@400..600&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500&amp;display=swap">
 <style>
@@ -858,7 +850,7 @@ p.disp{color:var(--t1)}
 <style>html.pt-hold #dc-root main > .scroller, html.pt-hold #dc-root main > .sticky, html.pt-hold #dc-root main > .seg2, html.pt-hold #dc-root main > .sb, html.pt-hold .chatbtn svg { opacity: 0 !important; } html.pt-hold { background: #0a090e; }</style>
 <script>try { var r = JSON.parse(sessionStorage.getItem("pt.dir") || "null"); if ((r && r.dir === "toMemories" && Date.now() - r.at < 5000)) document.documentElement.classList.add("pt-hold"); } catch (e) {}
 addEventListener("pagereveal", function (e) { if (document.documentElement.classList.contains("pt-hold") && e.viewTransition) e.viewTransition.skipTransition(); });</script>
-<link rel="prefetch" href="index.html"><link rel="prefetch" href="style.css"><link rel="prefetch" href="recap.css"><link rel="prefetch" href="bubbles.css"><link rel="prefetch" href="script.js"><link rel="prefetch" href="recap.js"><link rel="prefetch" href="bubbles.js"><link rel="prefetch" href="home-chat.js"><link rel="prefetch" href="name-effects.js"><link rel="prefetch" href="vent.js"><link rel="prefetch" href="input-grow.js"><link rel="prefetch" href="memory-tip.js"><link rel="prefetch" href="voice-transition.js"><link rel="prefetch" href="assets/vent.jpg">
+<link rel="prefetch" href="vent.html"><link rel="prefetch" href="style.css"><link rel="prefetch" href="recap.css"><link rel="prefetch" href="bubbles.css"><link rel="prefetch" href="script.js"><link rel="prefetch" href="recap.js"><link rel="prefetch" href="bubbles.js"><link rel="prefetch" href="home-chat.js"><link rel="prefetch" href="name-effects.js"><link rel="prefetch" href="vent.js"><link rel="prefetch" href="input-grow.js"><link rel="prefetch" href="memory-tip.js"><link rel="prefetch" href="voice-transition.js"><link rel="prefetch" href="assets/vent.jpg">
 <link rel="stylesheet" href="flow.css?v=3">
 <link rel="stylesheet" href="vt.css?v=3">
 <link rel="stylesheet" href="ios-chrome.css?v=3">
@@ -1009,19 +1001,19 @@ const INS = {
 };
 const UPS = { work: 'Your boss piled another project on you, then kept moving the deadline, including once overnight.', home: 'A package of yours was marked delivered, with a photo of it in the lobby, but it was gone when you went down.', friends: 'Your teammate skipped the sync and left you the slides. When you asked for their half, they hadn’t answered yet.', money: 'You found out your boyfriend cheated, and he told you it wasn’t that serious.', self: 'You spent the night telling yourself you should have seen it coming.' };
 const CTX = {
-  1: ['In Monday’s check-in, your boss added another project to a plate that was already full. You said it was too much before deciding what to ask for.'],
-  2: ['The next day the deadline moved up again. He apologised, and you asked for the new date in writing.'],
-  3: ['You found out your boyfriend cheated. You wanted to send everything you were feeling right then, and waited a night instead.'],
-  5: ['He said sorry, then added that it wasn’t that serious. You called it what it was: a betrayal.'],
-  7: ['You spent the night telling yourself you should have seen it coming. You went to bed early instead of replaying it.'],
-  8: ['You blocked his number. Your phone stopped lighting up with his name.'],
-  9: ['Your teammate skipped the sync and left you the slides again. By the end of the day you’d done their half and yours.'],
-  10: ['You asked your teammate directly for their half, with a message that didn’t sound like an accusation.'],
-  11: ['You told your best friend everything, start to finish. It was the first time you’d said it out loud.'],
-  12: ['The deadline moved overnight, the third time this week. You vented, then drafted the message you wished you could send.'],
-  14: ['You stayed until 10pm to hit the new date, and noticed how much of it wasn’t yours to carry.'],
-  15: ['You slept through the night without checking his Instagram, the first time since you found out.'],
-  16: ['Marked delivered, with a photo of it in the lobby, but gone when you went down. Third time this month. You emailed the office for the camera footage.']
+  1: ['Your boss added another project to an already full plate.'],
+  2: ['The deadline moved up again. You asked for the new date in writing.'],
+  3: ['You found out he cheated, and waited a night before replying.'],
+  5: ['He said sorry, then said it wasn’t that serious.'],
+  7: ['You blamed yourself, then went to bed early.'],
+  8: ['You blocked his number.'],
+  9: ['Your teammate skipped the sync and left you the slides again.'],
+  10: ['You asked your teammate directly for their half.'],
+  11: ['You told your best friend everything, out loud for the first time.'],
+  12: ['The deadline moved overnight, the third time this week.'],
+  14: ['You stayed until 10pm to hit the new date.'],
+  15: ['You slept through the night without checking his Instagram.'],
+  16: ['Marked delivered, then gone from the lobby. Third time this month.']
 };
 const DAYTITLE = { 1: ['Too much work', 'from my boss.'], 2: ['Deadline moved up', 'again, with an apology.'], 3: ['Found out', 'he cheated.'], 5: ['Said sorry,', 'then said it wasn’t that serious.'], 7: ['Blamed yourself', 'for not seeing it coming.'], 8: ['Blocked', 'his number.'], 9: ['Skipped the sync,', 'left you the slides.'], 10: ['Asked directly', 'for their half.'], 11: ['Told your best friend', 'everything.'], 12: ['Deadline moved overnight,', 'third time this week.'], 14: ['Stayed until 10pm', 'to hit the new date.'], 15: ['Slept through the night', 'without checking his Instagram.'], 16: ['Missing delivery', 'from apartment.'] };
 const SUMMARY = { work: 'Work got heavy when plans kept changing. Extra projects landed on you, then the deadline moved three times, once overnight. Your anger peaked at 88 on Oct 12.', home: 'A package marked delivered went missing from the lobby, for the third time this month. Your anger hit its peak (90) on Oct 16 and the building hasn’t answered yet.', friends: 'Your teammate skipped their part and you quietly covered it. Your anger dropped from 55 to 18 once you asked for their half directly.', money: 'You found out your boyfriend cheated, and your anger was highest right then (90). It eased to 22 by Oct 15 as you blocked him and told a friend.', self: 'After the news you blamed yourself for not seeing it coming. It’s a quieter anger, and it shows up at the end of a long day.' };
@@ -1201,7 +1193,7 @@ class Component extends DCLogic {
           DAYS[d].forEach((e, ei) => { const dt = DAYTITLE[d]; out.push({ t: dt ? dt[0] + ' ' + dt[1] : e[1], sub: 'Oct ' + d, bg: hrim(pk), core: hcore(pk), pick: () => this.setState({ day: d }) }); });
         });
         return out;
-      })(), calOpen: Object.keys(OPEN).filter(k => k !== 'pkg' && k !== 'home').sort((x, y) => OPEN[y].dn - OPEN[x].dn).map(k => { const n = 16 - OPEN[k].dn, tk = OPEN[k].tk || k; return { k: tk, cls: 'open2 k-' + tk + ((st.gone || {})[k] ? ' gone' : ''), c: rgb(hrgb(OPEN[k].h)), md: OPEN[k].d.replace('Oct ', '10.'), topic: TH[tk].name, q: OPEN[k].q, sug: OPEN[k].sug, q1: OPEN[k].q1, q2: OPEN[k].q2, date: OPEN[k].wd + ' ' + OPEN[k].d + ', 2026', ago: n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago', go: e => this.dissolve(k, e) }; }), fcD: isBlob ? 'block' : 'none', innerTop: isBlob ? 588 : st.day != null ? 524 : 488, toCal: () => this.swap('cal'), clearDay: () => this.setState({ day: null }),
+      })(), calOpen: Object.keys(OPEN).filter(k => k !== 'pkg' && k !== 'home').sort((x, y) => OPEN[y].dn - OPEN[x].dn).map(k => { const n = 16 - OPEN[k].dn, tk = OPEN[k].tk || k; return { k: tk, cls: 'open2 k-' + tk + ((st.gone || {})[k] ? ' gone' : ''), c: rgb(hrgb(OPEN[k].h)), md: OPEN[k].d.replace('Oct ', '10.'), topic: TH[tk].name, q: OPEN[k].q, sug: OPEN[k].sug, q1: OPEN[k].q1, q2: OPEN[k].q2, date: OPEN[k].wd + ' ' + OPEN[k].d + ', 2026', ago: n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago', go: e => this.dissolve(k, e) }; }), fcD: isBlob ? 'block' : 'none', innerTop: isBlob ? 588 : 488, toCal: () => this.swap('cal'), clearDay: () => this.setState({ day: null }),
       blobO: isBlob ? 1 : 0, blobPE: isBlob ? 'auto' : 'none', calO: isBlob ? 0 : 1, calPE: isBlob ? 'none' : 'auto',
       labs: THEMES.map((t, i) => ({ id: 'bl' + i, t: t.name, p: Math.round(t.n / TOTAL * 100) + '%', o: sel == null || i === sel ? 1 : (MODE === 'bonds' && linked(th.k, t.k) ? .85 : .45) })),
       chips: THEMES.map((t, i) => ({ k: i, lit: sel == null || i === sel, sOp: sel == null || i === sel ? 1 : .4, sCol: sel == null || i === sel ? 'rgba(236,232,242,.9)' : 'rgba(236,232,242,.4)', arc: [18, 6, 0, 6, 18][i], sz: Math.round(26 + t.n / TOTAL * 70), ov: i ? -10 : 0, zi: i === sel ? 9 : 5 - i, lift: i === sel ? -6 : 0, blob: ['46% 54% 52% 48% / 55% 45% 55% 45%', '58% 42% 40% 60% / 45% 58% 42% 55%', '40% 60% 55% 45% / 50% 40% 60% 50%', '52% 48% 60% 40% / 40% 55% 45% 60%', '45% 55% 42% 58% / 58% 46% 54% 42%'][i], ib: ['62% 38% 45% 55% / 48% 62% 38% 52%', '40% 60% 58% 42% / 60% 42% 58% 40%', '55% 45% 36% 64% / 42% 56% 44% 58%', '36% 64% 52% 48% / 56% 38% 62% 44%', '58% 42% 62% 38% / 38% 60% 40% 62%'][i], cx: Math.round(60 + i * 70), t: t.name, c: rgb(t.c), on: i === sel, pick: pick(i), w: (t.n / TOTAL * 100).toFixed(2), h: i === sel ? 14 : 6, lo: i === sel ? 1 : 0, dw: i === sel ? 'auto' : '14px', pad: i === sel ? '0 14px 0 8px' : '0', bg: i === sel ? 'rgba(255,255,255,.12)' : 'transparent', sw: rgb(t.c), swS: i === sel ? 1.15 : 1, swO: i === sel ? 1 : .55, col: i === sel ? '#FFFFFF' : 'rgba(255,255,255,.4)', mw: i === sel ? '90px' : '0px', ul: i === sel ? 1 : 0, tbg: i === sel ? rgb(t.c, .24) : sel == null ? rgb(t.c, .13) : 'rgba(255,255,255,.05)', tcol: i === sel ? rgb(mix(t.c, WHITE, .3)) : sel == null ? rgb(mix(t.c, WHITE, .3), .92) : 'rgba(236,232,242,.4)', ring: 'inset 0 0 0 1px ' + rgb(t.c, .05) })),
@@ -1230,7 +1222,92 @@ class Component extends DCLogic {
 </script>
 <script src="dc-lite.js?v=3"></script>
 <script src="page-transition.js?v=1"></script>
-<script src="flow.js?v=11"></script>
+<script src="flow.js?v=3"></script>
 <i id="dc-painted" hidden></i>
-</body>
+<style>
+/* topic sheet sits flush on the bottom edge; the phone screen rounds its lower corners */
+.dpage{inset:auto 0 0 0!important;border-radius:30px 30px 0 0!important;padding-bottom:env(safe-area-inset-bottom,0px)}
+</style>
+<style>
+/* day pop-up: the calendar dims, the day's card floats in the middle, Let go stays at the bottom */
+.dpop-scrim{position:absolute;inset:0;z-index:30;background:rgba(6,5,9,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transition:opacity 360ms ease;cursor:pointer}
+.dpop{position:absolute;left:16px;right:16px;top:50%;z-index:31;opacity:0;transform:translateY(calc(-50% + 14px)) scale(.97);filter:blur(4px);
+  transition:opacity 380ms cubic-bezier(.23,1,.32,1),transform 460ms cubic-bezier(.23,1,.32,1),filter 380ms cubic-bezier(.23,1,.32,1)}
+.dpop .dcard{box-shadow:0 24px 60px -18px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.06)}
+.dpop .dcard + .dcard{margin-top:12px}
+.dpop-x{position:absolute;left:24px;top:60px;width:44px;height:44px;border:0;padding:0;border-radius:50%;z-index:41;display:grid;place-items:center;cursor:pointer;
+  background:#1d1c22;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);opacity:0;transform:scale(.9) rotate(-45deg);pointer-events:none;
+  transition:opacity 220ms ease,transform 320ms cubic-bezier(.23,1,.32,1)}
+.dpop-x:active{transform:scale(.94)!important}
+.dpop-scrim,.dpop{pointer-events:none}
+.has-pop .dpop-scrim{opacity:1;pointer-events:auto}
+.has-pop .dpop{pointer-events:auto}
+.has-pop .letgo{z-index:32!important}
+.has-pop .dpop{opacity:1;transform:translateY(-50%) scale(1);filter:blur(0)}
+.has-pop .dpop-x{opacity:1;transform:none;pointer-events:auto}
+.has-pop .dcs{visibility:hidden}
+.letgo{animation:lgin 420ms cubic-bezier(.23,1,.32,1) 80ms both}
+@keyframes lgin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.dpop,.dpop-x{transition:opacity 150ms ease;transform:translateY(-50%)!important;filter:none!important}.letgo{animation:none}}
+</style>
+<script>
+(function(){
+  let main=null,scrim=null,pop=null,xb=null,sig='',closing=0;
+  const dayCell=d=>[...document.querySelectorAll('[aria-label^="October "]')].find(c=>new RegExp('^October '+d+'(,|$)').test(c.getAttribute('aria-label')));
+  let curDay=null;
+  document.addEventListener('click',e=>{const c=e.target.closest&&e.target.closest('[aria-label^="October "],.rrow');if(!c)return;
+    const m=c.matches('.rrow')?/Oct (\d+)/.exec((c.querySelector('small')||{}).textContent||''):/October (\d+)/.exec(c.getAttribute('aria-label'));if(m)curDay=+m[1]},true);
+  function closeDay(){if(!document.querySelector('.letgo')||curDay==null)return;const c=dayCell(curDay);if(c)c.click();}
+  function ensure(){main=document.querySelector('main');if(!main||scrim&&main.contains(scrim))return;
+    scrim=document.createElement('div');scrim.className='dpop-scrim';scrim.addEventListener('click',closeDay);
+    pop=document.createElement('div');pop.className='dpop';pop.setAttribute('role','dialog');
+    xb=document.createElement('button');xb.type='button';xb.className='dpop-x';xb.setAttribute('aria-label','Close');
+    xb.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#ECE8F2" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"/></svg>';
+    xb.addEventListener('click',e=>{e.stopPropagation();closeDay()});
+    main.append(scrim,pop,xb)}
+  function sync(){ensure();if(!main)return;const dcs=document.querySelector('.dcs');
+    if(dcs&&dcs.children.length){const s=dcs.innerHTML;if(s!==sig){sig=s;clearTimeout(closing);pop.innerHTML=s}
+      if(!main.classList.contains('has-pop')){void pop.offsetWidth;main.classList.add('has-pop')}}
+    else if(main.classList.contains('has-pop')){main.classList.remove('has-pop');sig='';closing=setTimeout(()=>{if(!main.classList.contains('has-pop'))pop.innerHTML=''},460)}}
+  new MutationObserver(m=>{if(m.every(r=>pop&&(pop.contains(r.target)||r.target===pop)))return;sync()}).observe(document.body,{childList:true,subtree:true,characterData:true});
+  sync();
+})();
+</script>
+<style>
+/* day view: no parcel mark, no heat bar, a white Let go */
+.dcard .dparcel,.hlg{display:none!important}
+.letgo{background:#fff!important;color:#000!important;box-shadow:none!important;transition:transform 140ms cubic-bezier(.23,1,.32,1)}
+.letgo:active{transform:scale(.97)}
+.rrow.is-forgot{display:none!important}
+</style>
+<style>
+/* let go: the burn screen rises over the calendar, then hands back to it */
+.lgx{position:absolute;inset:0;z-index:60;background:#000;opacity:0;transition:opacity 420ms cubic-bezier(.23,1,.32,1);pointer-events:none}
+.lgx.on{opacity:1;pointer-events:auto}
+.lgx iframe{width:100%;height:100%;border:0;display:block}
+.lgx-x{position:absolute;left:24px;top:60px;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#ECE8F2;font-size:18px;cursor:pointer;z-index:1}
+.lgx-x:active{transform:scale(.96)}
+</style>
+<script>
+(function(){
+  let bypass=false,ov=null,btn=null,lastDay=null;
+  // memories already let go: their colour stays on the calendar, but they no longer open
+  const KEY='lava.forgot';let gone=[];try{gone=JSON.parse(sessionStorage.getItem(KEY)||'[]')}catch(e){}
+  const save=()=>{try{sessionStorage.setItem(KEY,JSON.stringify(gone))}catch(e){}};
+  const dayOf=el=>{const c=el.closest&&el.closest('[aria-label^="October "]');if(c){const m=/October (\d+)/.exec(c.getAttribute('aria-label'));if(m)return +m[1]}
+    const r=el.closest&&el.closest('.rrow');if(r){const m=/Oct (\d+)/.exec((r.querySelector('small')||{}).textContent||'');if(m)return +m[1]}return null};
+  document.addEventListener('click',e=>{const d=dayOf(e.target);if(d==null)return;if(gone.includes(d)){e.preventDefault();e.stopPropagation();return}lastDay=d},true);
+  const hideRows=()=>document.querySelectorAll('.rrow').forEach(r=>{const m=/Oct (\d+)/.exec((r.querySelector('small')||{}).textContent||'');r.classList.toggle('is-forgot',!!(m&&gone.includes(+m[1])))});
+  new MutationObserver(hideRows).observe(document.body,{childList:true,subtree:true});hideRows();
+  function close(done){if(!ov)return;if(done===true&&lastDay!=null&&!gone.includes(lastDay)){gone.push(lastDay);save();hideRows()}const o=ov;o.classList.remove('on');setTimeout(()=>o.remove(),440);ov=null;
+    if(btn&&document.contains(btn)){bypass=true;btn.click();bypass=false}btn=null}
+  function open(b){if(ov)return;btn=b;const host=b.closest('main')||document.body;
+    ov=document.createElement('div');ov.className='lgx';
+    ov.innerHTML='<iframe src="letgo.html" title="Let go"></iframe><button type="button" class="lgx-x" aria-label="Close">✕</button>';
+    ov.querySelector('.lgx-x').addEventListener('click',close);
+    host.appendChild(ov);requestAnimationFrame(()=>requestAnimationFrame(()=>ov&&ov.classList.add('on')))}
+  document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.letgo');if(!b||bypass)return;e.preventDefault();e.stopPropagation();open(b)},true);
+  addEventListener('message',e=>{if(e.data&&e.data.letgo==='done')close(true)});
+})();
+</script></body>
 </html>

@@ -1,6 +1,6 @@
 /* Links the screens into one flow:
-   chat (index.html) ─ Memories ─▶ insights.html ─ chat button ─▶ back
-   chat (index.html) ─ voice orb ─▶ call.html ─ end call ─▶ chat stage of index.html */
+   chat (vent.html) ─ Memories ─▶ insights.html ─ chat button ─▶ back
+   chat (vent.html) ─ voice orb ─▶ call.html ─ end call ─▶ chat stage of vent.html */
 (function () {
   // [selector, page, when (optional), before leaving (optional)]
   const ROUTES = [
@@ -10,10 +10,10 @@
     // ... and its before-hook plays the exit choreography (voice-transition.js) and returns how long to wait
     ['.voice', 'call.html', () => { const i = document.getElementById('message'); return !(i && i.value.trim()); },
       () => (window.VoiceTransition ? window.VoiceTransition.exit() : 0)],
-    ['.chatbtn', 'index.html', null, () => (window.PageTransition ? window.PageTransition.exit() : 0)],
+    ['.chatbtn', 'vent.html', null, () => (window.PageTransition ? window.PageTransition.exit() : 0)],
     // hanging up lands on the chat stage, where the after-call conversation picks up
     // (a call preloaded inside the vent page hands back to it instead; -1 means "don't navigate")
-    ['[aria-label="End call"]', 'index.html', null, () => {
+    ['[aria-label="End call"]', 'vent.html', null, () => {
       if (window.__standby && parent !== window) { parent.postMessage('call-ended', '*'); return -1; }
       try { localStorage.setItem('hc.stage', 'chat'); } catch (e) {}
     }]
@@ -43,48 +43,12 @@
   // Coming back with the browser's back button should not leave the page faded out
   window.addEventListener('pageshow', () => { leaving = false; document.body.style.opacity = ''; });
   // Small phones: scale the fixed 402×874 frame to fit
-  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  function safeTop() {
-    const probe = document.createElement('div');
-    probe.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top)';
-    document.documentElement.appendChild(probe);
-    const v = probe.offsetHeight; probe.remove(); return v;
-  }
-  // The screen the page really gets. iOS can report a layout viewport shorter than the screen when the
-  // page runs under the status bar (home-screen app), so take the largest honest measure, never more than the screen.
-  function viewport() {
-    const de = document.documentElement, vv = window.visualViewport;
-    const vw = de.clientWidth;
-    let vh = Math.max(de.clientHeight, window.innerHeight || 0, vv ? vv.height : 0);
-    if (standalone() && screen.height > screen.width) vh = Math.max(vh, screen.height);
-    return [vw, Math.min(vh, Math.max(screen.height, screen.width))];
-  }
   function fit() {
-    const [vw, vh] = viewport();
-    const root = document.documentElement.style;
-    if (matchMedia('(pointer: coarse)').matches) {
-      // phone: fill the width; the frame's height becomes whatever the screen has room for
-      const s = vw / 402;
-      // Put the content just under the phone's status bar, with the design's 54px status strip
-      // trimmed to 10px of air. Where the page starts depends on the phone, not on how it was opened:
-      // when it runs behind the status bar the phone reports the bar's height as the top safe area,
-      // so push down by exactly that; otherwise (Safari, and home-screen apps that start below the bar)
-      // the inset is 0. Inside the lock screen's frame: as is.
-      let fy = 0;
-      if (window === window.top) fy = safeTop() - 44 * s;
-      root.setProperty('--fit', s); root.setProperty('--fh', ((vh - fy) / s) + 'px'); root.setProperty('--fy', fy + 'px');
-      // ?debug shows what the phone reported, for tuning on a real device
-      if (/[?&]debug\b/.test(location.search)) {
-        let tag = document.getElementById('fit-debug');
-        if (!tag) { tag = document.createElement('div'); tag.id = 'fit-debug'; tag.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99999;font:11px/1.3 monospace;color:#0f0;background:rgba(0,0,0,.7);padding:6px;border-radius:6px;pointer-events:none;white-space:pre'; document.body.appendChild(tag); }
-        tag.textContent = `client ${document.documentElement.clientWidth}x${document.documentElement.clientHeight}\ninner ${innerWidth}x${innerHeight}\nscreen ${screen.width}x${screen.height}\nsafeTop ${safeTop()} standalone ${standalone()}\nfit ${s.toFixed(3)} fy ${fy.toFixed(1)} vh ${vh}`;
-      }
-    } else {
-      root.setProperty('--fit', Math.min(1, vw / 402, vh / 874));
-    }
+    if (!document.body.classList.contains('flow-page')) return;
+    const s = Math.min(innerWidth / 402, innerHeight / 874);
+    document.documentElement.style.setProperty('--fit', s < 1 ? s : 1);
   }
-  addEventListener('resize', fit); addEventListener('orientationchange', fit); addEventListener('pageshow', fit); fit();
-  if (window.visualViewport) visualViewport.addEventListener('resize', fit);
+  addEventListener('resize', fit); fit();
 
   // iOS status bar and home indicator, drawn inside the phone frame on every screen
   (function chrome() {

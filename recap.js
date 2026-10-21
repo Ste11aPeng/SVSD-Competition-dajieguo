@@ -46,6 +46,7 @@
   // when your last reply matches ("not yet", "just the building").
   // How each one types: the motion of its words, how fast it types and how long it pauses after.
   // Shouted words (ALL CAPS, or carrying !! / ??) count as key words and flare.
+  const PACE = 0.8; // every agent types and sends 20% sooner than its voice's natural pace
   const VOICES = {
     // Ride-or-Die: the "Vibe" name style's wide face; words arrive with a light smear that settles
     // (a hint of the Vibe streak, kept soft so it never reads as blur)
@@ -147,17 +148,11 @@
         } },
         // then, whatever you say next: if it is about letting your friend know (any wording), a text for her
         { wait: 'reply' },
-        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'good call, she should know. here’s a *text* you can send her 👇' },
-        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', act: 'Drafting…', ms: 2000 },
-        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', draft: {
-          to: 'Maya (text message)',
-          body: [
-            'hey! heads up: packages keep disappearing from our lobby. mine was gone within 10 min of the “delivered” photo, 3rd time this month. I’ve asked the building for the camera footage.',
-            'can you grab yours the minute it shows delivered? don’t let it sit 🙏',
-          ],
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'good call, she should know. here’s a *summary* you can send her 👇' },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', act: 'Summarizing…', ms: 1600 },
+        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', summary: {
+          text: 'so my package got stolen from our lobby today, like 10 min after it said delivered. 3rd time this month 😩 I already contacted the apartment and the seller. girl pls be careful with yours 🙏',
         } },
-        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', act: 'Sending…', ms: 1100 },
-        { ifReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'sent 💬 she’ll see it right away.' },
         { unlessReply: 'friend|update|tell (her|him|them)|let (her|him|them) know|text (her|him|them)|message (her|him|them)|send (it )?to|pick up', say: 'got it. I’ll keep watching for the building and the seller, and tell you the second either one replies.' },
       ],
     },
@@ -595,6 +590,37 @@
     return card;
   }
 
+  // A summary of the event for someone else to read: Edit it in place, or Copy it to paste anywhere
+  function summaryCard(d) {
+    const card = el('div', 'op-draft op-sum');
+    const label = el('p', 'op-draft-label', 'Summary · ready to share');
+    const body = el('div', 'op-draft-body');
+    body.append(el('p', null, d.text));
+    const actions = el('div', 'op-draft-actions');
+    const edit = el('button', 'op-draft-btn', 'Edit');
+    const copy = el('button', 'op-draft-btn op-draft-btn--send op-copy');
+    edit.type = copy.type = 'button';
+    copy.innerHTML = '<span class="op-copy-in op-copy-a"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 3.5v-.25A1.75 1.75 0 0 0 8.75 1.5h-5.5A1.75 1.75 0 0 0 1.5 3.25v5.5c0 .97.78 1.75 1.75 1.75h.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy</span>'
+      + '<span class="op-copy-in op-copy-b" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path class="op-tick" d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Copied</span>';
+    edit.addEventListener('click', () => {
+      const on = !card.classList.contains('is-editing');
+      card.classList.toggle('is-editing', on);
+      body.contentEditable = on ? 'true' : 'false';
+      if (on) body.focus();
+      edit.textContent = on ? 'Done' : 'Edit';
+      if (on) { copy.classList.remove('is-copied'); label.textContent = 'Summary · ready to share'; }
+    });
+    copy.addEventListener('click', () => {
+      try { navigator.clipboard && navigator.clipboard.writeText(body.innerText).catch(() => {}); } catch (e) {}
+      copy.classList.add('is-copied');
+      copy.setAttribute('aria-label', 'Copied');
+      label.textContent = 'Copied to clipboard';
+    });
+    actions.append(edit, copy);
+    card.append(label, body, actions);
+    return card;
+  }
+
   // An email the agent drafted for you, shown in the chat before anything is sent.
   // Edit makes the message editable in place; Send is the only way it goes out.
   function draftCard(d) {
@@ -830,6 +856,16 @@
         if (!still()) return;
         continue;
       }
+      if (m.summary) {
+        setStatus(agent, null);
+        const card = summaryCard(m.summary);
+        push(list, card);
+        land(card);
+        follow();
+        await pause(600);
+        if (!still()) return;
+        continue;
+      }
       if (m.place) {
         setStatus(agent, null);
         const card = placeCard(m.place);
@@ -871,19 +907,19 @@
       // "Typing…" where its name is, then the words come in one after another, in its own way
       const v = VOICES[o.voice];
       setStatus(agent, 'Typing…');
-      await pause(v.typing(m.say.length));
+      await pause(v.typing(m.say.length) * PACE);
       if (!still()) return;
       const msg = lineOf('op-msg', m.say, { shout: true });
       const words = [...msg.children];
       words.forEach((span, k) => {
-        span.animate(v.word, { duration: v.duration, delay: k * v.step, easing: v.easing, fill: 'backwards' });
-        if (span.classList.contains('kw')) span.style.animationDelay = `${k * v.step}ms`; // flare as it appears
+        span.animate(v.word, { duration: v.duration, delay: k * v.step * PACE, easing: v.easing, fill: 'backwards' });
+        if (span.classList.contains('kw')) span.style.animationDelay = `${k * v.step * PACE}ms`; // flare as it appears
       });
       setStatus(agent, null);
       push(list, msg);
       follow();
-      const landed = words.length * v.step + v.duration;
-      await pause(landed + v.after); // and a pause before the next message
+      const landed = words.length * v.step * PACE + v.duration;
+      await pause(landed + v.after * PACE); // and a pause before the next message
       if (!still()) return;
       if (lastLine) return;
     }

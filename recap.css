@@ -595,3 +595,15 @@
 .op-place-meta { margin: 8px 0 0; font-size: 14.5px; opacity: 0.92; }
 .op-place .op-draft-actions { margin-top: 12px; }
 a.op-draft-btn { display: inline-grid; place-items: center; text-decoration: none; }
+
+/* summary card: Copy settles into Copied (crossfade with a little blur, the tick draws itself) */
+.op-copy{position:relative;display:inline-grid;min-width:104px;place-items:center;overflow:hidden;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 220ms ease,box-shadow 220ms ease}
+.op-copy-in{grid-area:1/1;display:inline-flex;align-items:center;gap:7px;transition:opacity 200ms ease,filter 200ms ease,transform 200ms cubic-bezier(.23,1,.32,1)}
+.op-copy-b{opacity:0;filter:blur(2px);transform:scale(.96)}
+.op-copy.is-copied{background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3)}
+.op-copy.is-copied .op-copy-a{opacity:0;filter:blur(2px);transform:scale(.96)}
+.op-copy.is-copied .op-copy-b{opacity:1;filter:blur(0);transform:none}
+.op-tick{stroke-dasharray:14;stroke-dashoffset:14;transition:stroke-dashoffset 260ms cubic-bezier(.23,1,.32,1) 80ms}
+.op-copy.is-copied .op-tick{stroke-dashoffset:0}
+.op-sum.is-editing .op-draft-body{outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);border-radius:12px}
+@media (prefers-reduced-motion:reduce){.op-copy-in,.op-tick{transition:opacity 150ms ease}}
